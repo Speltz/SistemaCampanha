@@ -1,0 +1,7 @@
+// Consulta CANDIDATO
+app.get('/candidato', function (req, res) {
+    conn.query('SELECT * FROM tbCandidato', function (err, results, fields) { res.status(200).json(results) })
+})
+
+
+
