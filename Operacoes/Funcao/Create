@@ -1,0 +1,11 @@
+//Create FUNCAO
+app.post('/funcao/create', function (req, res) {
+    const {
+        idFuncao, nmFuncao, dsFuncao, tpContrato} = req.body;
+
+    conn.query(`INSERT INTO tbFuncao (idFuncao, nmFuncao, dsFuncao, tpContrato) values (?,?,?,?)`,
+        [idFuncao, nmFuncao, dsFuncao, tpContrato], function (error, results) {
+                if (error) throw error;
+                res.status(200).json(results)
+            })
+});

@@ -1,0 +1,7 @@
+// Consulta FUNCAO
+app.get('/funcao', function (req, res) {
+    conn.query('SELECT * FROM tbFuncao', function (err, results, fields) {
+        if (err) throw err;
+        res.status(200).json(results);
+    });
+});

@@ -1,0 +1,15 @@
+// Edit FUNCAO
+app.put('/funcao/edit/:idFuncao', function (req, res) {
+    const { idFuncao } = req.params;
+    const { nmFuncao, dsFuncao, tpContrato } = req.body;
+
+    conn.query(`UPDATE tbFuncao SET nmFuncao = ?, dsFuncao = ?, tpContrato = ? WHERE idFuncao = ?`,
+        [nmFuncao, dsFuncao, tpContrato, idFuncao], function (error, results) {
+            if (error) throw error;
+            if (results.affectedRows === 0) {
+                res.status(404).json({ message: 'Funcao not found' });
+            } else {
+                res.status(200).json({ message: 'Funcao updated successfully' });
+            }
+        });
+});
