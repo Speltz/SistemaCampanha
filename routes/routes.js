@@ -45,7 +45,7 @@ module.exports = (connection) => {
     router.get('/funcao/edit/:idFuncao', (req, res) => {
         const idFuncao = req.params.idFuncao;
         const query = 'SELECT * FROM tbFuncao WHERE idFuncao = ?';
-    
+
         connection.query(query, [idFuncao], (err, results) => {
             if (err) {
                 res.redirect('/');
@@ -64,7 +64,7 @@ module.exports = (connection) => {
     router.post('/funcao/edit/:idFuncao', (req, res) => {
         const { idFuncao } = req.params;
         const { nmFuncao, dsFuncao, tpContrato } = req.body;
-    
+
         const query = 'UPDATE tbFuncao SET nmFuncao = ?, dsFuncao = ?, tpContrato = ? WHERE idFuncao = ?';
         connection.query(query, [nmFuncao, dsFuncao, tpContrato, idFuncao], (err, result) => {
             if (err) {
@@ -91,38 +91,52 @@ module.exports = (connection) => {
         });
     });
 
-// Página DELETE
-router.get('/funcao/delete/:idFuncao', (req, res) => {
-    let idFuncao = req.params.idFuncao;
-    const query = 'DELETE FROM tbFuncao WHERE idFuncao = ?';
+    // Delete
+    router.get('/funcao/delete/:idFuncao', (req, res) => {
+        let idFuncao = req.params.idFuncao;
+        const query = 'DELETE FROM tbFuncao WHERE idFuncao = ?';
 
-    connection.query(query, [idFuncao], (err, result) => {
-        if (err) {
-            console.error(err);
-            res.json({ message: err.message });
-        } else {
-            if (result.affectedRows === 0) {
-                req.session.message = {
-                    type: 'warning',
-                    message: 'Função não encontrada.'
-                };
+        connection.query(query, [idFuncao], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
             } else {
-                req.session.message = {
-                    type: 'info',
-                    message: 'Função deletada com sucesso!'
-                };
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Função não encontrada.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Função deletada com sucesso!'
+                    };
+                }
+                res.redirect('/funcao');
             }
-            res.redirect('/funcao');
-        }
+        });
     });
-});
 
 
 
-    // Operações CANDIDATO
+     // Operações CANDIDATO
+    // Index
     router.get('/candidato', (req, res) => {
-        res.send("Candidatos");
+        connection.query('SELECT * FROM tbCandidato', (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('canidato/index', { title: 'Candidatos', candidato: results });
+            }
+        });
     });
 
+
+
+
+
+
+
+    // End point
     return router;
 };

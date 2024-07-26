@@ -1,0 +1,39 @@
+<%- include('../layout/header') %>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto mt-4">
+                <div class="card shadow">
+                    <div class="card-header bg-success">
+                        <h5 class="text-light">Editar Função (<%= funcao.nmFuncao %>)</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form action="/funcao/edit/<%= funcao.idFuncao %>" method="post" id="add-form">
+                            <div class="mb-3">
+                                <label for="nmFuncao">Nome da função</label>
+                                <input type="text" name="nmFuncao" class="form-control form-control-lg"
+                                    placeholder="Função" value="<%= funcao.nmFuncao %>" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="dsFuncao">Descrição</label>
+                                <input type="text" name="dsFuncao" class="form-control form-control-lg"
+                                    placeholder="Descrição..." value="<%= funcao.dsFuncao %>" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="tpContrato">Tipo de contrato</label>
+                                <select name="tpContrato" class="form-control form-control-lg" required>
+                                    <option value="Pessoal" <%= funcao.tpContrato === 'Pessoal' ? 'selected' : '' %>>Pessoal</option>
+                                    <option value="Militante" <%= funcao.tpContrato === 'Militante' ? 'selected' : '' %>>Militante</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="submit" name="submit" value="Salvar Alterações" class="btn btn-success btn-lg" />
+                                <input type="button" name="submit" value="Voltar" onclick="window.location.href='/funcao'" class="btn btn-danger btn-lg" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../layout/footer') %>
