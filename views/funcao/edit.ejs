@@ -3,32 +3,31 @@
         <div class="row">
             <div class="col-lg-6 mx-auto mt-4">
                 <div class="card shadow">
-                    <div class="card-header bg-primary">
-                        <h5 class="text-light">Cadastrar Função</h5>
+                    <div class="card-header bg-success">
+                        <h5 class="text-light">Editar Função (<%= funcao.nmFuncao %>)</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/funcao/create" method="post" id="add-form">
+                        <form action="/funcao/edit/<%= funcao.idFuncao %>" method="post" id="add-form">
                             <div class="mb-3">
                                 <label for="nmFuncao">Nome da função</label>
                                 <input type="text" name="nmFuncao" class="form-control form-control-lg"
-                                    placeholder="Função" required />
+                                    placeholder="Função" value="<%= funcao.nmFuncao %>" required />
                             </div>
                             <div class="mb-3">
                                 <label for="dsFuncao">Descrição</label>
                                 <input type="text" name="dsFuncao" class="form-control form-control-lg"
-                                    placeholder="Descrição..." required />
+                                    placeholder="Descrição..." value="<%= funcao.dsFuncao %>" required />
                             </div>
                             <div class="mb-3">
                                 <label for="tpContrato">Tipo de contrato</label>
                                 <select name="tpContrato" class="form-control form-control-lg" required>
-                                    <option value="" disabled selected hidden>Tipo de contrato</option>
-                                    <option value="Pessoal">Pessoal</option>
-                                    <option value="Militante">Militante</option>
+                                    <option value="Pessoal" <%= funcao.tpContrato === 'Pessoal' ? 'selected' : '' %>>Pessoal</option>
+                                    <option value="Militante" <%= funcao.tpContrato === 'Militante' ? 'selected' : '' %>>Militante</option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
-                                <input type="submit" name="submit" value="Cadastrar" class="btn btn-primary btn-lg" />
+                                <input type="submit" name="submit" value="Salvar Alterações" class="btn btn-success btn-lg" />
                                 <input type="button" name="submit" value="Voltar" onclick="window.location.href='/funcao'" class="btn btn-danger btn-lg" />
                             </div>
                         </form>
