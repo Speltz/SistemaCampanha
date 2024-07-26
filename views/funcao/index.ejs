@@ -20,10 +20,10 @@
                                     <thead>
                                         <tr class="table-dark">
                                             <th>ID</th>
-                                            <th>Função</th>
-                                            <th>Descrição</th>
-                                            <th>Tipo de contrato</th>
-                                            <th>Ações</th>
+                                            <th class="text-center">Função</th>
+                                            <th class="text-center">Descrição</th>
+                                            <th class="text-center">Tipo de contrato</th>
+                                            <th class="text-center">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -44,8 +44,9 @@
                                                 <td class="text-center align-middle">
                                                     <a href="/funcao/edit/<%= row.idFuncao %>" class="text-success"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
-                                                    <a href="/funcao/delete/<%= row.idFuncao %>" class="text-danger"><i
-                                                            class="fas fa-trash fa-lg mx-1"></i></a>
+                                                    <a href="javascript:void(0);" class="text-danger delete-btn"
+                                                        data-url="/funcao/delete/<%= row.idFuncao %>">
+                                                        <i class="fas fa-trash fa-lg mx-1"></i>
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -57,6 +58,26 @@
                                     <% } %>
 
                         </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmação de exclusão -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir esta função?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Sim</button>
+                </div>
             </div>
         </div>
     </div>

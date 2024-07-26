@@ -12,6 +12,8 @@
         integrity="sha512-VNBisELNHh6+nfDjsFXDA6WgXEZm8cfTEcMtfOZdx0XTRoRbr/6Eqb2BjqxF4sNFzdvGIt+WqxKgn0DSfh2kcA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.datatables.net/v/bs5/dt-2.1.2/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css/">
+
 </head>
 
 <body>
@@ -53,7 +55,23 @@
             });
         });
     </script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            let deleteUrl = '';
+        
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    deleteUrl = this.dataset.url;
+                    confirmDeleteModal.show();
+                });
+            });
+        
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                window.location.href = deleteUrl;
+            });
+        });
+        </script>
 </body>
 
 </html>
