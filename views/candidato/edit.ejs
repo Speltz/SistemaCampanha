@@ -8,7 +8,7 @@
                     <h5 class="text-light">Dados do Candidato</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form action="/candidato/edit/<%= candidato.nrCandidato %>" method="post" id="add-form">
+                    <form action="/candidato/edit/<%= candidato.nrCandidato %>" method="post" id="add-form" onsubmit="return validateCandidato()">
                         <input type="hidden" name="originalNrCandidato" value="<%= candidato.nrCandidato %>"/>
                         <div class="mb-3">
                             <label for="nrCandidato">Número</label>

@@ -8,7 +8,7 @@
                         <h5 class="text-light">Dados do Candidato</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/candidato/create" method="post" id="add-form">
+                        <form action="/candidato/create" method="post" id="add-form" onsubmit="return validateCandidato()">
                             <div class="mb-3">
                                 <label for="nrCandidato">Número</label>
                                 <input type="number" name="nrCandidato" class="form-control form-control-lg"
