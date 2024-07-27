@@ -122,3 +122,33 @@ input.value = input.value.replace(/\D/g, '').slice(0, length);
         return true;
     }
 </script>
+<script>
+    function checkCandidato() {
+        const nrCandidato = document.querySelector('input[name="nrCandidato"]').value;
+
+        fetch('/candidato/check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nrCandidato: nrCandidato })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const messageElement = document.getElementById('candidato-message');
+            if (data.message === 'Candidato encontrado') {
+                messageElement.textContent = `Candidato: ${data.nmCandidato}`;
+                messageElement.style.color = 'green';
+            } else {
+                messageElement.textContent = data.message;
+                messageElement.style.color = 'red';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('candidato-message').textContent = 'Erro no servidor';
+            document.getElementById('candidato-message').style.color = 'red';
+        });
+    }
+</script>
+

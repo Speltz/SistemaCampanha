@@ -1,0 +1,79 @@
+<%- include('../layout/header') %>
+<%- include('../scripts/scripts') %>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary">
+                    <h5 class="text-light">Visualizar Veículo</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/veiculo/view/<%= veiculo.idVeiculo %>" method="post" id="view-form">
+                        <div class="mb-3">
+                            <label for="municipio">Município</label>
+                            <input type="text" name="municipio" class="form-control form-control-lg"
+                                placeholder="Município" value="<%= veiculo.municipio %>" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrCandidato">Candidato</label>
+                            <input type="text" name="nrCandidato" class="form-control form-control-lg"
+                                placeholder="Número do candidato" value="<%= veiculo.nrCandidato %>" readonly/>
+                        </div>
+                        <button type="button" onclick="checkCandidato()" >Verificar Candidato</button>
+                        <div id="candidato-message" style="margin-top: 10px;"></div>
+                        <div class="mb-3">
+                            <label for="marca">Marca</label>
+                            <input type="text" name="marca" class="form-control form-control-lg"
+                                placeholder="Marca do veículo" value="<%= veiculo.marca %>" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modelo">Modelo</label>
+                            <input type="text" name="modelo" class="form-control form-control-lg"
+                                placeholder="Modelo do veículo" value="<%= veiculo.modelo %>" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ano">Ano</label>
+                            <input type="number" name="ano" class="form-control form-control-lg"
+                                placeholder="Ano do veículo" value="<%= veiculo.ano %>" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="combustivel">Combustível</label>
+                            <select name="combustivel" class="form-control form-control-lg" disabled>
+                                <option value="" disabled hidden>Tipo de combustível</option>
+                                <option value="Gasolina" <%= veiculo.combustivel === 'Gasolina' ? 'selected' : '' %>>Gasolina</option>
+                                <option value="Álcool" <%= veiculo.combustivel === 'Álcool' ? 'selected' : '' %>>Álcool</option>
+                                <option value="Diesel" <%= veiculo.combustivel === 'Diesel' ? 'selected' : '' %>>Diesel</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="valor">Valor</label>
+                            <input type="number" name="valor" class="form-control form-control-lg"
+                                placeholder="R$..." value="<%= veiculo.valor %>" readonly/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipo">Tipo</label>
+                            <select name="tipo" class="form-control form-control-lg" disabled>
+                                <option value="Mensal" <%= veiculo.tipo === 'Mensal' ? 'selected' : '' %>>Mensal</option>
+                                <option value="Campanha" <%= veiculo.tipo === 'Campanha' ? 'selected' : '' %>>Campanha</option>
+                                <option value="Dia" <%= veiculo.tipo === 'Dia' ? 'selected' : '' %>>Dia</option>
+                                <option value="Hora" <%= veiculo.tipo === 'Hora' ? 'selected' : '' %>>Hora</option>
+                                <option value="Semana" <%= veiculo.tipo === 'Semana' ? 'selected' : '' %>>Semana</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cgHoraria">Carga Horária</label>
+                            <input type="number" name="cgHoraria" class="form-control form-control-lg"
+                                placeholder="Carga horária" value="<%= veiculo.cgHoraria %>" readonly/>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="button" name="submit" value="Voltar" onclick="window.location.href='/veiculo'" 
+                            class="btn btn-danger btn-lg" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../layout/footer') %>

@@ -118,8 +118,7 @@ module.exports = (connection) => {
             }
         });
     });
-
-
+//-----------------------------------------------------------------------------------------------------
 
      // Operações CANDIDATO
     // Index
@@ -164,6 +163,7 @@ module.exports = (connection) => {
             }
         });
     });
+    
     //View CANDIDATO
     router.get('/candidato/view/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
@@ -175,7 +175,7 @@ module.exports = (connection) => {
             } else {
                 if (results.length > 0) {
                     res.render('candidato/view', {
-                        title: 'Editar Candidato',
+                        title: 'Detalhes do candidato',
                         candidato: results[0]
                     });
                 } else {
@@ -273,8 +273,177 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
         });
     });
 
+     // **Confirmar se candidato está cadastrado (para uso em Query de outras tabelas)**
+     router.post('/candidato/check', (req, res) => {
+        const { nrCandidato } = req.body;
+        const checkCandidateQuery = `SELECT nmCandidato FROM tbCandidato WHERE nrCandidato = ?`;
+    
+        connection.query(checkCandidateQuery, [nrCandidato], (err, results) => {
+            if (err) {
+                return res.status(500).json({ message: 'Erro no servidor' });
+            } 
+            if (results.length === 0) {
+                return res.status(404).json({ message: 'Candidato não encontrado' });
+            } 
+            res.status(200).json({ message: 'Candidato encontrado', nmCandidato: results[0].nmCandidato });
+        });
+    });
+    
+//-----------------------------------------------------------------------------------------------------
+
+    //Operações VEÍCULO
+    //Index
+    router.get('/veiculo', (req, res) => {
+        connection.query('SELECT * FROM tbVeiculo', (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('veiculo/index', { title: 'Veículos', veiculo: results });
+            }
+        });
+    });
+
+    //Página CREATE
+    router.get('/veiculo/create', (req, res) => {
+        res.render('veiculo/create', { title: 'Cadastrar Veículo' });
+    });
+
+    //Create VEÍCULO
+      router.post('/veiculo/create', (req, res) => {
+        const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
+        const query = `INSERT INTO tbVeiculo (municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria], (err, result) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                req.session.message = {
+                    type: 'success',
+                    message: 'Veículo cadastrado com sucesso!'
+                };
+                res.redirect('/veiculo');
+            }
+        });
+    });
+
+        //View VEÍCULO
+        router.get('/veiculo/view/:idVeiculo', (req, res) => {
+            const idVeiculo = req.params.idVeiculo;
+            const query = 'SELECT * FROM tbVeiculo WHERE idVeiculo = ?';
+    
+            connection.query(query, [idVeiculo], (err, results) => {
+                if (err) {
+                    res.redirect('/');
+                } else {
+                    if (results.length > 0) {
+                        res.render('veiculo/view', {
+                            title: 'Detalhes do veículo',
+                            veiculo: results[0]
+                        });
+                    } else {
+                        res.redirect('/');
+                    }
+                }
+            });
+        });
+
+    // Página EDIT
+    router.get('/veiculo/edit/:idVeiculo', (req, res) => {
+        const idVeiculo = req.params.idVeiculo;
+        const query = 'SELECT * FROM tbVeiculo WHERE idVeiculo = ?';
+
+        connection.query(query, [idVeiculo], (err, results) => {
+            if (err) {
+                res.redirect('/');
+            } else {
+                if (results.length > 0) {
+                    res.render('veiculo/edit', {
+                        title: 'Editar Veículo',
+                        veiculo: results[0]
+                    });
+                } else {
+                    res.redirect('/');
+                }
+            }
+        });
+    });
+
+    //Edit VEÍCULO
+    router.post('/veiculo/edit/:idFuncao', (req, res) => {
+        const { idFuncao } = req.params;
+        const { nmFuncao, dsFuncao, tpContrato } = req.body;
+
+        const query = `UPDATE tbFuncao SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano, combustivel = ?, valor = ?,
+         tipo = ?, cgHoraria  = ?
+         WHERE idFuncao = ?`;
+        connection.query(query, [nmFuncao, dsFuncao, tpContrato, idFuncao], (err, result) => {
+            if (err) {
+                console.error(err);
+                req.session.message = {
+                    type: 'danger',
+                    message: 'Erro ao atualizar o cadastro de veículo.'
+                };
+                res.redirect('/veiculo');
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Função não encontrada.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'success',
+                        message: 'Função atualizada com sucesso!'
+                    };
+                }
+                res.redirect('/veiculo');
+            }
+        });
+    });
+
+      // Delete VEÍCULO
+      router.get('/veiculo/delete/:idVeiculo', (req, res) => {
+        let idVeiculo = req.params.idVeiculo;
+        const query = 'DELETE FROM tbVeiculo WHERE idVeiculo = ?';
+
+        connection.query(query, [idVeiculo], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Veículo não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Veículo deletado com sucesso!'
+                    };
+                }
+                res.redirect('/veiculo');
+            }
+        });
+    });
+//-----------------------------------------------------------------------------------------------------
+   //Operações SALÁRIO
+   //Index
+   router.get('/salario', (req, res) => {
+    connection.query('SELECT * FROM tbSalario', (err, results) => {
+        if (err) {
+            res.status(500).json({ message: err.message });
+        } else {
+            res.render('salario/index', { title: 'Salários', salario: results });
+        }
+    });
+});
 
 
-    // End point
+
+
+
+
+// End point
     return router;
 };

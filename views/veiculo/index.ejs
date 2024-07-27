@@ -13,51 +13,59 @@
                         <h2>
                             <%= title %>
                         </h2>
-                        <a href="/candidato/create" class="btn btn-primary mb-2">Novo Cadastro</a>
+                        <a href="/veiculo/create" class="btn btn-primary mb-2">Novo Cadastro</a>
                         <div class="table-responsive">
-                            <% if (candidato !='' ) { %>
+                            <% if (veiculo !='' ) { %>
                                 <table class="table table-striped text-center my-2">
                                     <thead>
                                         <tr class="table-dark">
-                                            <th>Número</th>
-                                            <th class="text-center">Partido</th>
-                                            <th class="text-center">Cargo</th>
+                                            <th class="text-center">ID</th>
                                             <th class="text-center">Município</th>
-                                            <th class="text-center">Nome</th>
-                                            <th class="text-center">CNPJ</th>
+                                            <th class="text-center">Candidato</th>
+                                            <th class="text-center">Marca</th>
+                                            <th class="text-center">Modelo</th>
+                                            <th class="text-center">Ano</th>
+                                            <th class="text-center">Combustível</th>
+                                            <th class="text-center">Valor</th>
                                             <th class="text-center">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% candidato.forEach((row, index)=> { %>
+                                        <% veiculo.forEach((row, index)=> { %>
                                             <tr class="align-middle">
                                                 <td>
-                                                    <%= row.nrCandidato %>
-                                                </td>
-                                                <td>
-                                                    <%= row.partido %>
-                                                </td>
-                                                <td>
-                                                    <%= row.cargo %>
+                                                    <%= row.idVeiculo %>
                                                 </td>
                                                 <td>
                                                     <%= row.municipio %>
                                                 </td>
                                                 <td>
-                                                    <%= row.nmCandidato %>
+                                                    <%= row.nrCandidato %>
                                                 </td>
                                                 <td>
-                                                    <%= row.cnpj %>
+                                                    <%= row.marca %>
+                                                </td>
+                                                <td>
+                                                    <%= row.modelo %>
+                                                </td>
+                                                <td>
+                                                    <%= row.ano %>
+                                                </td>
+                                                <td>
+                                                    <%= row.combustivel %>
+                                                </td>
+                                                <td>
+                                                    <%= row.valor %>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <a href="/candidato/view/<%= row.nrCandidato %>" class=""
+                                                    <a href="/veiculo/view/<%= row.idVeiculo %>" class=""
                                                         title="Ver detalhes"><i
                                                         class="fa-solid fa-eye mx-1"></i></a>
-                                                    <a href="/candidato/edit/<%= row.nrCandidato %>" class="text-success"
+                                                    <a href="/veiculo/edit/<%= row.idVeiculo %>" class="text-success"
                                                         title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
-                                                        data-url="/candidato/delete/<%= row.nrCandidato %>"
+                                                        data-url="/veiculo/delete/<%= row.idVeiculo %>"
                                                         title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
                                                 </td>
@@ -66,7 +74,7 @@
                                     </tbody>
                                 </table>
                                 <% } else{ %>
-                                    <h1 class="text-center text-secondary mt-5">Nenhum candidato encontrado no banco de
+                                    <h1 class="text-center text-secondary mt-5">Nenhum veículo encontrado no banco de
                                         dados.</h1>
                                     <% } %>
 
