@@ -4,11 +4,11 @@
         <div class="row">
             <div class="col-lg-6 mx-auto mt-4">
                 <div class="card shadow">
-                    <div class="card-header bg-primary">
-                        <h5 class="text-light">Cadastrar Veículo</h5>
+                    <div class="card-header bg-success">
+                        <h5 class="text-light">Editar Veículo</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/veiculo/edit/<%= veiculo.idVeiculo %>" method="post" id="add-form">
+                        <form action="/veiculo/edit/<%= veiculo.idVeiculo %>" method="post" id="edit-form">
                             <div class="mb-3">
                                 <label for="municipio">Município</label>
                                 <input type="text" name="municipio" class="form-control form-control-lg"
@@ -68,7 +68,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <input type="submit" name="submit" value="Cadastrar" class="btn btn-primary btn-lg" />
+                                <input type="submit" name="submit" value="Salvar Alterações" class="btn btn-success btn-lg" />
                                 <input type="button" name="submit" value="Voltar" onclick="window.location.href='/veiculo'" 
                                 class="btn btn-danger btn-lg" />
                             </div>

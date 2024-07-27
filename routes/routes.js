@@ -118,9 +118,9 @@ module.exports = (connection) => {
             }
         });
     });
-//-----------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------
 
-     // Operações CANDIDATO
+    // Operações CANDIDATO
     // Index
     router.get('/candidato', (req, res) => {
         connection.query('SELECT * FROM tbCandidato', (err, results) => {
@@ -132,16 +132,16 @@ module.exports = (connection) => {
         });
     });
 
-        // Página CREATE
-        router.get('/candidato/create', (req, res) => {
-            res.render('candidato/create', { title: 'Cadastrar Candidato' });
-        });
+    // Página CREATE
+    router.get('/candidato/create', (req, res) => {
+        res.render('candidato/create', { title: 'Cadastrar Candidato' });
+    });
 
-        // Create CANDIDATO
+    // Create CANDIDATO
     router.post('/candidato/create', (req, res) => {
         const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
-            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
             cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
         const query = `INSERT INTO tbCandidato (nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
                         enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
@@ -149,21 +149,21 @@ module.exports = (connection) => {
                         cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos ) VALUES (?, ?, ?, ?, ?, ?, 
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
-            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
             cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos], (err, result) => {
-            if (err) {
-                res.status(500).json({ message: err.message, type: 'danger' });
-            } else {
-                req.session.message = {
-                    type: 'success',
-                    message: 'Candidato cadastrado com sucesso!'
-                };
-                res.redirect('/candidato');
-            }
-        });
+                if (err) {
+                    res.status(500).json({ message: err.message, type: 'danger' });
+                } else {
+                    req.session.message = {
+                        type: 'success',
+                        message: 'Candidato cadastrado com sucesso!'
+                    };
+                    res.redirect('/candidato');
+                }
+            });
     });
-    
+
     //View CANDIDATO
     router.get('/candidato/view/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
@@ -207,45 +207,45 @@ module.exports = (connection) => {
     });
 
     //EDIT Candidato
-router.post('/candidato/edit/:nrCandidato', (req, res) => {
-    const originalNrCandidato = req.params.nrCandidato;
-    const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-        enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
-        ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
-        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+    router.post('/candidato/edit/:nrCandidato', (req, res) => {
+        const originalNrCandidato = req.params.nrCandidato;
+        const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
 
-    const query = `UPDATE tbCandidato SET nrCandidato = ?, partido = ?, cargo = ?, municipio = ?, nmCandidato = ?, cnpj = ?,
+        const query = `UPDATE tbCandidato SET nrCandidato = ?, partido = ?, cargo = ?, municipio = ?, nmCandidato = ?, cnpj = ?,
                     enderecoCandidato = ?, cidadeCandidato = ?, cepCandidato = ?, cpfAdmFinanceiro = ?, rgAdmFinanceiro = ?, 
                     ecAdmFinanceiro = ?, profAdmFinanceiro = ?, nmAdmFinanceiro = ?, enderecoAdmFinanceiro = ?, cidadeAdmFinanceiro = ?, 
                     cepAdmFinanceiro = ?, dtInicioCampanha = ?, dtFimCampanha = ?, lmMilitantes = ?, lmVeiculos = ?
                     WHERE nrCandidato = ?`;
-    connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-        enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
-        ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
-        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
-        if (err) {
-            console.error(err);
-            req.session.message = {
-                type: 'danger',
-                message: 'Erro ao atualizar o cadastro de candidato.'
-            };
-            res.redirect('/candidato');
-        } else {
-            if (result.affectedRows === 0) {
-                req.session.message = {
-                    type: 'warning',
-                    message: 'Candidato não encontrado.'
-                };
-            } else {
-                req.session.message = {
-                    type: 'success',
-                    message: 'Cadastro de candidato atualizado com sucesso!'
-                };
-            }
-            res.redirect('/candidato');
-        }
+        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    req.session.message = {
+                        type: 'danger',
+                        message: 'Erro ao atualizar o cadastro de candidato.'
+                    };
+                    res.redirect('/candidato');
+                } else {
+                    if (result.affectedRows === 0) {
+                        req.session.message = {
+                            type: 'warning',
+                            message: 'Candidato não encontrado.'
+                        };
+                    } else {
+                        req.session.message = {
+                            type: 'success',
+                            message: 'Cadastro de candidato atualizado com sucesso!'
+                        };
+                    }
+                    res.redirect('/candidato');
+                }
+            });
     });
-});
 
     // Delete CANDIDATO
     router.get('/candidato/delete/:nrCandidato', (req, res) => {
@@ -273,23 +273,26 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
         });
     });
 
-     // **Confirmar se candidato está cadastrado (para uso em Query de outras tabelas)**
-     router.post('/candidato/check', (req, res) => {
-        const { nrCandidato } = req.body;
-        const checkCandidateQuery = `SELECT nmCandidato FROM tbCandidato WHERE nrCandidato = ?`;
-    
-        connection.query(checkCandidateQuery, [nrCandidato], (err, results) => {
+    // **Confirmar se candidato está cadastrado (para uso em Query de outras tabelas)**
+    router.get('/api/check-candidato', (req, res) => {
+        const { nrCandidato } = req.query;
+        const query = 'SELECT nmCandidato FROM tbCandidato WHERE nrCandidato = ? LIMIT 1';
+
+        connection.query(query, [nrCandidato], (err, results) => {
             if (err) {
-                return res.status(500).json({ message: 'Erro no servidor' });
-            } 
-            if (results.length === 0) {
-                return res.status(404).json({ message: 'Candidato não encontrado' });
-            } 
-            res.status(200).json({ message: 'Candidato encontrado', nmCandidato: results[0].nmCandidato });
+                console.error(err);
+                res.status(500).json({ exists: false });
+            } else {
+                if (results.length > 0) {
+                    res.json({ exists: true, nmCandidato: results[0].nmCandidato });
+                } else {
+                    res.json({ exists: false });
+                }
+            }
         });
     });
-    
-//-----------------------------------------------------------------------------------------------------
+
+    //-----------------------------------------------------------------------------------------------------
 
     //Operações VEÍCULO
     //Index
@@ -309,7 +312,7 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
     });
 
     //Create VEÍCULO
-      router.post('/veiculo/create', (req, res) => {
+    router.post('/veiculo/create', (req, res) => {
         const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
         const query = `INSERT INTO tbVeiculo (municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -326,26 +329,26 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
         });
     });
 
-        //View VEÍCULO
-        router.get('/veiculo/view/:idVeiculo', (req, res) => {
-            const idVeiculo = req.params.idVeiculo;
-            const query = 'SELECT * FROM tbVeiculo WHERE idVeiculo = ?';
-    
-            connection.query(query, [idVeiculo], (err, results) => {
-                if (err) {
-                    res.redirect('/');
+    //View VEÍCULO
+    router.get('/veiculo/view/:idVeiculo', (req, res) => {
+        const idVeiculo = req.params.idVeiculo;
+        const query = 'SELECT * FROM tbVeiculo WHERE idVeiculo = ?';
+
+        connection.query(query, [idVeiculo], (err, results) => {
+            if (err) {
+                res.redirect('/');
+            } else {
+                if (results.length > 0) {
+                    res.render('veiculo/view', {
+                        title: 'Detalhes do veículo',
+                        veiculo: results[0]
+                    });
                 } else {
-                    if (results.length > 0) {
-                        res.render('veiculo/view', {
-                            title: 'Detalhes do veículo',
-                            veiculo: results[0]
-                        });
-                    } else {
-                        res.redirect('/');
-                    }
+                    res.redirect('/');
                 }
-            });
+            }
         });
+    });
 
     // Página EDIT
     router.get('/veiculo/edit/:idVeiculo', (req, res) => {
@@ -368,15 +371,13 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
         });
     });
 
-    //Edit VEÍCULO
-    router.post('/veiculo/edit/:idFuncao', (req, res) => {
-        const { idFuncao } = req.params;
-        const { nmFuncao, dsFuncao, tpContrato } = req.body;
+    // Edit VEÍCULO
+    router.post('/veiculo/edit/:idVeiculo', (req, res) => {
+        const { idVeiculo } = req.params;
+        const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
 
-        const query = `UPDATE tbFuncao SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano, combustivel = ?, valor = ?,
-         tipo = ?, cgHoraria  = ?
-         WHERE idFuncao = ?`;
-        connection.query(query, [nmFuncao, dsFuncao, tpContrato, idFuncao], (err, result) => {
+        const query = `UPDATE tbVeiculo SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano = ?, combustivel = ?, valor = ?, tipo = ?, cgHoraria = ? WHERE idVeiculo = ?`;
+        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria, idVeiculo], (err, result) => {
             if (err) {
                 console.error(err);
                 req.session.message = {
@@ -388,12 +389,12 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
                 if (result.affectedRows === 0) {
                     req.session.message = {
                         type: 'warning',
-                        message: 'Função não encontrada.'
+                        message: 'Veículo não encontrado.'
                     };
                 } else {
                     req.session.message = {
                         type: 'success',
-                        message: 'Função atualizada com sucesso!'
+                        message: 'Cadastro de veículo atualizado com sucesso!'
                     };
                 }
                 res.redirect('/veiculo');
@@ -401,8 +402,9 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
         });
     });
 
-      // Delete VEÍCULO
-      router.get('/veiculo/delete/:idVeiculo', (req, res) => {
+
+    // Delete VEÍCULO
+    router.get('/veiculo/delete/:idVeiculo', (req, res) => {
         let idVeiculo = req.params.idVeiculo;
         const query = 'DELETE FROM tbVeiculo WHERE idVeiculo = ?';
 
@@ -426,24 +428,166 @@ router.post('/candidato/edit/:nrCandidato', (req, res) => {
             }
         });
     });
-//-----------------------------------------------------------------------------------------------------
-   //Operações SALÁRIO
-   //Index
-   router.get('/salario', (req, res) => {
-    connection.query('SELECT * FROM tbSalario', (err, results) => {
-        if (err) {
-            res.status(500).json({ message: err.message });
-        } else {
-            res.render('salario/index', { title: 'Salários', salario: results });
-        }
+    //-----------------------------------------------------------------------------------------------------
+    //Operações SALÁRIO
+    //Index
+    // s = salario, f = funcao
+    router.get('/salario', (req, res) => {
+        connection.query(`SELECT s.idSalario, s.municipio, s.nrCandidato, s.idFuncao, s.valor, s.tipo, s.cgHoraria, f.nmFuncao
+        FROM tbSalario s
+        JOIN tbFuncao f ON s.idFuncao = f.idFuncao`, (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('salario/index', { title: 'Salários', salario: results });
+            }
+        });
     });
-});
+
+    //Página CREATE
+    router.get('/salario/create', (req, res) => {
+        const query = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
+        connection.query(query, (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                res.render('salario/create', { title: 'Cadastrar Salário', funcoes: results });
+            }
+        });
+    });
+
+    //Create SALARIO
+    router.post('/salario/create', (req, res) => {
+        const { municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria } = req.body;
+        const query = `INSERT INTO tbSalario (municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria) 
+        VALUES (?, ?, ?, ?, ?, ?)`;
+        connection.query(query, [municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria], (err, result) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                req.session.message = {
+                    type: 'success',
+                    message: 'Salário cadastrado com sucesso!'
+                };
+                res.redirect('/salario');
+            }
+        });
+    });
+    //View SALÁRIO
+    router.get('/salario/view/:idSalario', (req, res) => {
+        const idSalario = req.params.idSalario;
+        const salarioQuery = 'SELECT * FROM tbSalario WHERE idSalario = ?';
+        const funcoesQuery = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
+
+        connection.query(salarioQuery, [idSalario], (err, salarioResults) => {
+            if (err) {
+                res.redirect('/');
+            } else if (salarioResults.length > 0) {
+                connection.query(funcoesQuery, (err, funcoesResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        res.render('salario/view', {
+                            title: 'Dados do Salário',
+                            salario: salarioResults[0],
+                            funcoes: funcoesResults
+                        });
+                    }
+                });
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+    // Página EDIT
+    router.get('/salario/edit/:idSalario', (req, res) => {
+        const idSalario = req.params.idSalario;
+        const salarioQuery = 'SELECT * FROM tbSalario WHERE idSalario = ?';
+        const funcoesQuery = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
+
+        connection.query(salarioQuery, [idSalario], (err, salarioResults) => {
+            if (err) {
+                res.redirect('/');
+            } else if (salarioResults.length > 0) {
+                connection.query(funcoesQuery, (err, funcoesResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        res.render('salario/edit', {
+                            title: 'Editar Salário',
+                            salario: salarioResults[0],
+                            funcoes: funcoesResults
+                        });
+                    }
+                });
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+    //Edit SALÁRIO
+    router.post('/salario/edit/:idSalario', (req, res) => {
+        const { idSalario } = req.params;
+        const { municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria } = req.body;
+
+        const query = `UPDATE tbSalario SET municipio = ?, nrCandidato = ?, idFuncao = ?, valor = ?, tipo = ?, cgHoraria = ?`;
+        connection.query(query, [municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria, idSalario], (err, result) => {
+            if (err) {
+                console.error(err);
+                req.session.message = {
+                    type: 'danger',
+                    message: 'Erro ao atualizar o cadastro de salário.'
+                };
+                res.redirect('/salario');
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Salário não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'success',
+                        message: 'Cadastro de salário atualizado com sucesso!'
+                    };
+                }
+                res.redirect('/salario');
+            }
+        });
+    });
+
+    // Delete SALARIO
+    router.get('/salario/delete/:idSalario', (req, res) => {
+        let idSalario = req.params.idSalario;
+        const query = 'DELETE FROM tbSalario WHERE idSalario = ?';
+
+        connection.query(query, [idSalario], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Salário não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Salário deletado com sucesso!'
+                    };
+                }
+                res.redirect('/salario');
+            }
+        });
+    });
 
 
 
 
 
-
-// End point
+    // End point
     return router;
 };

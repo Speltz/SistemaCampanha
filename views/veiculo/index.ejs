@@ -33,29 +33,29 @@
                                     <tbody>
                                         <% veiculo.forEach((row, index)=> { %>
                                             <tr class="align-middle">
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.idVeiculo %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.municipio %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.nrCandidato %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.marca %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.modelo %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.ano %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.combustivel %>
                                                 </td>
-                                                <td>
-                                                    <%= row.valor %>
+                                                <td style="text-align: center;">
+                                                    R$ <%= formatValor(row.valor) %>
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <a href="/veiculo/view/<%= row.idVeiculo %>" class=""

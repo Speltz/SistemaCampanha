@@ -31,23 +31,23 @@
                                     <tbody>
                                         <% candidato.forEach((row, index)=> { %>
                                             <tr class="align-middle">
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.nrCandidato %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.partido %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.cargo %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.municipio %>
                                                 </td>
-                                                <td>
+                                                <td style="text-align: center;">
                                                     <%= row.nmCandidato %>
                                                 </td>
-                                                <td>
-                                                    <%= row.cnpj %>
+                                                <td style="text-align: center;">
+                                                    <%= formatCNPJ(row.cnpj) %>
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <a href="/candidato/view/<%= row.nrCandidato %>" class=""

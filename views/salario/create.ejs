@@ -5,10 +5,10 @@
             <div class="col-lg-6 mx-auto mt-4">
                 <div class="card shadow">
                     <div class="card-header bg-primary">
-                        <h5 class="text-light">Cadastrar Veículo</h5>
+                        <h5 class="text-light">Cadastrar Salário</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/veiculo/create" method="post" id="add-form">
+                        <form action="/salario/create" method="post" id="add-form">
                             <div class="mb-3">
                                 <label for="municipio">Município</label>
                                 <input type="text" name="municipio" class="form-control form-control-lg"
@@ -22,35 +22,19 @@
                             <button type="button" onclick="checkCandidato()">Verificar Candidato</button>
                             <div id="candidato-message" style="margin-top: 10px;"></div>
                             <div class="mb-3">
-                                <div class="mb-3">
-                                    <label for="marca">Marca</label>
-                                    <input type="text" name="marca" class="form-control form-control-lg"
-                                        placeholder="Marca do veículo" required />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="modelo">Modelo</label>
-                                    <input type="text" name="modelo" class="form-control form-control-lg"
-                                        placeholder="Modelo do veículo" required />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ano">Ano</label>
-                                    <input type="number" name="ano" class="form-control form-control-lg"
-                                        placeholder="Ano do veículo" required />
-                                </div>
-                                <div class="mb-3">
-                                <label for="combustivel">Combustível</label>
-                                <select name="combustivel" class="form-control form-control-lg" required>
-                                    <option value="" disabled selected hidden>Tipo de combustível</option>
-                                    <option value="Gasolina">Gasolina</option>
-                                    <option value="Álcool">Álcool</option>
-                                    <option value="Diesel">Diesel</option>
+                                <label for="idFuncao">Função</label>
+                                <select name="idFuncao" class="form-control form-control-lg" required>
+                                    <option value="" disabled selected hidden>Selecione a Função</option>
+                                    <% funcoes.forEach(funcao => { %>
+                                        <option value="<%= funcao.idFuncao %>"><%= funcao.nmFuncao %></option>
+                                    <% }); %>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="valor">Valor</label>
-                                <input type="number" name="valor" class="form-control form-control-lg"
-                                    placeholder="R$..." required />
-                            </div>
+                                <div class="mb-3">
+                                    <label for="valor">Valor</label>
+                                    <input type="number" id="valor" name="valor" class="form-control form-control-lg"
+                                        placeholder="R$..." required />
+                                </div>
                             <div class="mb-3">
                                 <label for="tipo">Tipo</label>
                                 <select name="tipo" class="form-control form-control-lg" required>
@@ -70,7 +54,7 @@
 
                             <div class="mb-3">
                                 <input type="submit" name="submit" value="Cadastrar" class="btn btn-primary btn-lg" />
-                                <input type="button" name="submit" value="Voltar" onclick="window.location.href='/veiculo'" 
+                                <input type="button" name="submit" value="Voltar" onclick="window.location.href='/salario'" 
                                 class="btn btn-danger btn-lg" />
                             </div>
                         </form>

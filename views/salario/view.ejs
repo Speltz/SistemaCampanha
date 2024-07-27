@@ -1,0 +1,64 @@
+<%- include('../layout/header') %>
+<%- include('../scripts/scripts') %>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary">
+                    <h5 class="text-light">Dados do Salário</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form id="add-form">
+                        <div class="mb-3">
+                            <label for="municipio">Município</label>
+                            <input type="text" name="municipio" class="form-control form-control-lg"
+                                placeholder="Município" required value="<%= salario.municipio %>" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrCandidato">Candidato</label>
+                            <input type="number" name="nrCandidato" class="form-control form-control-lg"
+                                placeholder="Número do candidato" required value="<%= salario.nrCandidato %>" readonly />
+                        </div>
+                        <button type="button" onclick="checkCandidato()">Verificar Candidato</button>
+                        <div id="candidato-message" style="margin-top: 10px;"></div>
+                        <div class="mb-3">
+                            <label for="idFuncao">Função</label>
+                            <select name="idFuncao" class="form-control form-control-lg" required disabled>
+                                <option value="" disabled hidden>Selecione a Função</option>
+                                <% funcoes.forEach(funcao => { %>
+                                    <option value="<%= funcao.idFuncao %>" <%= salario.idFuncao == funcao.idFuncao ? 'selected' : '' %>><%= funcao.nmFuncao %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="valor">Valor</label>
+                            <input type="number" name="valor" class="form-control form-control-lg"
+                                placeholder="R$..." required value="<%= salario.valor %>" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipo">Tipo</label>
+                            <select name="tipo" class="form-control form-control-lg" required disabled>
+                                <option value="" disabled selected hidden>Tipo</option>
+                                <option value="Mensal" <%= salario.tipo === 'Mensal' ? 'selected' : '' %>>Mensal</option>
+                                <option value="Campanha" <%= salario.tipo === 'Campanha' ? 'selected' : '' %>>Campanha</option>
+                                <option value="Dia" <%= salario.tipo === 'Dia' ? 'selected' : '' %>>Dia</option>
+                                <option value="Hora" <%= salario.tipo === 'Hora' ? 'selected' : '' %>>Hora</option>
+                                <option value="Semana" <%= salario.tipo === 'Semana' ? 'selected' : '' %>>Semana</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cgHoraria">Carga Horária</label>
+                            <input type="number" name="cgHoraria" class="form-control form-control-lg"
+                                placeholder="Carga horária" required value="<%= salario.cgHoraria %>" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <input type="button" name="submit" value="Voltar" onclick="window.location.href='/salario'" 
+                            class="btn btn-danger btn-lg" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../layout/footer') %>

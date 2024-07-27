@@ -41,7 +41,7 @@
                                     <div class="mb-3">
                                         <label for="cnpj">CNPJ</label>
                                         <input type="text" id="cnpj" name="cnpj" class="form-control form-control-lg"
-                                            placeholder="CNPJ" required value="<%= candidato.cnpj %>"
+                                            placeholder="CNPJ" required value="<%= formatCNPJ(candidato.cnpj) %>"
                                             oninput="validateNumberLength(this, 14)" readonly />
                                     </div>
                                     <div class="mb-3">

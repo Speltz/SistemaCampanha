@@ -2,9 +2,17 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
+const { formatCNPJ } = require('./utils/utils');
+const { formatValor } = require('./utils/utils');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+
+//Disponibiliza máscara do CNPJ
+app.locals.formatCNPJ = formatCNPJ;
+
+//Disponibiliza conversão do valor em Real
+app.locals.formatValor = formatValor;
 
 // Conexão do banco de dados
 const connection = mysql.createConnection({
