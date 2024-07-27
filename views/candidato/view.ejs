@@ -8,57 +8,57 @@
                     <h5 class="text-light">Dados do Candidato</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form action="/candidato/edit/<%= candidato.nrCandidato %>" method="post" id="add-form">
+                    <form id="add-form">
                         <input type="hidden" name="originalNrCandidato" value="<%= candidato.nrCandidato %>"/>
                         <div class="mb-3">
                             <label for="nrCandidato">Número</label>
                             <input type="number" name="nrCandidato" class="form-control form-control-lg"
-                                placeholder="Número" required value="<%= candidato.nrCandidato %>"/>
+                                placeholder="Número" required value="<%= candidato.nrCandidato %>" readonly />
                         </div>
                         <div class="mb-3">
                             <label for="partido">Partido</label>
                             <input type="text" name="partido" class="form-control form-control-lg"
-                                placeholder="Partido" required value="<%= candidato.partido %>"/>
+                                placeholder="Partido" required value="<%= candidato.partido %>" readonly />
                         </div>
                         <div class="mb-3">
                             <div class="mb-3">
                                 <label for="cargo">Cargo</label>
                                 <input type="text" name="cargo" class="form-control form-control-lg"
-                                    placeholder="Cargo" required value="<%= candidato.cargo %>"/>
+                                    placeholder="Cargo" required value="<%= candidato.cargo %>" readonly />
                             </div>
                             <div class="mb-3">
                                 <div class="mb-3">
                                     <label for="municipio">Município</label>
                                     <input type="text" name="municipio" class="form-control form-control-lg"
-                                        placeholder="Município" required value="<%= candidato.municipio %>"/>
+                                        placeholder="Município" required value="<%= candidato.municipio %>" readonly />
                                 </div>
                                 <div class="mb-3">
                                     <div class="mb-3">
                                         <label for="nmCandidato">Nome - Candidato</label>
                                         <input type="text" name="nmCandidato" class="form-control form-control-lg"
-                                            placeholder="Nome" required value="<%= candidato.nmCandidato %>"/>
+                                            placeholder="Nome" required value="<%= candidato.nmCandidato %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="cnpj">CNPJ</label>
                                         <input type="text" id="cnpj" name="cnpj" class="form-control form-control-lg"
                                             placeholder="CNPJ" required value="<%= candidato.cnpj %>"
-                                            oninput="validateNumberLength(this, 14)" />
+                                            oninput="validateNumberLength(this, 14)" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="enderecoCandidato">Endereço - Candidato</label>
                                         <input type="text" name="enderecoCandidato" class="form-control form-control-lg"
-                                            placeholder="Endereço" required value="<%= candidato.enderecoCandidato %>"/>
+                                            placeholder="Endereço" required value="<%= candidato.enderecoCandidato %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="cidadeCandidato">Cidade - Candidato</label>
                                         <input type="text" name="cidadeCandidato" class="form-control form-control-lg"
-                                            placeholder="Cidade" required value="<%= candidato.cidadeCandidato %>"/>
+                                            placeholder="Cidade" required value="<%= candidato.cidadeCandidato %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepCandidato">CEP - Candidato</label>
                                         <input type="number" name="cepCandidato" class="form-control form-control-lg"
                                             placeholder="CEP" required value="<%= candidato.cepCandidato %>"
-                                            oninput="validateNumberLength(this, 8)"/>
+                                            oninput="validateNumberLength(this, 8)" readonly />
                                     </div>
                                     <div class="card-header bg-primary">
                                         <h5 class="text-light">Dados do Administrador Financeiro</h5>
@@ -67,17 +67,17 @@
                                         <label for="cpfAdmFinanceiro">CPF - Administrador Financeiro</label>
                                         <input type="number" name="cpfAdmFinanceiro" class="form-control form-control-lg"
                                             placeholder="CPF" required value="<%= candidato.cpfAdmFinanceiro %>"
-                                            oninput="validateNumberLength(this, 11)"/>
+                                            oninput="validateNumberLength(this, 11)" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="rgAdmFinanceiro">RG - Administrador Financeiro</label>
                                         <input type="number" name="rgAdmFinanceiro" class="form-control form-control-lg"
                                             placeholder="RG" required value="<%= candidato.rgAdmFinanceiro %>"
-                                            oninput="validateNumberLength(this, 9)"/>
+                                            oninput="validateNumberLength(this, 9)" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="ecAdmFinanceiro">Estado Civil - Administrador Financeiro</label>
-                                        <select name="ecAdmFinanceiro" class="form-control form-control-lg" required>
+                                        <select name="ecAdmFinanceiro" class="form-control form-control-lg" required disabled>
                                             <option value="Solteiro"
                                             <%= candidato.ecAdmFinanceiro === 'Solteiro' ? 'selected' : '' %>>Solteiro
                                             </option>
@@ -98,28 +98,28 @@
                                     <div class="mb-3">
                                         <label for="profAdmFinanceiro">Profissão - Administrador Financeiro</label>
                                         <input type="text" name="profAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="Profissão" required value="<%= candidato.profAdmFinanceiro %>"/>
+                                            placeholder="Profissão" required value="<%= candidato.profAdmFinanceiro %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="nmAdmFinanceiro">Nome - Administrador Financeiro</label>
                                         <input type="text" name="nmAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="Nome" required value="<%= candidato.nmAdmFinanceiro %>"/>
+                                            placeholder="Nome" required value="<%= candidato.nmAdmFinanceiro %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="enderecoAdmFinanceiro">Endereço - Administrador Financeiro</label>
                                         <input type="text" name="enderecoAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="Endereço" required value="<%= candidato.enderecoAdmFinanceiro %>"/>
+                                            placeholder="Endereço" required value="<%= candidato.enderecoAdmFinanceiro %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="cidadeAdmFinanceiro">Cidade - Administrador Financeiro</label>
                                         <input type="text" name="cidadeAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="Cidade" required value="<%= candidato.cidadeAdmFinanceiro %>"/>
+                                            placeholder="Cidade" required value="<%= candidato.cidadeAdmFinanceiro %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
                                         <input type="number" name="cepAdmFinanceiro" class="form-control form-control-lg"
                                             placeholder="CEP" value="<%= candidato.cepAdmFinanceiro %>"
-                                            required oninput="validateNumberLength(this, 8)"/>
+                                            required oninput="validateNumberLength(this, 8)" readonly />
                                     </div>
                                     <div class="card-header bg-primary">
                                         <h5 class="text-light">Dados da Campanha</h5>
@@ -127,28 +127,25 @@
                                     <div class="mb-3">
                                         <label for="dtInicioCampanha">Início da campanha</label>
                                         <input type="date" name="dtInicioCampanha" class="form-control form-control-lg"
-                                            placeholder="  /  /  " required value="<%= candidato.dtInicioCampanha %>"/>
+                                            placeholder="  /  /  " required value="<%= candidato.dtInicioCampanha %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="dtFimCampanha">Fim da campanha</label>
                                         <input type="date" name="dtFimCampanha" class="form-control form-control-lg"
-                                            placeholder="  /  /  " required value="<%= candidato.dtFimCampanha %>"/>
+                                            placeholder="  /  /  " required value="<%= candidato.dtFimCampanha %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="lmMilitantes">Limite de militantes</label>
                                         <input type="number" name="lmMilitantes" class="form-control form-control-lg"
-                                            placeholder="Limite de militantes" required value="<%= candidato.lmMilitantes %>"/>
+                                            placeholder="Limite de militantes" required value="<%= candidato.lmMilitantes %>" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="lmVeiculos">Limite de veículos</label>
                                         <input type="number" name="lmVeiculos" class="form-control form-control-lg"
-                                            placeholder="Limite de veículos" required value="<%= candidato.lmVeiculos %>"/>
+                                            placeholder="Limite de veículos" required value="<%= candidato.lmVeiculos %>" readonly />
                                     </div>
 
-
                                     <div class="mb-3">
-                                        <input type="submit" name="submit" value="Salvar Alterações"
-                                            class="btn btn-success btn-lg" />
                                         <input type="button" name="submit" value="Voltar"
                                             onclick="window.location.href='/candidato'"
                                             class="btn btn-danger btn-lg" />

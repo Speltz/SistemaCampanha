@@ -42,10 +42,12 @@
                                                     <%= row.tpContrato %>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <a href="/funcao/edit/<%= row.idFuncao %>" class="text-success"><i
+                                                    <a href="/funcao/edit/<%= row.idFuncao %>" class="text-success"
+                                                        title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
-                                                        data-url="/funcao/delete/<%= row.idFuncao %>">
+                                                        data-url="/funcao/delete/<%= row.idFuncao %>"
+                                                        title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
                                                 </td>
                                             </tr>
@@ -75,8 +77,9 @@
                     Tem certeza de que deseja excluir esta função?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
                     <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                    
                 </div>
             </div>
         </div>

@@ -1,36 +1,143 @@
 <%- include('../layout/header') %>
+<%- include('../scripts/scripts') %>
     <div class="container">
         <div class="row">
             <div class="col-lg-6 mx-auto mt-4">
                 <div class="card shadow">
                     <div class="card-header bg-primary">
-                        <h5 class="text-light">Cadastrar Função</h5>
+                        <h5 class="text-light">Dados do Candidato</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="/funcao/create" method="post" id="add-form">
+                        <form action="/candidato/create" method="post" id="add-form">
                             <div class="mb-3">
-                                <label for="nmFuncao">Nome da função</label>
-                                <input type="text" name="nmFuncao" class="form-control form-control-lg"
-                                    placeholder="Função" required />
+                                <label for="nrCandidato">Número</label>
+                                <input type="number" name="nrCandidato" class="form-control form-control-lg"
+                                    placeholder="Número" required />
                             </div>
                             <div class="mb-3">
-                                <label for="dsFuncao">Descrição</label>
-                                <input type="text" name="dsFuncao" class="form-control form-control-lg"
-                                    placeholder="Descrição..." required />
+                                <label for="partido">Partido</label>
+                                <input type="text" name="partido" class="form-control form-control-lg"
+                                    placeholder="Partido" required />
                             </div>
                             <div class="mb-3">
-                                <label for="tpContrato">Tipo de contrato</label>
-                                <select name="tpContrato" class="form-control form-control-lg" required>
-                                    <option value="" disabled selected hidden>Tipo de contrato</option>
-                                    <option value="Pessoal">Pessoal</option>
-                                    <option value="Militante">Militante</option>
-                                </select>
-                            </div>
+                                <div class="mb-3">
+                                    <label for="cargo">Cargo</label>
+                                    <input type="text" name="cargo" class="form-control form-control-lg"
+                                        placeholder="Cargo" required />
+                                </div>
+                                <div class="mb-3">
+                                    <div class="mb-3">
+                                        <label for="municipio">Município</label>
+                                        <input type="text" name="municipio" class="form-control form-control-lg"
+                                            placeholder="Município" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="mb-3">
+                                            <label for="nmCandidato">Nome - Candidato</label>
+                                            <input type="text" name="nmCandidato" class="form-control form-control-lg"
+                                                placeholder="Nome" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cnpj">CNPJ</label>
+                                            <input type="text" id="cnpj" name="cnpj" class="form-control form-control-lg"
+                                                placeholder="CNPJ" required oninput="validateNumberLength(this, 14)" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="enderecoCandidato">Endereço - Candidato</label>
+                                            <input type="text" name="enderecoCandidato" class="form-control form-control-lg"
+                                                placeholder="Endereço" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cidadeCandidato">Cidade - Candidato</label>
+                                            <input type="text" name="cidadeCandidato" class="form-control form-control-lg"
+                                                placeholder="Cidade" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cepCandidato">CEP - Candidato</label>
+                                            <input type="number" name="cepCandidato" class="form-control form-control-lg"
+                                                placeholder="CEP" required oninput="validateNumberLength(this, 8)"/>
+                                        </div>
+                                        <div class="card-header bg-primary">
+                                            <h5 class="text-light">Dados do Administrador Financeiro</h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cpfAdmFinanceiro">CPF - Administrador Financeiro</label>
+                                            <input type="number" name="cpfAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="CPF" required oninput="validateNumberLength(this, 11)"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="rgAdmFinanceiro">RG - Administrador Financeiro</label>
+                                            <input type="number" name="rgAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="RG" required oninput="validateNumberLength(this, 9)"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="ecAdmFinanceiro">Estado Civil - Administrador Financeiro</label>
+                                            <select name="ecAdmFinanceiro" class="form-control form-control-lg" required>
+                                                <option value="" disabled selected hidden>Estado Civil</option>
+                                                <option value="Solteiro">Solteiro</option>
+                                                <option value="Casado">Casado</option>
+                                                <option value="Separado">Separado</option>
+                                                <option value="Divorciado">Divorciado</option>
+                                                <option value="Viúvo">Viúvo</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="profAdmFinanceiro">Profissão - Administrador Financeiro</label>
+                                            <input type="text" name="profAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="Profissão" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nmAdmFinanceiro">Nome - Administrador Financeiro</label>
+                                            <input type="text" name="nmAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="Nome" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="enderecoAdmFinanceiro">Endereço - Administrador Financeiro</label>
+                                            <input type="text" name="enderecoAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="Endereço" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cidadeAdmFinanceiro">Cidade - Administrador Financeiro</label>
+                                            <input type="text" name="cidadeAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="Cidade" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
+                                            <input type="number" name="cepAdmFinanceiro" class="form-control form-control-lg"
+                                                placeholder="CEP" required oninput="validateNumberLength(this, 8)"/>
+                                        </div>
+                                        <div class="card-header bg-primary">
+                                            <h5 class="text-light">Dados da Campanha</h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="dtInicioCampanha">Início da campanha</label>
+                                            <input type="date" name="dtInicioCampanha" class="form-control form-control-lg"
+                                                placeholder="  /  /  " required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="dtFimCampanha">Fim da campanha</label>
+                                            <input type="date" name="dtFimCampanha" class="form-control form-control-lg"
+                                                placeholder="  /  /  " required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="lmMilitantes">Limite de militantes</label>
+                                            <input type="number" name="lmMilitantes" class="form-control form-control-lg"
+                                                placeholder="Limite de militantes" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="lmVeiculos">Limite de veículos</label>
+                                            <input type="number" name="lmVeiculos" class="form-control form-control-lg"
+                                                placeholder="Limite de veículos" required />
+                                        </div>
 
-                            <div class="mb-3">
-                                <input type="submit" name="submit" value="Cadastrar" class="btn btn-primary btn-lg" />
-                                <input type="button" name="submit" value="Voltar" onclick="window.location.href='/funcao'" class="btn btn-danger btn-lg" />
-                            </div>
+
+                                        <div class="mb-3">
+                                            <input type="submit" name="submit" value="Cadastrar"
+                                                class="btn btn-primary btn-lg" />
+                                            <input type="button" name="submit" value="Voltar"
+                                                onclick="window.location.href='/candidato'"
+                                                class="btn btn-danger btn-lg" />
+                                        </div>
                         </form>
                     </div>
                 </div>

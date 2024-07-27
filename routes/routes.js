@@ -34,7 +34,7 @@ module.exports = (connection) => {
             } else {
                 req.session.message = {
                     type: 'success',
-                    message: 'Função criada com sucesso!'
+                    message: 'Função cadastrada com sucesso!'
                 };
                 res.redirect('/funcao');
             }
@@ -61,6 +61,8 @@ module.exports = (connection) => {
             }
         });
     });
+
+    //EDIT Função
     router.post('/funcao/edit/:idFuncao', (req, res) => {
         const { idFuncao } = req.params;
         const { nmFuncao, dsFuncao, tpContrato } = req.body;
@@ -91,7 +93,7 @@ module.exports = (connection) => {
         });
     });
 
-    // Delete
+    // Delete FUNÇÃO
     router.get('/funcao/delete/:idFuncao', (req, res) => {
         let idFuncao = req.params.idFuncao;
         const query = 'DELETE FROM tbFuncao WHERE idFuncao = ?';
@@ -126,14 +128,150 @@ module.exports = (connection) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
-                res.render('canidato/index', { title: 'Candidatos', candidato: results });
+                res.render('candidato/index', { title: 'Candidatos', candidato: results });
             }
         });
     });
 
+        // Página CREATE
+        router.get('/candidato/create', (req, res) => {
+            res.render('candidato/create', { title: 'Cadastrar Candidato' });
+        });
 
+        // Create CANDIDATO
+    router.post('/candidato/create', (req, res) => {
+        const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+        const query = `INSERT INTO tbCandidato (nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+                        enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
+                        ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+                        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos ) VALUES (?, ?, ?, ?, ?, ?, 
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
+            ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos], (err, result) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                req.session.message = {
+                    type: 'success',
+                    message: 'Candidato cadastrado com sucesso!'
+                };
+                res.redirect('/candidato');
+            }
+        });
+    });
+    //View CANDIDATO
+    router.get('/candidato/view/:nrCandidato', (req, res) => {
+        const nrCandidato = req.params.nrCandidato;
+        const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
 
+        connection.query(query, [nrCandidato], (err, results) => {
+            if (err) {
+                res.redirect('/');
+            } else {
+                if (results.length > 0) {
+                    res.render('candidato/view', {
+                        title: 'Editar Candidato',
+                        candidato: results[0]
+                    });
+                } else {
+                    res.redirect('/');
+                }
+            }
+        });
+    });
 
+    // Página EDIT
+    router.get('/candidato/edit/:nrCandidato', (req, res) => {
+        const nrCandidato = req.params.nrCandidato;
+        const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
+
+        connection.query(query, [nrCandidato], (err, results) => {
+            if (err) {
+                res.redirect('/');
+            } else {
+                if (results.length > 0) {
+                    res.render('candidato/edit', {
+                        title: 'Editar Candidato',
+                        candidato: results[0]
+                    });
+                } else {
+                    res.redirect('/');
+                }
+            }
+        });
+    });
+
+    //EDIT Candidato
+router.post('/candidato/edit/:nrCandidato', (req, res) => {
+    const originalNrCandidato = req.params.nrCandidato;
+    const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+        enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
+        ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+
+    const query = `UPDATE tbCandidato SET nrCandidato = ?, partido = ?, cargo = ?, municipio = ?, nmCandidato = ?, cnpj = ?,
+                    enderecoCandidato = ?, cidadeCandidato = ?, cepCandidato = ?, cpfAdmFinanceiro = ?, rgAdmFinanceiro = ?, 
+                    ecAdmFinanceiro = ?, profAdmFinanceiro = ?, nmAdmFinanceiro = ?, enderecoAdmFinanceiro = ?, cidadeAdmFinanceiro = ?, 
+                    cepAdmFinanceiro = ?, dtInicioCampanha = ?, dtFimCampanha = ?, lmMilitantes = ?, lmVeiculos = ?
+                    WHERE nrCandidato = ?`;
+    connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
+        enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
+        ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
+        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
+        if (err) {
+            console.error(err);
+            req.session.message = {
+                type: 'danger',
+                message: 'Erro ao atualizar o cadastro de candidato.'
+            };
+            res.redirect('/candidato');
+        } else {
+            if (result.affectedRows === 0) {
+                req.session.message = {
+                    type: 'warning',
+                    message: 'Candidato não encontrado.'
+                };
+            } else {
+                req.session.message = {
+                    type: 'success',
+                    message: 'Cadastro de candidato atualizado com sucesso!'
+                };
+            }
+            res.redirect('/candidato');
+        }
+    });
+});
+
+    // Delete CANDIDATO
+    router.get('/candidato/delete/:nrCandidato', (req, res) => {
+        let nrCandidato = req.params.nrCandidato;
+        const query = 'DELETE FROM tbCandidato WHERE nrCandidato = ?';
+
+        connection.query(query, [nrCandidato], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Candidato não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Candidato deletado com sucesso!'
+                    };
+                }
+                res.redirect('/candidato');
+            }
+        });
+    });
 
 
 
