@@ -3,15 +3,27 @@ const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
 const { formatCNPJ } = require('./utils/utils');
+const { formatCPF } = require('./utils/utils');
+const { formatRG } = require('./utils/utils');
 const { formatValor } = require('./utils/utils');
+const { formatCEP } = require('./utils/utils');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-//Disponibiliza máscara do CNPJ
+//Disponibiliza máscara do CNPJ - Tabela
 app.locals.formatCNPJ = formatCNPJ;
 
-//Disponibiliza conversão do valor em Real
+//Disponibiliza máscara do CPF - Tabela
+app.locals.formatCPF = formatCPF;
+
+//Disponibiliza máscara do RG - Tabela
+app.locals.formatRG = formatRG;
+
+//Disponibiliza máscara do CEP - Tabela
+app.locals.formatCEP = formatCEP;
+
+//Disponibiliza conversão do valor em Real - Tabela
 app.locals.formatValor = formatValor;
 
 // Conexão do banco de dados

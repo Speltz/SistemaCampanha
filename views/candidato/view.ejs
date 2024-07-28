@@ -56,8 +56,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepCandidato">CEP - Candidato</label>
-                                        <input type="number" name="cepCandidato" class="form-control form-control-lg"
-                                            placeholder="CEP" required value="<%= candidato.cepCandidato %>"
+                                        <input type="text" name="cepCandidato" class="form-control form-control-lg"
+                                            placeholder="CEP" required value="<%= formatCEP(candidato.cepCandidato) %>"
                                             oninput="validateNumberLength(this, 8)" readonly />
                                     </div>
                                     <div class="card-header bg-primary">
@@ -65,14 +65,14 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="cpfAdmFinanceiro">CPF - Administrador Financeiro</label>
-                                        <input type="number" name="cpfAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="CPF" required value="<%= candidato.cpfAdmFinanceiro %>"
+                                        <input type="text" name="cpfAdmFinanceiro" class="form-control form-control-lg"
+                                            placeholder="CPF" required value="<%= formatCPF(candidato.cpfAdmFinanceiro) %>"
                                             oninput="validateNumberLength(this, 11)" readonly />
                                     </div>
                                     <div class="mb-3">
                                         <label for="rgAdmFinanceiro">RG - Administrador Financeiro</label>
-                                        <input type="number" name="rgAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="RG" required value="<%= candidato.rgAdmFinanceiro %>"
+                                        <input type="text" name="rgAdmFinanceiro" class="form-control form-control-lg"
+                                            placeholder="RG" required value="<%= formatRG(candidato.rgAdmFinanceiro) %>"
                                             oninput="validateNumberLength(this, 9)" readonly />
                                     </div>
                                     <div class="mb-3">
@@ -117,8 +117,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
-                                        <input type="number" name="cepAdmFinanceiro" class="form-control form-control-lg"
-                                            placeholder="CEP" value="<%= candidato.cepAdmFinanceiro %>"
+                                        <input type="text" name="cepAdmFinanceiro" class="form-control form-control-lg"
+                                            placeholder="CEP" value="<%= formatCEP(candidato.cepAdmFinanceiro) %>"
                                             required oninput="validateNumberLength(this, 8)" readonly />
                                     </div>
                                     <div class="card-header bg-primary">
