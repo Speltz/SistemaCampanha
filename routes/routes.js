@@ -532,7 +532,8 @@ module.exports = (connection) => {
         const { idSalario } = req.params;
         const { municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria } = req.body;
 
-        const query = `UPDATE tbSalario SET municipio = ?, nrCandidato = ?, idFuncao = ?, valor = ?, tipo = ?, cgHoraria = ?`;
+        const query = `UPDATE tbSalario SET municipio = ?, nrCandidato = ?, idFuncao = ?, valor = ?, tipo = ?, cgHoraria = ?
+                        WHERE idSalario = ?`;
         connection.query(query, [municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria, idSalario], (err, result) => {
             if (err) {
                 console.error(err);
