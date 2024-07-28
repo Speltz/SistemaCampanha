@@ -67,7 +67,8 @@ module.exports = (connection) => {
         const { idFuncao } = req.params;
         const { nmFuncao, dsFuncao, tpContrato } = req.body;
 
-        const query = 'UPDATE tbFuncao SET nmFuncao = ?, dsFuncao = ?, tpContrato = ? WHERE idFuncao = ?';
+        const query = `UPDATE tbFuncao SET nmFuncao = ?, dsFuncao = ?, tpContrato = ? 
+        WHERE idFuncao = ?`;
         connection.query(query, [nmFuncao, dsFuncao, tpContrato, idFuncao], (err, result) => {
             if (err) {
                 console.error(err);
@@ -376,7 +377,9 @@ module.exports = (connection) => {
         const { idVeiculo } = req.params;
         const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
 
-        const query = `UPDATE tbVeiculo SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano = ?, combustivel = ?, valor = ?, tipo = ?, cgHoraria = ? WHERE idVeiculo = ?`;
+        const query = `UPDATE tbVeiculo SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano = ?,
+         combustivel = ?, valor = ?, tipo = ?, cgHoraria = ?
+          WHERE idVeiculo = ?`;
         connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria, idVeiculo], (err, result) => {
             if (err) {
                 console.error(err);
