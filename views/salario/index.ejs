@@ -46,8 +46,8 @@
                                                 <td style="text-align: center;">
                                                     <%= row.nmFuncao %>
                                                 </td>
-                                                <td style="text-align: center;">
-                                                    R$ <%= formatValor(row.valor) %>
+                                                <td style="text-align: center;" data-mask="#.##0,00" 
+                                                data-mask-reverse="true"><%= row.valor %>
                                                 </td>
                                                 <td style="text-align: center;">
                                                     <%= row.tipo %>

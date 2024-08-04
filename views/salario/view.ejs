@@ -32,8 +32,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="valor">Valor</label>
-                            <input type="number" name="valor" class="form-control form-control-lg"
-                                placeholder="R$..." required value="<%= salario.valor %>" readonly />
+                            <input type="text" name="valor" class="form-control form-control-lg"
+                                placeholder="R$..." required value="<%= salario.valor %>"  data-mask="#.##0,00" 
+                                data-mask-reverse="true"
+                                readonly />
                         </div>
                         <div class="mb-3">
                             <label for="tipo">Tipo</label>

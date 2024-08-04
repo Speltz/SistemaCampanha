@@ -46,8 +46,8 @@
                                                 <td style="text-align: center;">
                                                     <%= row.nmCandidato %>
                                                 </td>
-                                                <td style="text-align: center;">
-                                                    <%= formatCNPJ(row.cnpj) %>
+                                                <td style="text-align: center;" data-mask="00.000.000/0000-00">
+                                                    <%= row.cnpj %>
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <a href="/candidato/view/<%= row.nrCandidato %>" class=""

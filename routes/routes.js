@@ -144,15 +144,22 @@ module.exports = (connection) => {
             enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
             cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+
+        //Remove caracteres não numéricos
+         const cleanCnpj = cnpj.replace(/\D/g, '');
+         const cleanCepCandidato = cepCandidato.replace(/\D/g, '');
+         const cleanCpfAdmFinanceiro = cpfAdmFinanceiro.replace(/\D/g, '');
+         const cleanCepAdmFinanceiro = cepAdmFinanceiro.replace(/\D/g, '');
+
         const query = `INSERT INTO tbCandidato (nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
                         enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
                         ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
                         cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos ) VALUES (?, ?, ?, ?, ?, ?, 
                         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cleanCnpj,
+            enderecoCandidato, cidadeCandidato, cleanCepCandidato, cleanCpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos], (err, result) => {
+            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos], (err, result) => {
                 if (err) {
                     res.status(500).json({ message: err.message, type: 'danger' });
                 } else {
@@ -209,21 +216,28 @@ module.exports = (connection) => {
 
     //EDIT Candidato
     router.post('/candidato/edit/:nrCandidato', (req, res) => {
+
         const originalNrCandidato = req.params.nrCandidato;
         const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
             enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
             cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
 
+        //Remove caracteres não numéricos
+         const cleanCnpj = cnpj.replace(/\D/g, '');
+         const cleanCepCandidato = cepCandidato.replace(/\D/g, '');
+         const cleanCpfAdmFinanceiro = cpfAdmFinanceiro.replace(/\D/g, '');
+         const cleanCepAdmFinanceiro = cepAdmFinanceiro.replace(/\D/g, '');
+
         const query = `UPDATE tbCandidato SET nrCandidato = ?, partido = ?, cargo = ?, municipio = ?, nmCandidato = ?, cnpj = ?,
                     enderecoCandidato = ?, cidadeCandidato = ?, cepCandidato = ?, cpfAdmFinanceiro = ?, rgAdmFinanceiro = ?, 
                     ecAdmFinanceiro = ?, profAdmFinanceiro = ?, nmAdmFinanceiro = ?, enderecoAdmFinanceiro = ?, cidadeAdmFinanceiro = ?, 
                     cepAdmFinanceiro = ?, dtInicioCampanha = ?, dtFimCampanha = ?, lmMilitantes = ?, lmVeiculos = ?
                     WHERE nrCandidato = ?`;
-        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
-            enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
+        connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cleanCnpj,
+            enderecoCandidato, cidadeCandidato, cleanCepCandidato, cleanCpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
+            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
                 if (err) {
                     console.error(err);
                     req.session.message = {

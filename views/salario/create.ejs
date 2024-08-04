@@ -16,9 +16,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="nrCandidato">Candidato</label>
-                                <input type="number" name="nrCandidato" class="form-control form-control-lg"
-                                    placeholder="Número do candidato" required />
-                            </div>
+                                <div class="input-group">
+                                    <input type="number" name="nrCandidato" class="form-control form-control-lg" placeholder="Número do candidato" required />
+                                    <button type="button" class="btn btn-primary">Buscar Candidato</button>
+                                </div>
+                            </div>                            
                             <button type="button" onclick="checkCandidato()">Verificar Candidato</button>
                             <div id="candidato-message" style="margin-top: 10px;"></div>
                             <div class="mb-3">
@@ -32,8 +34,8 @@
                             </div>
                                 <div class="mb-3">
                                     <label for="valor">Valor</label>
-                                    <input type="number" id="valor" name="valor" class="form-control form-control-lg"
-                                        placeholder="R$..." required />
+                                    <input type="text" id="valor" name="valor" class="form-control form-control-lg"
+                                        placeholder="R$..."  data-mask="#.##0,00" data-mask-reverse="true" required />
                                 </div>
                             <div class="mb-3">
                                 <label for="tipo">Tipo</label>
