@@ -329,9 +329,13 @@ module.exports = (connection) => {
     //Create VEÍCULO
     router.post('/veiculo/create', (req, res) => {
         const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
+        //Remove caracteres não numéricos
+        const clearValor = valor.replace(/\D/g, '');
+        //Transforma em decimal
+        const decimalValor = clearValor / 100.0;
         const query = `INSERT INTO tbVeiculo (municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria], (err, result) => {
+        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, decimalValor, tipo, cgHoraria], (err, result) => {
             if (err) {
                 res.status(500).json({ message: err.message, type: 'danger' });
             } else {
@@ -390,11 +394,14 @@ module.exports = (connection) => {
     router.post('/veiculo/edit/:idVeiculo', (req, res) => {
         const { idVeiculo } = req.params;
         const { municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria } = req.body;
-
+        //Remove caracteres não numéricos
+        const clearValor = valor.replace(/\D/g, '');
+        //Transforma em decimal
+        const decimalValor = clearValor / 100.0;
         const query = `UPDATE tbVeiculo SET municipio = ?, nrCandidato = ?, marca = ?, modelo = ?, ano = ?,
          combustivel = ?, valor = ?, tipo = ?, cgHoraria = ?
           WHERE idVeiculo = ?`;
-        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, valor, tipo, cgHoraria, idVeiculo], (err, result) => {
+        connection.query(query, [municipio, nrCandidato, marca, modelo, ano, combustivel, decimalValor, tipo, cgHoraria, idVeiculo], (err, result) => {
             if (err) {
                 console.error(err);
                 req.session.message = {
@@ -476,9 +483,13 @@ module.exports = (connection) => {
     //Create SALARIO
     router.post('/salario/create', (req, res) => {
         const { municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria } = req.body;
+        //Remove caracteres não numéricos
+        const clearValor = valor.replace(/\D/g, '');
+        //Transforma em decimal
+        const decimalValor = clearValor / 100.0;
         const query = `INSERT INTO tbSalario (municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria) 
         VALUES (?, ?, ?, ?, ?, ?)`;
-        connection.query(query, [municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria], (err, result) => {
+        connection.query(query, [municipio, nrCandidato, idFuncao, decimalValor, tipo, cgHoraria], (err, result) => {
             if (err) {
                 res.status(500).json({ message: err.message, type: 'danger' });
             } else {
@@ -548,10 +559,13 @@ module.exports = (connection) => {
     router.post('/salario/edit/:idSalario', (req, res) => {
         const { idSalario } = req.params;
         const { municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria } = req.body;
-
+        //Remove caracteres não numéricos
+        const clearValor = valor.replace(/\D/g, '');
+        //Transforma em decimal
+        const decimalValor = clearValor / 100.0;
         const query = `UPDATE tbSalario SET municipio = ?, nrCandidato = ?, idFuncao = ?, valor = ?, tipo = ?, cgHoraria = ?
                         WHERE idSalario = ?`;
-        connection.query(query, [municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria, idSalario], (err, result) => {
+        connection.query(query, [municipio, nrCandidato, idFuncao, decimalValor, tipo, cgHoraria, idSalario], (err, result) => {
             if (err) {
                 console.error(err);
                 req.session.message = {
