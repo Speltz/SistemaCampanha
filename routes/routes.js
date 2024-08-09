@@ -143,7 +143,7 @@ module.exports = (connection) => {
         const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
             enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha,dtTrava, lmMilitantes, lmVeiculos } = req.body;
 
         //Remove caracteres não numéricos
          const cleanCnpj = cnpj.replace(/\D/g, '');
@@ -154,12 +154,12 @@ module.exports = (connection) => {
         const query = `INSERT INTO tbCandidato (nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
                         enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro, 
                         ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro, 
-                        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos ) VALUES (?, ?, ?, ?, ?, ?, 
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                        cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, dtTrava, lmMilitantes, lmVeiculos ) VALUES (?, ?, ?, ?, ?, ?, 
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cleanCnpj,
             enderecoCandidato, cidadeCandidato, cleanCepCandidato, cleanCpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos], (err, result) => {
+            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, dtTrava, lmMilitantes, lmVeiculos], (err, result) => {
                 if (err) {
                     res.status(500).json({ message: err.message, type: 'danger' });
                 } else {
@@ -221,7 +221,7 @@ module.exports = (connection) => {
         const { nrCandidato, partido, cargo, municipio, nmCandidato, cnpj,
             enderecoCandidato, cidadeCandidato, cepCandidato, cpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos } = req.body;
+            cepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, dtTrava, lmMilitantes, lmVeiculos } = req.body;
 
         //Remove caracteres não numéricos
          const cleanCnpj = cnpj.replace(/\D/g, '');
@@ -232,12 +232,12 @@ module.exports = (connection) => {
         const query = `UPDATE tbCandidato SET nrCandidato = ?, partido = ?, cargo = ?, municipio = ?, nmCandidato = ?, cnpj = ?,
                     enderecoCandidato = ?, cidadeCandidato = ?, cepCandidato = ?, cpfAdmFinanceiro = ?, rgAdmFinanceiro = ?, 
                     ecAdmFinanceiro = ?, profAdmFinanceiro = ?, nmAdmFinanceiro = ?, enderecoAdmFinanceiro = ?, cidadeAdmFinanceiro = ?, 
-                    cepAdmFinanceiro = ?, dtInicioCampanha = ?, dtFimCampanha = ?, lmMilitantes = ?, lmVeiculos = ?
+                    cepAdmFinanceiro = ?, dtInicioCampanha = ?, dtFimCampanha = ?, dtTrava =?, lmMilitantes = ?, lmVeiculos = ?
                     WHERE nrCandidato = ?`;
         connection.query(query, [nrCandidato, partido, cargo, municipio, nmCandidato, cleanCnpj,
             enderecoCandidato, cidadeCandidato, cleanCepCandidato, cleanCpfAdmFinanceiro, rgAdmFinanceiro,
             ecAdmFinanceiro, profAdmFinanceiro, nmAdmFinanceiro, enderecoAdmFinanceiro, cidadeAdmFinanceiro,
-            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
+            cleanCepAdmFinanceiro, dtInicioCampanha, dtFimCampanha, dtTrava, lmMilitantes, lmVeiculos, originalNrCandidato], (err, result) => {
                 if (err) {
                     console.error(err);
                     req.session.message = {
