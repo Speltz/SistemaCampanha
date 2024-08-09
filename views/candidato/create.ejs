@@ -64,6 +64,15 @@
                                                     required />
                                             </div>
                                             <div class="mb-3">
+                                                <label for="ufCandidato">UF - Candidato</label>
+                                                <select name="ufCandidato" class="form-control form-control-lg" required>
+                                                    <option value="" disabled selected hidden>Selecione o estado</option>
+                                                    <% uf.forEach(uf => { %>
+                                                        <option value="<%= uf.ufCandidato %>"><%= uf.uf %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
                                                 <label for="cepCandidato">CEP - Candidato</label>
                                                 <input type="text" name="cepCandidato"
                                                     class="form-control form-control-lg" placeholder="CEP" data-mask="00000-000"
@@ -129,6 +138,15 @@
                                                 <input type="text" name="cidadeAdmFinanceiro"
                                                     class="form-control form-control-lg" placeholder="Cidade"
                                                     required />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ufAdmFinanceiro">UF - Administrador Financeiro</label>
+                                                <select name="ufAdmFinanceiro" class="form-control form-control-lg" required>
+                                                    <option value="" disabled selected hidden>Selecione o estado</option>
+                                                    <% uf.forEach(uf => { %>
+                                                        <option value="<%= uf.ufCandidato %>"><%= uf.uf %></option>
+                                                    <% }); %>
+                                                </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>

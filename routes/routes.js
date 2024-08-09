@@ -135,7 +135,14 @@ module.exports = (connection) => {
 
     // Página CREATE
     router.get('/candidato/create', (req, res) => {
-        res.render('candidato/create', { title: 'Cadastrar Candidato' });
+        const query = 'SELECT uf FROM tbUf';
+        connection.query(query, (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                res.render('candidato/create', { title: 'Cadastrar Candidato', uf: results });
+            }
+        });
     });
 
     // Create CANDIDATO
@@ -197,15 +204,18 @@ module.exports = (connection) => {
     router.get('/candidato/edit/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
         const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
+        const ufQuery = 'SELECT uf FROM tbUf';
+        
 
-        connection.query(query, [nrCandidato], (err, results) => {
+        connection.query(query, ufQuery [nrCandidato], (err, results) => {
             if (err) {
                 res.redirect('/');
             } else {
                 if (results.length > 0) {
                     res.render('candidato/edit', {
                         title: 'Editar Candidato',
-                        candidato: results[0]
+                        candidato: results[0],
+                        uf: results
                     });
                 } else {
                     res.redirect('/');

@@ -28,7 +28,8 @@
                                 <select name="idFuncao" class="form-control form-control-lg" required>
                                     <option value="" disabled hidden>Selecione a Função</option>
                                     <% funcoes.forEach(funcao => { %>
-                                        <option value="<%= funcao.idFuncao %>" <%= salario.idFuncao == funcao.idFuncao ? 'selected' : '' %>><%= funcao.nmFuncao %></option>
+                                        <option value="<%= funcao.idFuncao %>" <%= salario.idFuncao == funcao.idFuncao ? 'selected' : '' %>
+                                            ><%= funcao.nmFuncao %></option>
                                     <% }); %>
                                 </select>
                             </div>
