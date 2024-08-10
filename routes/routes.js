@@ -135,14 +135,7 @@ module.exports = (connection) => {
 
     // Página CREATE
     router.get('/candidato/create', (req, res) => {
-        const query = 'SELECT uf FROM tbUf';
-        connection.query(query, (err, results) => {
-            if (err) {
-                res.status(500).json({ message: err.message, type: 'danger' });
-            } else {
-                res.render('candidato/create', { title: 'Cadastrar Candidato', uf: results });
-            }
-        });
+        res.render('candidato/create', { title: 'Cadastrar Candidato' });
     });
 
     // Create CANDIDATO
@@ -183,25 +176,19 @@ module.exports = (connection) => {
     router.get('/candidato/view/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
         const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
-        const ufQuery = 'SELECT uf FROM tbUf';
-        
-        connection.query(query, [nrCandidato], (err, candidatoResults) => {
+
+        connection.query(query, [nrCandidato], (err, results) => {
             if (err) {
                 res.redirect('/');
-            } else if (candidatoResults.length > 0) {
-                connection.query(ufQuery, (err, ufResults) => {
-                    if (err) {
-                        res.redirect('/');
-                    } else {
-                        res.render('candidato/view', {
-                            title: 'Dados do Candidato',
-                            candidato: candidatoResults[0],
-                            uf: ufResults
-                        });
-                    }
-                });
             } else {
-                res.redirect('/');
+                if (results.length > 0) {
+                    res.render('candidato/view', {
+                        title: 'Detalhes do candidato',
+                        candidato: results[0]
+                    });
+                } else {
+                    res.redirect('/');
+                }
             }
         });
     });
@@ -210,25 +197,19 @@ module.exports = (connection) => {
     router.get('/candidato/edit/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
         const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
-        const ufQuery = 'SELECT uf FROM tbUf';
-        
-        connection.query(query, [nrCandidato], (err, candidatoResults) => {
+
+        connection.query(query, [nrCandidato], (err, results) => {
             if (err) {
                 res.redirect('/');
-            } else if (candidatoResults.length > 0) {
-                connection.query(ufQuery, (err, ufResults) => {
-                    if (err) {
-                        res.redirect('/');
-                    } else {
-                        res.render('candidato/edit', {
-                            title: 'Editar Candidato',
-                            candidato: candidatoResults[0],
-                            uf: ufResults
-                        });
-                    }
-                });
             } else {
-                res.redirect('/');
+                if (results.length > 0) {
+                    res.render('candidato/edit', {
+                        title: 'Editar Candidato',
+                        candidato: results[0]
+                    });
+                } else {
+                    res.redirect('/');
+                }
             }
         });
     });
@@ -338,6 +319,16 @@ module.exports = (connection) => {
                 res.status(500).json({ message: err.message });
             } else {
                 res.render('veiculo/index', { title: 'Veículos', veiculo: results });
+            }
+        });
+    });
+
+    router.get('/veiculo/create', (req, res) => {
+        connection.query('SELECT * FROM tbCandidato', (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('veiculo/create', { title: 'Candidatos', candidato: results });
             }
         });
     });

@@ -1,84 +1,144 @@
 <%- include('../layout/header') %>
-<%- include('../scripts/scripts') %>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mx-auto mt-4">
-                <div class="card shadow">
-                    <div class="card-header bg-success">
-                        <h5 class="text-light">Editar Veículo</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        <form action="/veiculo/edit/<%= veiculo.idVeiculo %>" method="post" id="edit-form">
-                            <div class="mb-3">
-                                <label for="municipio">Município</label>
-                                <input type="text" name="municipio" class="form-control form-control-lg"
-                                    placeholder="Município" required value="<%= veiculo.municipio %>"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nrCandidato">Candidato</label>
-                                <div class="input-group">
-                                    <input type="text" name="nrCandidato" class="form-control form-control-lg" placeholder="Número do candidato" required value="<%= veiculo.nrCandidato %>"/>
-                                    <button type="button" class="btn btn-primary">Buscar Candidato</button>
+    <%- include('../scripts/scripts') %>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto mt-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-header bg-success">
+                            <h5 class="text-light">Editar Veículo</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form action="/veiculo/edit/<%= veiculo.idVeiculo %>" method="post" id="edit-form">
+                                <div class="mb-3">
+                                    <label for="municipio">Município</label>
+                                    <input type="text" name="municipio" class="form-control form-control-lg"
+                                        placeholder="Município" required value="<%= veiculo.municipio %>" />
                                 </div>
-                            </div>
-                            
-                            <button type="button" onclick="checkCandidato()">Verificar Candidato</button>
-                            <div id="candidato-message" style="margin-top: 10px;"></div>
-                            <div class="mb-3">
+                                <div class="mb-3">
+                                    <label for="nrCandidato">Candidato</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nrCandidato" class="form-control form-control-lg"
+                                            placeholder="Número do candidato" required
+                                            value="<%= veiculo.nrCandidato %>" />
+                                        <button type="button" class="btn btn-primary modal-btn">Buscar
+                                            Candidato</button>
+                                    </div>
+                                </div>
+
+                                <button type="button" onclick="checkCandidato()">Verificar Candidato</button>
+                                <div id="candidato-message" style="margin-top: 10px;"></div>
                                 <div class="mb-3">
                                     <label for="marca">Marca</label>
                                     <input type="text" name="marca" class="form-control form-control-lg"
-                                        placeholder="Marca do veículo" required value="<%= veiculo.marca %>"/>
+                                        placeholder="Marca do veículo" required value="<%= veiculo.marca %>" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="modelo">Modelo</label>
                                     <input type="text" name="modelo" class="form-control form-control-lg"
-                                        placeholder="Modelo do veículo" required value="<%= veiculo.modelo %>"/>
+                                        placeholder="Modelo do veículo" required value="<%= veiculo.modelo %>" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="ano">Ano</label>
                                     <input type="number" name="ano" class="form-control form-control-lg"
-                                        placeholder="Ano do veículo" required value="<%= veiculo.ano %>"/>
+                                        placeholder="Ano do veículo" required value="<%= veiculo.ano %>" />
                                 </div>
                                 <div class="mb-3">
-                                <label for="combustivel">Combustível</label>
-                                <select name="combustivel" class="form-control form-control-lg" required>
-                                    <option value="" disabled selected hidden>Tipo de combustível</option>
-                                    <option value="Gasolina" <%= veiculo.combustivel === 'Gasolina' ? 'selected' : '' %>>Gasolina</option>
-                                    <option value="Álcool" <%= veiculo.combustivel === 'Álcool' ? 'selected' : '' %>>Álcool</option>
-                                    <option value="Diesel" <%= veiculo.combustivel === 'Diesel' ? 'selected' : '' %>>Diesel</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="valor">Valor</label>
-                                <input type="text" name="valor" class="form-control form-control-lg"
-                                    placeholder="R$..." required value="<%= veiculo.valor %>" data-mask="#.##0,00" data-mask-reverse="true"/>
-                            </div>
-                            <div class="mb-3">
-                                <label for="tipo">Tipo</label>
-                                <select name="tipo" class="form-control form-control-lg" required>
-                                    <option value="Mensal" <%= veiculo.tipo === 'Mensal' ? 'selected' : '' %>>Mensal</option>
-                                    <option value="Campanha" <%= veiculo.tipo === 'Campanha' ? 'selected' : '' %>>Campanha</option>
-                                    <option value="Dia" <%= veiculo.tipo === 'Dia' ? 'selected' : '' %>>Dia</option>
-                                    <option value="Hora" <%= veiculo.tipo === 'Hora' ? 'selected' : '' %>>Hora</option>
-                                    <option value="Semana" <%= veiculo.tipo === 'Semana' ? 'selected' : '' %>>Semana</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="cgHoraria">Carga Horária</label>
-                                <input type="number" name="cgHoraria" class="form-control form-control-lg"
-                                    placeholder="Carga horária" required value="<%= veiculo.cgHoraria %>"/>
-                            </div>
+                                    <label for="combustivel">Combustível</label>
+                                    <select name="combustivel" class="form-control form-control-lg" required>
+                                        <option value="" disabled selected hidden>Tipo de combustível</option>
+                                        <option value="Gasolina" <%=veiculo.combustivel==='Gasolina' ? 'selected' : ''
+                                            %>>Gasolina</option>
+                                        <option value="Álcool" <%=veiculo.combustivel==='Álcool' ? 'selected' : '' %>
+                                            >Álcool</option>
+                                        <option value="Diesel" <%=veiculo.combustivel==='Diesel' ? 'selected' : '' %>
+                                            >Diesel</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="valor">Valor</label>
+                                    <input type="text" name="valor" class="form-control form-control-lg"
+                                        placeholder="R$..." required value="<%= veiculo.valor %>" data-mask="#.##0,00"
+                                        data-mask-reverse="true" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tipo">Tipo</label>
+                                    <select name="tipo" class="form-control form-control-lg" required>
+                                        <option value="Mensal" <%=veiculo.tipo==='Mensal' ? 'selected' : '' %>
+                                            >Mensal</option>
+                                        <option value="Campanha" <%=veiculo.tipo==='Campanha' ? 'selected' : '' %>
+                                            >Campanha</option>
+                                        <option value="Dia" <%=veiculo.tipo==='Dia' ? 'selected' : '' %>>Dia
+                                        </option>
+                                        <option value="Hora" <%=veiculo.tipo==='Hora' ? 'selected' : '' %>>Hora
+                                        </option>
+                                        <option value="Semana" <%=veiculo.tipo==='Semana' ? 'selected' : '' %>
+                                            >Semana</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cgHoraria">Carga Horária</label>
+                                    <input type="number" name="cgHoraria" class="form-control form-control-lg"
+                                        placeholder="Carga horária" required value="<%= veiculo.cgHoraria %>" />
+                                </div>
 
-                            <div class="mb-3">
-                                <input type="submit" name="submit" value="Salvar Alterações" class="btn btn-success btn-lg" />
-                                <input type="button" name="submit" value="Voltar" onclick="window.location.href='/veiculo'" 
-                                class="btn btn-danger btn-lg" />
-                            </div>
-                        </form>
+                                <div class="mb-3">
+                                    <input type="submit" name="submit" value="Salvar Alterações"
+                                        class="btn btn-success btn-lg" />
+                                    <input type="button" name="submit" value="Voltar"
+                                        onclick="window.location.href='/veiculo'" class="btn btn-danger btn-lg" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <%- include('../layout/footer') %>
+        <!-- Modal para exibição de candidatos -->
+        <div class="modal fade" id="listaCandidatosModal" tabindex="-1" aria-labelledby="listaCandidatosModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="listaCandidatosModalLabel">Lista de Candidatos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Teste
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            #listaCandidatosModal .modal-dialog {
+                max-width: 800px;
+            }
+
+            .card-header h5 {
+                margin-bottom: 0;
+            }
+
+            .input-group input {
+                border-top-left-radius: 0.5rem !important;
+                border-bottom-left-radius: 0.5rem !important;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .input-group button {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                border-top-right-radius: 0.5rem !important;
+                border-bottom-right-radius: 0.5rem !important;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const listaCandidatosModal = new bootstrap.Modal(document.getElementById('listaCandidatosModal'));
+                document.querySelectorAll('.modal-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        listaCandidatosModal.show();
+                    });
+                });
+            });
+        </script>
+        <%- include('../layout/footer') %>

@@ -2,14 +2,14 @@
     <%- include('../scripts/scripts') %>
         <div class="container">
             <div class="row">
-                <div class="col-lg-6 mx-auto mt-4">
+                <div class="col-lg-6 mx-auto mt-4 mb-4">
                     <div class="card shadow">
                         <div class="card-header bg-primary">
                             <h5 class="text-light">Dados do Candidato</h5>
                         </div>
-                        <div class="card-body p-4">
-                            <form action="/candidato/create" method="post" id="add-form"
-                                onsubmit="return validateCandidato()">
+                        <form action="/candidato/create" method="post" id="add-form"
+                            onsubmit="return validateCandidato()">
+                            <div class="card-body p-4">
                                 <div class="mb-3">
                                     <label for="nrCandidato">Número</label>
                                     <input type="number" name="nrCandidato" class="form-control form-control-lg"
@@ -21,184 +21,148 @@
                                         placeholder="Partido" required />
                                 </div>
                                 <div class="mb-3">
-                                    <div class="mb-3">
-                                        <label for="cargo">Cargo</label>
-                                        <input type="text" name="cargo" class="form-control form-control-lg"
-                                            placeholder="Cargo" required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="mb-3">
-                                            <label for="municipio">Município</label>
-                                            <input type="text" name="municipio" class="form-control form-control-lg"
-                                                placeholder="Município" required />
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="mb-3">
-                                                <label for="nmCandidato">Nome - Candidato</label>
-                                                <input type="text" name="nmCandidato"
-                                                    class="form-control form-control-lg" placeholder="Nome" required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cnpj">CNPJ</label>
-                                                <input type="text" id="cnpj" name="cnpj"
-                                                    class="form-control form-control-lg" placeholder="CNPJ" data-mask="00.000.000/0000-00"
-                                                     required
-                                                     />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="enderecoCandidato">Endereço - Candidato</label>
-                                                <input type="text" name="enderecoCandidato"
-                                                    class="form-control form-control-lg" placeholder="Endereço"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="bairroCandidato">Bairro - Candidato</label>
-                                                <input type="text" name="bairroCandidato"
-                                                    class="form-control form-control-lg" placeholder="Bairro"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cidadeCandidato">Cidade - Candidato</label>
-                                                <input type="text" name="cidadeCandidato"
-                                                    class="form-control form-control-lg" placeholder="Cidade"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="ufCandidato">UF - Candidato</label>
-                                                <select name="ufCandidato" class="form-control form-control-lg" required>
-                                                    <option value="" disabled selected hidden>Selecione o estado</option>
-                                                    <% uf.forEach(uf => { %>
-                                                        <option value="<%= uf.ufCandidato %>"><%= uf.uf %></option>
-                                                    <% }); %>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cepCandidato">CEP - Candidato</label>
-                                                <input type="text" name="cepCandidato"
-                                                    class="form-control form-control-lg" placeholder="CEP" data-mask="00000-000"
-                                                    required />
-                                            </div>
-                                            <div class="card-header bg-primary">
-                                                <h5 class="text-light">Dados do Administrador Financeiro</h5>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cpfAdmFinanceiro">CPF - Administrador Financeiro</label>
-                                                <input type="text" name="cpfAdmFinanceiro" id="cpf"
-                                                    class="form-control form-control-lg" placeholder="CPF" data-mask="000.000.000-00" 
-                                                    required
-                                                     />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="rgAdmFinanceiro">RG - Administrador Financeiro</label>
-                                                <input type="text" name="rgAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="RG" required
-                                                    oninput="validateNumberLength(this, 12)" />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="ecAdmFinanceiro">Estado Civil - Administrador
-                                                    Financeiro</label>
-                                                <select name="ecAdmFinanceiro" class="form-control form-control-lg"
-                                                    required>
-                                                    <option value="" disabled selected hidden>Estado Civil</option>
-                                                    <option value="Solteiro">Solteiro</option>
-                                                    <option value="Casado">Casado</option>
-                                                    <option value="Separado">Separado</option>
-                                                    <option value="Divorciado">Divorciado</option>
-                                                    <option value="Viúvo">Viúvo</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="profAdmFinanceiro">Profissão - Administrador
-                                                    Financeiro</label>
-                                                <input type="text" name="profAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="Profissão"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="nmAdmFinanceiro">Nome - Administrador Financeiro</label>
-                                                <input type="text" name="nmAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="Nome" required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="enderecoAdmFinanceiro">Endereço - Administrador
-                                                    Financeiro</label>
-                                                <input type="text" name="enderecoAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="Endereço"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="bairroAdmFinanceiro">Bairro - Administrador Financeiro</label>
-                                                <input type="text" name="bairroAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="Bairro"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cidadeAdmFinanceiro">Cidade - Administrador
-                                                    Financeiro</label>
-                                                <input type="text" name="cidadeAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="Cidade"
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="ufAdmFinanceiro">UF - Administrador Financeiro</label>
-                                                <select name="ufAdmFinanceiro" class="form-control form-control-lg" required>
-                                                    <option value="" disabled selected hidden>Selecione o estado</option>
-                                                    <% uf.forEach(uf => { %>
-                                                        <option value="<%= uf.ufCandidato %>"><%= uf.uf %></option>
-                                                    <% }); %>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
-                                                <input type="text" name="cepAdmFinanceiro"
-                                                    class="form-control form-control-lg" placeholder="CEP" data-mask="00000-000"
-                                                    required />
-                                            </div>
-                                            <div class="card-header bg-primary">
-                                                <h5 class="text-light">Dados da Campanha</h5>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="dtInicioCampanha">Início da campanha</label>
-                                                <input type="date" name="dtInicioCampanha"
-                                                    class="form-control form-control-lg" placeholder="  /  /  "
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="dtFimCampanha">Fim da campanha</label>
-                                                <input type="date" name="dtFimCampanha"
-                                                    class="form-control form-control-lg" placeholder="  /  /  "
-                                                    required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="dtTrava">Trava de data inicial - Contratos</label>
-                                                <input type="date" name="dtTrava"
-                                                    class="form-control form-control-lg" placeholder="  /  /  " />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="lmMilitantes">Limite de militantes</label>
-                                                <input type="number" name="lmMilitantes"
-                                                    class="form-control form-control-lg"
-                                                    placeholder="Limite de militantes" required />
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="lmVeiculos">Limite de veículos</label>
-                                                <input type="number" name="lmVeiculos"
-                                                    class="form-control form-control-lg"
-                                                    placeholder="Limite de veículos" required />
-                                            </div>
-
-
-                                            <div class="mb-3">
-                                                <input type="submit" name="submit" value="Cadastrar"
-                                                    class="btn btn-primary btn-lg" />
-                                                <input type="button" name="submit" value="Voltar"
-                                                    onclick="window.location.href='/candidato'"
-                                                    class="btn btn-danger btn-lg" />
-                                            </div>
-                            </form>
-                        </div>
+                                    <label for="cargo">Cargo</label>
+                                    <input type="text" name="cargo" class="form-control form-control-lg"
+                                        placeholder="Cargo" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="municipio">Município</label>
+                                    <input type="text" name="municipio" class="form-control form-control-lg"
+                                        placeholder="Município" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nmCandidato">Nome - Candidato</label>
+                                    <input type="text" name="nmCandidato" class="form-control form-control-lg"
+                                        placeholder="Nome" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cnpj">CNPJ</label>
+                                    <input type="text" id="cnpj" name="cnpj" class="form-control form-control-lg"
+                                        placeholder="CNPJ" data-mask="00.000.000/0000-00" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="enderecoCandidato">Endereço - Candidato</label>
+                                    <input type="text" name="enderecoCandidato" class="form-control form-control-lg"
+                                        placeholder="Endereço" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bairroCandidato">Bairro - Candidato</label>
+                                    <input type="text" name="bairroCandidato" class="form-control form-control-lg"
+                                        placeholder="Bairro" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cidadeCandidato">Cidade - Candidato</label>
+                                    <input type="text" name="cidadeCandidato" class="form-control form-control-lg"
+                                        placeholder="Cidade" required />
+                                </div>
+                                <label for="cepCandidato">CEP - Candidato</label>
+                                <input type="text" name="cepCandidato" class="form-control form-control-lg"
+                                    placeholder="CEP" data-mask="00000-000" required />
+                            </div>
+                            <div class="card-header bg-primary">
+                                <h5 class="text-light">Dados do Administrador Financeiro</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <label for="cpfAdmFinanceiro">CPF - Administrador Financeiro</label>
+                                    <input type="text" name="cpfAdmFinanceiro" id="cpf"
+                                        class="form-control form-control-lg" placeholder="CPF"
+                                        data-mask="000.000.000-00" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rgAdmFinanceiro">RG - Administrador Financeiro</label>
+                                    <input type="text" name="rgAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="RG" required oninput="validateNumberLength(this, 12)" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ecAdmFinanceiro">Estado Civil - Administrador
+                                        Financeiro</label>
+                                    <select name="ecAdmFinanceiro" class="form-control form-control-lg" required>
+                                        <option value="" disabled selected hidden>Estado Civil</option>
+                                        <option value="Solteiro">Solteiro</option>
+                                        <option value="Casado">Casado</option>
+                                        <option value="Separado">Separado</option>
+                                        <option value="Divorciado">Divorciado</option>
+                                        <option value="Viúvo">Viúvo</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="profAdmFinanceiro">Profissão - Administrador
+                                        Financeiro</label>
+                                    <input type="text" name="profAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="Profissão" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nmAdmFinanceiro">Nome - Administrador Financeiro</label>
+                                    <input type="text" name="nmAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="Nome" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="enderecoAdmFinanceiro">Endereço - Administrador
+                                        Financeiro</label>
+                                    <input type="text" name="enderecoAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="Endereço" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bairroAdmFinanceiro">Bairro - Administrador Financeiro</label>
+                                    <input type="text" name="bairroAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="Bairro" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cidadeAdmFinanceiro">Cidade - Administrador
+                                        Financeiro</label>
+                                    <input type="text" name="cidadeAdmFinanceiro" class="form-control form-control-lg"
+                                        placeholder="Cidade" required />
+                                </div>
+                                <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
+                                <input type="text" name="cepAdmFinanceiro" class="form-control form-control-lg"
+                                    placeholder="CEP" data-mask="00000-000" required />
+                            </div>
+                            <div class="card-header bg-primary">
+                                <h5 class="text-light">Dados da Campanha</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <label for="dtInicioCampanha">Início da campanha</label>
+                                    <input type="date" name="dtInicioCampanha" class="form-control form-control-lg"
+                                        placeholder="  /  /  " required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dtFimCampanha">Fim da campanha</label>
+                                    <input type="date" name="dtFimCampanha" class="form-control form-control-lg"
+                                        placeholder="  /  /  " required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dtTrava">Trava de data inicial - Contratos</label>
+                                    <input type="date" name="dtTrava" class="form-control form-control-lg"
+                                        placeholder="  /  /  " />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lmMilitantes">Limite de militantes</label>
+                                    <input type="number" name="lmMilitantes" class="form-control form-control-lg"
+                                        placeholder="Limite de militantes" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="lmVeiculos">Limite de veículos</label>
+                                    <input type="number" name="lmVeiculos" class="form-control form-control-lg"
+                                        placeholder="Limite de veículos" required />
+                                </div>
+                                <div class="mb-3">
+                                    <input type="submit" name="submit" value="Cadastrar"
+                                        class="btn btn-primary btn-lg" />
+                                    <input type="button" name="submit" value="Voltar"
+                                        onclick="window.location.href='/candidato'" class="btn btn-danger btn-lg" />
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            .card-header h5 {
+                margin-bottom: 0;
+            }
+        </style>
         <%- include('../layout/footer') %>

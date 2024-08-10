@@ -1,9 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
+const path = require('path');
 const session = require('express-session');
 
-    //Máscaras manuais (antigas, talvez úteis depois)
+//Máscaras manuais (antigas, talvez úteis depois)
 // const { formatCNPJ } = require('./utils/utils');
 // const { formatCPF } = require('./utils/utils');
 // const { formatRG } = require('./utils/utils');
@@ -12,6 +13,7 @@ const session = require('express-session');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+app.use(express.static(path.join(__dirname, '/public/layout')));
     // Máscaras manuais (antigas, talvez úteis depois)
 // //Disponibiliza máscara do CNPJ - Tabela
 // app.locals.formatCNPJ = formatCNPJ;
