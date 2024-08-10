@@ -19,7 +19,6 @@
                                 <table class="table table-striped text-center my-2">
                                     <thead>
                                         <tr class="table-dark">
-                                            <th>Número</th>
                                             <th class="text-center">Nome</th>
                                             <th class="text-center">Função</th>
                                             <th class="text-center">Município</th>
@@ -45,10 +44,10 @@
                                                     <%= row.nrCandidato %>
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <%= row.dtInicio %>
+                                                    <%= row.dtInicioFormat %>
                                                 </td>
-                                                <td style="text-align: center;" data-mask="00.000.000/0000-00">
-                                                    <%= row.dtFim %>
+                                                <td style="text-align: center;">
+                                                    <%= row.dtFimFormat %>
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <a href="/contrato-pessoal/view/<%= row.idContratoPessoal %>" class=""
@@ -58,7 +57,7 @@
                                                         title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
-                                                        data-url="/contrato-pessoal/delete/<%= row.nrCandidato %>"
+                                                        data-url="/contrato-pessoal/delete/<%= row.idContratoPessoal %>"
                                                         title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
                                                 </td>

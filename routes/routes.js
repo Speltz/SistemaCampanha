@@ -640,7 +640,9 @@ module.exports = (connection) => {
 // Operações CONTRATO PESSOAL
     // Index
     router.get('/contrato-pessoal', (req, res) => {
-        connection.query('SELECT * FROM tbContratoPessoal', (err, results) => {
+        connection.query(`SELECT municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado, bairroContratado, cidadeContratado, 
+            ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
+            dtVencimento, DATE_FORMAT(dtInicio, '%d/%m/%Y') as dtInicioFormat, DATE_FORMAT(dtFim, '%d/%m/%Y') as dtFimFormat, hrEntrada, hrSaida, hrIntervalo FROM tbContratoPessoal`, (err, results) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
@@ -649,6 +651,58 @@ module.exports = (connection) => {
         });
     });
 
+    //Página CREATE
+    router.get('/contrato-pessoal/create', (req, res) => {
+        const funcaoQuery = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
+        const ufQuery = 'SELECT uf FROM tbUf';
+    
+        connection.query(funcaoQuery, (err, funcaoResults) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                connection.query(ufQuery, (err, ufResults) => {
+                    if (err) {
+                        res.status(500).json({ message: err.message, type: 'danger' });
+                    } else {
+                        res.render('contratoPessoal/create', { 
+                            title: 'Cadastrar Novo Contrato Pessoal', 
+                            funcao: funcaoResults,
+                            uf: ufResults 
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Create CONTRATO PESSOAL
+    router.post('/contrato-pessoal/create', (req, res) => {
+        const { municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado, bairroContratado, cidadeContratado, 
+            ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
+            dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo } = req.body;
+
+        //Remove caracteres não numéricos
+         const cleanCpfContratado = cpfContratado.replace(/\D/g, '');
+         const cleanCepContratado = cepContratado.replace(/\D/g, '');
+
+        const query = `INSERT INTO tbContratoPessoal (municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado,
+         bairroContratado, cidadeContratado, ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, 
+         nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo  ) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(query, [municipio, nrCandidato, nmContratado, cleanCpfContratado, rgContratado, enderecoContratado, bairroContratado,
+            cidadeContratado, ufContratado, cleanCepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
+            dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo], (err, result) => {
+                if (err) {
+                    res.status(500).json({ message: err.message, type: 'danger' });
+                } else {
+                    req.session.message = {
+                        type: 'success',
+                        message: 'Contrato cadastrado com sucesso!'
+                    };
+                    res.redirect('/contrato-pessoal');
+                }
+            });
+    });
 
 
     // End point
