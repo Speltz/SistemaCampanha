@@ -323,19 +323,15 @@ module.exports = (connection) => {
         });
     });
 
+    //Página CREATE
     router.get('/veiculo/create', (req, res) => {
         connection.query('SELECT * FROM tbCandidato', (err, results) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
-                res.render('veiculo/create', { title: 'Candidatos', candidato: results });
+                res.render('veiculo/create', { title: 'Cadastrar Veículo', candidato: results });
             }
         });
-    });
-
-    //Página CREATE
-    router.get('/veiculo/create', (req, res) => {
-        res.render('veiculo/create', { title: 'Cadastrar Veículo' });
     });
 
     //Create VEÍCULO
@@ -482,15 +478,43 @@ module.exports = (connection) => {
 
     //Página CREATE
     router.get('/salario/create', (req, res) => {
-        const query = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
-        connection.query(query, (err, results) => {
-            if (err) {
-                res.status(500).json({ message: err.message, type: 'danger' });
-            } else {
-                res.render('salario/create', { title: 'Cadastrar Salário', funcoes: results });
-            }
+        // Cria um array de promessas para as duas consultas
+        const veiculoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
         });
+    
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    
+        // Executa ambas as promessas e aguarda suas resoluções
+        Promise.all([veiculoQuery, funcaoQuery])
+            .then(([candidato, funcoes]) => {
+                // Renderiza a página com os dados das duas consultas
+                res.render('salario/create', {
+                    title: 'Cadastrar Salário',
+                    funcoes: funcoes,
+                    candidato: candidato // Adiciona os dados dos veículos ao contexto
+                });
+            })
+            .catch(err => {
+                // Lida com erros
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
     });
+    
 
     //Create SALARIO
     router.post('/salario/create', (req, res) => {

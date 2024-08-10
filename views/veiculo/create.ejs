@@ -17,8 +17,9 @@
                                 <div class="mb-3">
                                     <label for="nrCandidato">Candidato</label>
                                     <div class="input-group">
-                                        <input type="number" name="nrCandidato" class="form-control form-control-lg"
-                                            placeholder="Número do candidato" required />
+                                        <input readonly type="number" name="nrCandidato"
+                                            class="form-control form-control-lg" placeholder="Número do candidato"
+                                            required />
                                         <button type="button" class="btn btn-primary modal-btn">Buscar
                                             Candidato</button>
                                     </div>
@@ -128,8 +129,10 @@
                                                 <%= row.cnpj %>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <a href="/candidato/view/<%= row.nrCandidato %>" class="text-success"
-                                                    title="Selecionar candidato"><i class="fa-solid fa-check mx-1"></i></a>
+                                                <button type="button" class="text-success border-none" title="Selecionar candidato"
+                                                    onclick="preencherCampo('<%= row.nrCandidato %>')">
+                                                    <i class="fa-solid fa-check mx-1"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                         <% }) %>
@@ -150,6 +153,10 @@
 
             .card-header h5 {
                 margin-bottom: 0;
+            }
+
+            .border-none {
+                border: none;
             }
 
             .input-group input {
@@ -175,5 +182,16 @@
                     });
                 });
             });
+            function preencherCampo(nrCandidato) {
+                // Obtém o campo com name="nrCandidato"
+                const campo = document.querySelector('input[name="nrCandidato"]');
+                if (campo) {
+                    // Preenche o campo com o número do candidato
+                    campo.value = nrCandidato;
+                } else {
+                    console.error('Campo com name="nrCandidato" não encontrado.');
+                }
+                $("#listaCandidatosModal").modal('hide');
+            }
         </script>
         <%- include('../layout/footer') %>

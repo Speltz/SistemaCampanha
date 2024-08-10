@@ -103,7 +103,54 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Teste
+                        <% if (candidato !='' ) { %>
+                            <table class="table table-striped text-center my-2">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th>Número</th>
+                                        <th class="text-center">Partido</th>
+                                        <th class="text-center">Cargo</th>
+                                        <th class="text-center">Município</th>
+                                        <th class="text-center">Nome</th>
+                                        <th class="text-center">CNPJ</th>
+                                        <th class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% candidato.forEach((row, index)=> { %>
+                                        <tr class="align-middle">
+                                            <td style="text-align: center;">
+                                                <%= row.nrCandidato %>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <%= row.partido %>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <%= row.cargo %>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <%= row.municipio %>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <%= row.nmCandidato %>
+                                            </td>
+                                            <td style="text-align: center;" data-mask="00.000.000/0000-00">
+                                                <%= row.cnpj %>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <button type="button" class="text-success" title="Selecionar candidato"
+                                                    onclick="preencherCampo('<%= row.nrCandidato %>')">
+                                                    <i class="fa-solid fa-check mx-1"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                            <% } else{ %>
+                                <h1 class="text-center text-secondary mt-5">Nenhum candidato encontrado no banco de
+                                    dados.</h1>
+                                <% } %>
                     </div>
                 </div>
             </div>
@@ -140,5 +187,16 @@
                     });
                 });
             });
+            function preencherCampo(nrCandidato) {
+                // Obtém o campo com name="nrCandidato"
+                const campo = document.querySelector('input[name="nrCandidato"]');
+                if (campo) {
+                    // Preenche o campo com o número do candidato
+                    campo.value = nrCandidato;
+                } else {
+                    console.error('Campo com name="nrCandidato" não encontrado.');
+                }
+                $("#listaCandidatosModal").modal('hide');
+            }
         </script>
         <%- include('../layout/footer') %>
