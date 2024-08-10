@@ -637,7 +637,17 @@ module.exports = (connection) => {
         });
     });
 
-
+// Operações CONTRATO PESSOAL
+    // Index
+    router.get('/contrato-pessoal', (req, res) => {
+        connection.query('SELECT * FROM tbContratoPessoal', (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('contratoPessoal/index', { title: 'Contratos Pessoais', contratoPessoal: results });
+            }
+        });
+    });
 
 
 
