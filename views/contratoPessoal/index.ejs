@@ -19,6 +19,7 @@
                                 <table class="table table-striped text-center my-2">
                                     <thead>
                                         <tr class="table-dark">
+                                            <th class="text-center">ID</th>
                                             <th class="text-center">Nome</th>
                                             <th class="text-center">Função</th>
                                             <th class="text-center">Município</th>
@@ -32,7 +33,10 @@
                                         <% contratoPessoal.forEach((row, index)=> { %>
                                             <tr class="align-middle">
                                                 <td style="text-align: center;">
-                                                    <%= row.nmContratado %>
+                                                    <%= row.idContratoPessoal %>,
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.nmContratado %>, 
                                                 </td>
                                                 <td style="text-align: center;">
                                                     <%= row.idFuncao %>
@@ -50,16 +54,17 @@
                                                     <%= row.dtFimFormat %>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <a href="/contrato-pessoal/view/<%= row.idContratoPessoal %>" class=""
-                                                        title="Ver detalhes"><i
-                                                        class="fa-solid fa-eye mx-1"></i></a>
-                                                    <a href="/contrato-pessoal/edit/<%= row.idContratoPessoal %>" class="text-success"
-                                                        title="Editar"><i
+                                                    <a href="/contrato-pessoal/view/<%= row.idContratoPessoal %>"
+                                                        class="" title="Ver detalhes"><i
+                                                            class="fa-solid fa-eye mx-1"></i></a>
+                                                    <a href="/contrato-pessoal/edit/<%= row.idContratoPessoal %>"
+                                                        class="text-success" title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
                                                         data-url="/contrato-pessoal/delete/<%= row.idContratoPessoal %>"
                                                         title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <% }) %>
@@ -90,7 +95,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Sim</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                    
+
                 </div>
             </div>
         </div>
