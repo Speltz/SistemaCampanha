@@ -50,9 +50,24 @@
                                             placeholder="Endereço" required value="<%= candidato.enderecoCandidato %>" readonly />
                                     </div>
                                     <div class="mb-3">
+                                        <label for="bairroCandidato">Bairro - Candidato</label>
+                                        <input type="text" name="bairroCandidato" class="form-control form-control-lg"
+                                            placeholder="Bairro" required value="<%= candidato.bairroCandidato %>" readonly />
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="cidadeCandidato">Cidade - Candidato</label>
                                         <input type="text" name="cidadeCandidato" class="form-control form-control-lg"
                                             placeholder="Cidade" required value="<%= candidato.cidadeCandidato %>" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ufCandidato">UF - Candidato</label>
+                                        <select name="ufCandidato" class="form-control form-control-lg" required disabled>
+                                            <option value="" disabled selected hidden>Selecione o estado</option>
+                                            <% uf.forEach(uf => { %>
+                                                <option value="<%= uf.uf %>" <%= candidato.ufCandidato == uf.uf ? 'selected' : '' %>>
+                                                    <%= uf.uf %></option>
+                                            <% }); %>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepCandidato">CEP - Candidato</label>
@@ -111,9 +126,24 @@
                                             placeholder="Endereço" required value="<%= candidato.enderecoAdmFinanceiro %>" readonly />
                                     </div>
                                     <div class="mb-3">
+                                        <label for="bairroAdmFinanceiro">Bairro - Administrador Financeiro</label>
+                                        <input type="text" name="bairroAdmFinanceiro" class="form-control form-control-lg"
+                                            placeholder="Bairro" required value="<%= candidato.bairroAdmFinanceiro %>" readonly />
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="cidadeAdmFinanceiro">Cidade - Administrador Financeiro</label>
                                         <input type="text" name="cidadeAdmFinanceiro" class="form-control form-control-lg"
                                             placeholder="Cidade" required value="<%= candidato.cidadeAdmFinanceiro %>" readonly />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ufAdmFinanceiro">UF - Administrador Financeiro</label>
+                                        <select name="ufAdmFinanceiro" class="form-control form-control-lg" required disabled>
+                                            <option value="" disabled selected hidden>Selecione o estado</option>
+                                            <% uf.forEach(uf => { %>
+                                                <option value="<%= uf.uf %>" <%= candidato.ufAdmFinanceiro == uf.uf ? 'selected' : '' %>>
+                                                    <%= uf.uf %></option>
+                                            <% }); %>
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="cepAdmFinanceiro">CEP - Administrador Financeiro</label>
@@ -135,7 +165,7 @@
                                             placeholder="  /  /  " required value="<%= candidato.dtFimCampanha %>" readonly />
                                     </div>
                                     <div class="mb-3">
-                                        <label for="dtTrava">Fim da campanha</label>
+                                        <label for="dtTrava">Trava de data inicial - Contratos</label>
                                         <input type="date" name="dtTrava" class="form-control form-control-lg"
                                             placeholder="  /  /  "   value="<%= candidato.dtTrava %>" readonly />
                                     </div>

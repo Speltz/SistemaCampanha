@@ -183,19 +183,25 @@ module.exports = (connection) => {
     router.get('/candidato/view/:nrCandidato', (req, res) => {
         const nrCandidato = req.params.nrCandidato;
         const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
-
-        connection.query(query, [nrCandidato], (err, results) => {
+        const ufQuery = 'SELECT uf FROM tbUf';
+        
+        connection.query(query, [nrCandidato], (err, candidatoResults) => {
             if (err) {
                 res.redirect('/');
+            } else if (candidatoResults.length > 0) {
+                connection.query(ufQuery, (err, ufResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        res.render('candidato/view', {
+                            title: 'Dados do Candidato',
+                            candidato: candidatoResults[0],
+                            uf: ufResults
+                        });
+                    }
+                });
             } else {
-                if (results.length > 0) {
-                    res.render('candidato/view', {
-                        title: 'Detalhes do candidato',
-                        candidato: results[0]
-                    });
-                } else {
-                    res.redirect('/');
-                }
+                res.redirect('/');
             }
         });
     });
@@ -206,20 +212,23 @@ module.exports = (connection) => {
         const query = 'SELECT * FROM tbCandidato WHERE nrCandidato = ?';
         const ufQuery = 'SELECT uf FROM tbUf';
         
-
-        connection.query(query, ufQuery [nrCandidato], (err, results) => {
+        connection.query(query, [nrCandidato], (err, candidatoResults) => {
             if (err) {
                 res.redirect('/');
+            } else if (candidatoResults.length > 0) {
+                connection.query(ufQuery, (err, ufResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        res.render('candidato/edit', {
+                            title: 'Editar Candidato',
+                            candidato: candidatoResults[0],
+                            uf: ufResults
+                        });
+                    }
+                });
             } else {
-                if (results.length > 0) {
-                    res.render('candidato/edit', {
-                        title: 'Editar Candidato',
-                        candidato: results[0],
-                        uf: results
-                    });
-                } else {
-                    res.redirect('/');
-                }
+                res.redirect('/');
             }
         });
     });
