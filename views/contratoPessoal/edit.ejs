@@ -17,8 +17,12 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="nrCandidato">Candidato</label>
-                                    <input type="number" name="nrCandidato" class="form-control form-control-lg"
-                                        placeholder="Número do candidato" value="<%= contratoPessoal.nrCandidato %>" required />
+                                    <div class="input-group">
+                                        <input type="number" name="nrCandidato" class="form-control form-control-lg"
+                                            placeholder="Número do candidato"  value="<%= contratoPessoal.nrCandidato %>" required />
+                                        <button type="button" class="btn btn-primary modal-btn">Buscar
+                                            Candidato</button>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <div class="mb-3">
@@ -184,4 +188,114 @@
                 </div>
             </div>
         </div>
+                        <!-- Modal para exibição de candidatos -->
+                        <div class="modal fade" id="listaCandidatosModal" tabindex="-1" aria-labelledby="listaCandidatosModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="listaCandidatosModalLabel">Lista de Candidatos</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <% if (candidato !='' ) { %>
+                                        <table class="table table-striped text-center my-2">
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <th>Número</th>
+                                                    <th class="text-center">Partido</th>
+                                                    <th class="text-center">Cargo</th>
+                                                    <th class="text-center">Município</th>
+                                                    <th class="text-center">Nome</th>
+                                                    <th class="text-center">CNPJ</th>
+                                                    <th class="text-center">Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% candidato.forEach((row, index)=> { %>
+                                                    <tr class="align-middle">
+                                                        <td style="text-align: center;">
+                                                            <%= row.nrCandidato %>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <%= row.partido %>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <%= row.cargo %>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <%= row.municipio %>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <%= row.nmCandidato %>
+                                                        </td>
+                                                        <td style="text-align: center;" data-mask="00.000.000/0000-00">
+                                                            <%= row.cnpj %>
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            <button type="button" class="text-success border-none" title="Selecionar candidato"
+                                                                onclick="preencherCampo('<%= row.nrCandidato %>')">
+                                                                <i class="fa-solid fa-check mx-1"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                        <% } else{ %>
+                                            <h1 class="text-center text-secondary mt-5">Nenhum candidato encontrado no banco de
+                                                dados.</h1>
+                                            <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        #listaCandidatosModal .modal-dialog {
+                            max-width: 800px !important;
+                        }
+            
+                        .card-header h5 {
+                            margin-bottom: 0;
+                        }
+            
+                        .border-none {
+                            border: none;
+                        }
+            
+                        .input-group input {
+                            border-top-left-radius: 0.5rem !important;
+                            border-bottom-left-radius: 0.5rem !important;
+                            border-top-right-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+            
+                        .input-group button {
+                            border-top-left-radius: 0;
+                            border-bottom-left-radius: 0;
+                            border-top-right-radius: 0.5rem !important;
+                            border-bottom-right-radius: 0.5rem !important;
+                        }
+                    </style>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const listaCandidatosModal = new bootstrap.Modal(document.getElementById('listaCandidatosModal'));
+                            document.querySelectorAll('.modal-btn').forEach(button => {
+                                button.addEventListener('click', function () {
+                                    listaCandidatosModal.show();
+                                });
+                            });
+                        });
+                        function preencherCampo(nrCandidato) {
+                            // Obtém o campo com name="nrCandidato"
+                            const campo = document.querySelector('input[name="nrCandidato"]');
+                            if (campo) {
+                                // Preenche o campo com o número do candidato
+                                campo.value = nrCandidato;
+                            } else {
+                                console.error('Campo com name="nrCandidato" não encontrado.');
+                            }
+                            $("#listaCandidatosModal").modal('hide');
+                        }
+                    </script>
         <%- include('../layout/footer') %>
