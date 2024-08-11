@@ -9,7 +9,7 @@
                         </div>
                         <div class="card-body p-4">
                             <form action="/contrato-pessoal/edit/<%= contratoPessoal.idContratoPessoal %>" method="post" id="edit-form"
-                                onsubmit="return validateCandidato()">
+                                onsubmit="return validateContrato()">
                                 <div class="mb-3">
                                     <label for="municipio">Município</label>
                                     <input type="text" name="municipio" class="form-control form-control-lg"
@@ -31,7 +31,8 @@
                                     <div class="mb-3">
                                         <label for="cpfContratado">CPF - Contratado</label>
                                         <input type="text" name="cpfContratado" class="form-control form-control-lg"
-                                            placeholder="CPF" value="<%= contratoPessoal.cpfContratado %>" required />
+                                            placeholder="CPF" value="<%= contratoPessoal.cpfContratado %>" data-mask="000.000.000-00"
+                                             required />
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -123,17 +124,17 @@
                                     <label for="usaPixCpf">Usa Pix CPF?</label>
                                     <select name="usaPixCpf" class="form-control form-control-lg" required>
                                         <option value="" disabled selected hidden>Selecione</option>
-                                        <option value="1">Sim</option>
-                                        <option value="0">Não</option>
+                                        <option value="1" <%= contratoPessoal.usaPixCpf === 1 ? 'selected' : '' %>>Sim</option>
+                                        <option value="0" <%= contratoPessoal.usaPixCpf === 0 ? 'selected' : '' %>>Não</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formaPagamento">Forma de pagamento</label>
                                     <select name="formaPagamento" class="form-control form-control-lg" required>
                                         <option value="" disabled selected hidden>Selecione</option>
-                                        <option value="1">1 Parcela</option>
-                                        <option value="2">2 Parcelas</option>
-                                        <option value="3">3 Parcelas</option>
+                                        <option value="1" <%= contratoPessoal.formaPagamento === 1 ? 'selected' : '' %>>1 Parcela</option>
+                                        <option value="2" <%= contratoPessoal.formaPagamento === 2 ? 'selected' : '' %>>2 Parcelas</option>
+                                        <option value="3" <%= contratoPessoal.formaPagamento === 3 ? 'selected' : '' %>>3 Parcelas</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">

@@ -13,16 +13,16 @@
                         <h2>
                             <%= title %>
                         </h2>
-                        <a href="/contrato-pessoal/create" class="btn btn-primary mb-2">Novo Cadastro</a>
+                        <a href="/contrato-veiculo/create" class="btn btn-primary mb-2">Novo Cadastro</a>
                         <div class="table-responsive">
-                            <% if (contratoPessoal !='' ) { %>
+                            <% if (contratoVeiculo !='' ) { %>
                                 <table class="table table-striped text-center my-2">
                                     <thead>
                                         <tr class="table-dark">
                                             <th class="text-center">ID</th>
-                                            <th class="text-center">Nome</th>
-                                            <th class="text-center">Função</th>
-                                            <th class="text-center">Município</th>
+                                            <th class="text-center">Marca</th>
+                                            <th class="text-center">Modelo</th>
+                                            <th class="text-center">Ano</th>
                                             <th class="text-center">Candidato</th>
                                             <th class="text-center">Data de início</th>
                                             <th class="text-center">Data de fim</th>
@@ -30,19 +30,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% contratoPessoal.forEach((row, index)=> { %>
+                                        <% contratoVeiculo.forEach((row, index)=> { %>
                                             <tr class="align-middle">
                                                 <td style="text-align: center;">
-                                                    <%= row.idContratoPessoal %>
+                                                    <%= row.idContratoVeiculo %>
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <%= row.nmContratado %>
+                                                    <%= row.marca %>
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <%= row.idFuncao %>
+                                                    <%= row.modelo %>
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <%= row.municipio %>
+                                                    <%= row.ano %>
                                                 </td>
                                                 <td style="text-align: center;">
                                                     <%= row.nrCandidato %>
@@ -54,14 +54,14 @@
                                                     <%= row.dtFimFormat %>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <a href="/contrato-pessoal/view/<%= row.idContratoPessoal %>"
+                                                    <a href="/contrato-veiculo/view/<%= row.idContratoVeiculo %>"
                                                         class="" title="Ver detalhes"><i
                                                             class="fa-solid fa-eye mx-1"></i></a>
-                                                    <a href="/contrato-pessoal/edit/<%= row.idContratoPessoal %>"
+                                                    <a href="/contrato-veiculo/edit/<%= row.idContratoVeiculo %>"
                                                         class="text-success" title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
-                                                        data-url="/contrato-pessoal/delete/<%= row.idContratoPessoal %>"
+                                                        data-url="/contrato-veiculo/delete/<%= row.idContratoVeiculo %>"
                                                         title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
                                                     </a>

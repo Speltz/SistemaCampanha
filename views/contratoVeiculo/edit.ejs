@@ -1,0 +1,221 @@
+<%- include('../layout/header') %>
+<%- include('../scripts/scripts') %>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+            <div class="card shadow">
+                <div class="card-header bg-success">
+                    <h5 class="text-light">Dados para contrato de veículo</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/contrato-veiculo/edit/<%= contratoVeiculo.idContratoVeiculo %>" method="post" id="edit-form"
+                        onsubmit="return validateContrato()">
+                        <div class="mb-3">
+                            <label for="municipio">Município</label>
+                            <input type="text" name="municipio" class="form-control form-control-lg"
+                                placeholder="Município" value="<%= contratoVeiculo.municipio %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrCandidato">Candidato</label>
+                            <input type="number" name="nrCandidato" class="form-control form-control-lg"
+                                placeholder="Número do candidato" value="<%= contratoVeiculo.nrCandidato %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="marca">Marca</label>
+                            <input type="text" name="marca" class="form-control form-control-lg"
+                                placeholder="Marca" value="<%= contratoVeiculo.marca %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="modelo">Modelo</label>
+                            <input type="text" name="modelo" class="form-control form-control-lg"
+                                placeholder="Modelo" value="<%= contratoVeiculo.modelo %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ano">Ano</label>
+                            <input type="number" name="ano" class="form-control form-control-lg"
+                                placeholder="Ano" value="<%= contratoVeiculo.ano %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="placaVeiculo">Placa</label>
+                            <input type="text" name="placaVeiculo" class="form-control form-control-lg"
+                                placeholder="Placa do veículo" value="<%= contratoVeiculo.placaVeiculo %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="renavam">Renavam</label>
+                            <input type="number" name="renavam" class="form-control form-control-lg"
+                                placeholder="Renavam" value="<%= contratoVeiculo.renavam %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="chassi">Chassi</label>
+                            <input type="text" name="chassi" class="form-control form-control-lg"
+                                placeholder="Chassi" value="<%= contratoVeiculo.chassi %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="locadoCedido">Locado ou cedido</label>
+                            <select name="locadoCedido" class="form-control form-control-lg" required>
+                                <option value="" disabled hidden>Selecione</option>
+                                <option value="Locado" <%= contratoVeiculo.locadoCedido === 'Locado' ? 'selected' : '' %>>Locado</option>
+                                <option value="Cedido" <%= contratoVeiculo.locadoCedido === 'Cedido' ? 'selected' : '' %>>Cedido</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cgHoraria">Carga horária</label>
+                            <input type="number" name="cgHoraria" class="form-control form-control-lg"
+                                placeholder="Carga Horária" value="<%= contratoVeiculo.cgHoraria %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="responsavelAbastecimento">Responsável pelo abastecimento</label>
+                            <select name="responsavelAbastecimento" class="form-control form-control-lg" required>
+                                <option value="" disabled hidden>Selecione</option>
+                                <option value="Candidato" <%= contratoVeiculo.responsavelAbastecimento === 'Candidato' ? 'selected' : '' %>>Candidato</option>
+                                <option value="Contratado" <%= contratoVeiculo.responsavelAbastecimento === 'Contratado' ? 'selected' : '' %>>Contratado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="responsavelManutencao">Responsável pela manutenção</label>
+                            <select name="responsavelManutencao" class="form-control form-control-lg" required>
+                                <option value="" disabled hidden>Selecione</option>
+                                <option value="Candidato" <%= contratoVeiculo.responsavelManutencao === 'Candidato' ? 'selected' : '' %>>Candidato</option>
+                                <option value="Contratado" <%= contratoVeiculo.responsavelManutencao === 'Contratado' ? 'selected' : '' %>>Contratado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="responsavelMotorista">Responsável pelo motorista</label>
+                            <select name="responsavelMotorista" class="form-control form-control-lg" required>
+                                <option value="" disabled hidden>Selecione</option>
+                                <option value="Candidato" <%= contratoVeiculo.responsavelMotorista === 'Candidato' ? 'selected' : '' %>>Candidato</option>
+                                <option value="Contratado" <%= contratoVeiculo.responsavelMotorista === 'Contratado' ? 'selected' : '' %>>Contratado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nmContratado">Nome do contratado</label>
+                            <input type="text" name="nmContratado" class="form-control form-control-lg"
+                                placeholder="Nome" value="<%= contratoVeiculo.nmContratado %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cpfContratado">CPF</label>
+                            <input type="text" name="cpfContratado" class="form-control form-control-lg"
+                                placeholder="CPF" data-mask="000.000.000-00" value="<%= contratoVeiculo.cpfContratado %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="rgContratado">RG</label>
+                            <input type="text" name="rgContratado" class="form-control form-control-lg"
+                                placeholder="RG" value="<%= contratoVeiculo.rgContratado %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" id="endereco" name="endereco"
+                                class="form-control form-control-lg" placeholder="Endereço" value="<%= contratoVeiculo.endereco %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" name="bairro" class="form-control form-control-lg"
+                                placeholder="Bairro" value="<%= contratoVeiculo.bairro %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" name="cidade" class="form-control form-control-lg"
+                                placeholder="Cidade" value="<%= contratoVeiculo.cidade %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="uf">UF</label>
+                            <select name="uf" class="form-control form-control-lg" required>
+                                <option value="" disabled selected hidden>Selecione o estado</option>
+                                <% uf.forEach(uf => { %>
+                                    <option value="<%= uf.uf %>" <%= contratoVeiculo.uf === uf.uf ? 'selected' : '' %>>
+                                        <%= uf.uf %>
+                                    </option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cep">CEP</label>
+                            <input type="text" name="cep" class="form-control form-control-lg"
+                                placeholder="CEP" data-mask="00000-000" value="<%= contratoVeiculo.cep %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <div class="card-header bg-success">
+                                <h5 class="text-light">Informações de pagamento</h5>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrBanco">Banco (número)</label>
+                            <input type="number" name="nrBanco" class="form-control form-control-lg"
+                                placeholder="Número do banco" value="<%= contratoVeiculo.nrBanco %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrAgencia">Agencia</label>
+                            <input type="number" name="nrAgencia" class="form-control form-control-lg"
+                                placeholder="Agência" value="<%= contratoVeiculo.nrAgencia %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="nrContaBancaria">Conta Bancária</label>
+                            <input type="number" name="nrContaBancaria" class="form-control form-control-lg"
+                                placeholder="Número do banco" value="<%= contratoVeiculo.nrContaBancaria %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="usaPixCpf">Usa Pix CPF?</label>
+                            <select name="usaPixCpf" class="form-control form-control-lg" required>
+                                <option value="" disabled selected hidden>Selecione</option>
+                                <option value="1" <%= contratoVeiculo.usaPixCpf === 1 ? 'selected' : '' %>>Sim</option>
+                                <option value="0" <%= contratoVeiculo.usaPixCpf === 0 ? 'selected' : '' %>>Não</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formaPagamento">Forma de pagamento</label>
+                            <select name="formaPagamento" class="form-control form-control-lg" required>
+                                <option value="" disabled selected hidden>Selecione</option>
+                                <option value="1" <%= contratoVeiculo.formaPagamento === 1 ? 'selected' : '' %>>1 Parcela</option>
+                                <option value="2" <%= contratoVeiculo.formaPagamento === 2 ? 'selected' : '' %>>2 Parcelas</option>
+                                <option value="3" <%= contratoVeiculo.formaPagamento === 3 ? 'selected' : '' %>>3 Parcelas</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dtVencimento">Data de vencimento</label>
+                            <input type="date" name="dtVencimento" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.dtVencimento %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <div class="card-header bg-success">
+                                <h5 class="text-light">Informações do contrato</h5>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dtInicio">Início do contrato</label>
+                            <input type="date" name="dtInicio" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.dtInicio %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="dtFim">Fim do contrato</label>
+                            <input type="date" name="dtFim" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.dtFim %>" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="hrEntrada">Horário de entrada</label>
+                            <input type="time" name="hrEntrada" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.hrEntrada %>" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="hrSaida">Horário de saída</label>
+                            <input type="time" name="hrSaida" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.hrSaida %>" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="hrIntervalo">Intervalo de almoço</label>
+                            <input type="time" name="hrIntervalo" class="form-control form-control-lg"
+                                placeholder="  /  /  " value="<%= contratoVeiculo.hrIntervalo %>" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" name="submit" value="Salvar"
+                                class="btn btn-success btn-lg" />
+                            <input type="button" name="submit" value="Voltar"
+                                onclick="window.location.href='/contrato-veiculo'"
+                                class="btn btn-danger btn-lg" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../layout/footer') %>

@@ -508,7 +508,8 @@ module.exports = (connection) => {
         const clearValor = valor.replace(/\D/g, '');
         //Transforma em decimal
         const decimalValor = clearValor / 100.0;
-        const query = `INSERT INTO tbSalario (municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria) 
+        const query = `INSERT INTO tbSalario (
+        municipio, nrCandidato, idFuncao, valor, tipo, cgHoraria) 
         VALUES (?, ?, ?, ?, ?, ?)`;
         connection.query(query, [municipio, nrCandidato, idFuncao, decimalValor, tipo, cgHoraria], (err, result) => {
             if (err) {
@@ -640,9 +641,33 @@ module.exports = (connection) => {
     // Operações CONTRATO PESSOAL
     // Index
     router.get('/contrato-pessoal', (req, res) => {
-        connection.query(`SELECT municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado, bairroContratado, cidadeContratado, 
-            ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
-            dtVencimento, DATE_FORMAT(dtInicio, '%d/%m/%Y') as dtInicioFormat, DATE_FORMAT(dtFim, '%d/%m/%Y') as dtFimFormat, hrEntrada, hrSaida, hrIntervalo FROM tbContratoPessoal`, (err, results) => {
+        connection.query(`SELECT 
+            idContratoPessoal, 
+            municipio, 
+            nrCandidato, 
+            nmContratado, 
+            cpfContratado, 
+            rgContratado, 
+            enderecoContratado, 
+            bairroContratado, 
+            cidadeContratado, 
+            ufContratado, 
+            cepContratado, 
+            idFuncao, 
+            contratadoDoado, 
+            cgHoraria, 
+            nrBanco, 
+            nrAgencia, 
+            nrContaBancaria, 
+            usaPixCpf, 
+            formaPagamento,
+            dtVencimento, 
+            DATE_FORMAT(dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+            DATE_FORMAT(dtFim, '%d/%m/%Y') as dtFimFormat, 
+            hrEntrada, 
+            hrSaida, 
+            hrIntervalo 
+            FROM tbContratoPessoal`, (err, results) => {
             if (err) {
                 res.status(500).json({ message: err.message });
             } else {
@@ -685,10 +710,32 @@ module.exports = (connection) => {
         const cleanCpfContratado = cpfContratado.replace(/\D/g, '');
         const cleanCepContratado = cepContratado.replace(/\D/g, '');
 
-        const query = `INSERT INTO tbContratoPessoal (municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado,
-         bairroContratado, cidadeContratado, ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, 
-         nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo  ) 
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO tbContratoPessoal (
+        municipio, 
+        nrCandidato, 
+        nmContratado, 
+        cpfContratado, 
+        rgContratado, 
+        enderecoContratado, 
+        bairroContratado, 
+        cidadeContratado, 
+        ufContratado, 
+        cepContratado, 
+        idFuncao, 
+        contratadoDoado, 
+        cgHoraria, 
+        nrBanco, 
+        nrAgencia, 
+        nrContaBancaria, 
+        usaPixCpf, 
+        formaPagamento, 
+        dtVencimento, 
+        dtInicio, 
+        dtFim, 
+        hrEntrada, 
+        hrSaida, 
+        hrIntervalo  ) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         connection.query(query, [municipio, nrCandidato, nmContratado, cleanCpfContratado, rgContratado, enderecoContratado, bairroContratado,
             cidadeContratado, ufContratado, cleanCepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
             dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo], (err, result) => {
@@ -704,11 +751,12 @@ module.exports = (connection) => {
             });
     });
 
-    //View CONTRATO PESSOAL
+    // View CONTRATO PESSOAL
     router.get('/contrato-pessoal/view/:idContratoPessoal', (req, res) => {
         const idContratoPessoal = req.params.idContratoPessoal;
         const query = 'SELECT * FROM tbContratoPessoal WHERE idContratoPessoal = ?';
         const ufQuery = 'SELECT uf FROM tbUf';
+        const funcaoQuery = 'SELECT idFuncao, nmFuncao FROM tbFuncao';
 
         connection.query(query, [idContratoPessoal], (err, contratoPessoalResults) => {
             if (err) {
@@ -718,10 +766,17 @@ module.exports = (connection) => {
                     if (err) {
                         res.redirect('/');
                     } else {
-                        res.render('contratoPessoal/view', {
-                            title: 'Dados do Contrato',
-                            contratoPessoal: contratoPessoalResults[0],
-                            uf: ufResults
+                        connection.query(funcaoQuery, (err, funcaoResults) => {  // Added the funcaoQuery here
+                            if (err) {
+                                res.redirect('/');
+                            } else {
+                                res.render('contratoPessoal/view', {
+                                    title: 'Dados do Contrato',
+                                    contratoPessoal: contratoPessoalResults[0],
+                                    uf: ufResults,
+                                    funcao: funcaoResults // Added the funcao data to the render context
+                                });
+                            }
                         });
                     }
                 });
@@ -730,6 +785,7 @@ module.exports = (connection) => {
             }
         });
     });
+
 
     // Página EDIT
     router.get('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
@@ -762,6 +818,352 @@ module.exports = (connection) => {
                 });
             } else {
                 res.redirect('/');
+            }
+        });
+    });
+
+    //EDIT Contrato Pessoal
+    router.post('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
+
+        const idContratoPessoal = req.params.idContratoPessoal;
+        const { municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado, bairroContratado, cidadeContratado,
+            ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
+            dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo } = req.body;
+
+        //Remove caracteres não numéricos
+        const cleanCpfContratado = cpfContratado.replace(/\D/g, '');
+        const cleanCepContratado = cepContratado.replace(/\D/g, '');
+
+        const query = `UPDATE tbContratoPessoal SET 
+        municipio = ?, 
+        nrCandidato = ?, 
+        nmContratado = ?, 
+        cpfContratado = ?, 
+        rgContratado = ?, 
+        enderecoContratado = ?, 
+        bairroContratado = ?, 
+        cidadeContratado = ?, 
+        ufContratado = ?, 
+        cepContratado = ?, 
+        idFuncao = ?, 
+        contratadoDoado = ?, 
+        cgHoraria = ?, 
+        nrBanco = ?, 
+        nrAgencia = ?,  
+        nrContaBancaria = ?, 
+        usaPixCpf = ?, 
+        formaPagamento = ?, 
+        dtVencimento = ?, 
+        dtInicio = ?, 
+        dtFim =?, 
+        hrEntrada = ?, 
+        hrSaida = ?, 
+        hrIntervalo = ?
+        WHERE idContratoPessoal = ?`;
+        connection.query(query, [municipio, nrCandidato, nmContratado, cleanCpfContratado, rgContratado, enderecoContratado,
+            bairroContratado, cidadeContratado, ufContratado, cleanCepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia,
+            nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo, idContratoPessoal], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    req.session.message = {
+                        type: 'danger',
+                        message: 'Erro ao atualizar o contrato.'
+                    };
+                    res.redirect('/contrato-pessoal');
+                } else {
+                    if (result.affectedRows === 0) {
+                        req.session.message = {
+                            type: 'warning',
+                            message: 'Contrato não encontrado.'
+                        };
+                    } else {
+                        req.session.message = {
+                            type: 'success',
+                            message: 'Contrato atualizado com sucesso!'
+                        };
+                    }
+                    res.redirect('/contrato-pessoal');
+                }
+            });
+    });
+
+    // Delete CONTRATO PESSOAL
+    router.get('/contrato-pessoal/delete/:idContratoPessoal', (req, res) => {
+        let idContratoPessoal = req.params.idContratoPessoal;
+        const query = 'DELETE FROM tbContratoPessoal WHERE idContratoPessoal = ?';
+
+        connection.query(query, [idContratoPessoal], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Contrato não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Contrato deletado com sucesso!'
+                    };
+                }
+                res.redirect('/contrato-pessoal');
+            }
+        });
+    });
+
+    // Operações CONTRATO VEICULO
+    // Index
+    router.get('/contrato-veiculo', (req, res) => {
+        connection.query(`SELECT 
+            idContratoVeiculo, 
+            municipio, 
+            nrCandidato, 
+            marca, 
+            modelo, 
+            ano, 
+            placaVeiculo, 
+            renavam, 
+            chassi, 
+            locadoCedido, 
+            cgHoraria, 
+            responsavelAbastecimento, 
+            responsavelManutencao, 
+            responsavelMotorista, 
+            nmContratado, 
+            cpfContratado, 
+            rgContratado, 
+            endereco, 
+            bairro, 
+            cidade, 
+            uf, 
+            cep,  
+            nrBanco, 
+            nrAgencia, 
+            nrContaBancaria, 
+            usaPixCpf, 
+            formaPagamento,
+            dtVencimento, 
+            DATE_FORMAT(dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+            DATE_FORMAT(dtFim, '%d/%m/%Y') as dtFimFormat, hrEntrada, hrSaida, 
+            hrIntervalo 
+            FROM tbContratoVeiculo`, (err, results) => {
+            if (err) {
+                res.status(500).json({ message: err.message });
+            } else {
+                res.render('contratoVeiculo/index', { title: 'Contratos de veículo', contratoVeiculo: results });
+            }
+        });
+    });
+
+       //Página CREATE
+       router.get('/contrato-veiculo/create', (req, res) => {
+        const veiculoQuery = 'SELECT idVeiculo, marca FROM tbVeiculo';
+        const ufQuery = 'SELECT uf FROM tbUf';
+
+        connection.query(veiculoQuery, (err, veiculoResults) => {
+            if (err) {
+                res.status(500).json({ message: err.message, type: 'danger' });
+            } else {
+                connection.query(ufQuery, (err, ufResults) => {
+                    if (err) {
+                        res.status(500).json({ message: err.message, type: 'danger' });
+                    } else {
+                        res.render('contratoVeiculo/create', {
+                            title: 'Cadastrar Novo Contrato de veículo',
+                            veiculo: veiculoResults,
+                            uf: ufResults
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+     // Create CONTRATO VEICULO
+     router.post('/contrato-veiculo/create', (req, res) => {
+        const { municipio, nrCandidato, marca, modelo, ano, placaVeiculo, renavam, chassi, locadoCedido, 
+            cgHoraria, responsavelAbastecimento, responsavelManutencao, responsavelMotorista, nmContratado, cpfContratado, rgContratado, 
+            endereco, bairro, cidade, uf, cep, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento,dtInicio, dtFim, 
+            hrEntrada, hrSaida, hrIntervalo } = req.body;
+
+        //Remove caracteres não numéricos
+        const cleanCpfContratado = cpfContratado.replace(/\D/g, '');
+        const cleanCep = cep.replace(/\D/g, '');
+
+        const query = `INSERT INTO tbContratoVeiculo (
+            municipio, 
+            nrCandidato, 
+            marca, 
+            modelo, 
+            ano, 
+            placaVeiculo, 
+            renavam, 
+            chassi, 
+            locadoCedido, 
+            cgHoraria, 
+            responsavelAbastecimento, 
+            responsavelManutencao, 
+            responsavelMotorista, 
+            nmContratado, 
+            cpfContratado, 
+            rgContratado, 
+            endereco, 
+            bairro, 
+            cidade, 
+            uf, 
+            cep,  
+            nrBanco, 
+            nrAgencia, 
+            nrContaBancaria, 
+            usaPixCpf, 
+            formaPagamento,
+            dtVencimento, 
+            dtInicio, 
+            dtFim, 
+            hrEntrada, 
+            hrSaida, 
+            hrIntervalo )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        connection.query(query, [ municipio, nrCandidato, marca, modelo, ano, placaVeiculo, renavam, chassi, locadoCedido, 
+            cgHoraria, responsavelAbastecimento, responsavelManutencao, responsavelMotorista, nmContratado, cleanCpfContratado, rgContratado, 
+            endereco, bairro, cidade, uf, cleanCep, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento,dtInicio, dtFim, 
+            hrEntrada, hrSaida, hrIntervalo ], (err, result) => {
+                if (err) {
+                    res.status(500).json({ message: err.message, type: 'danger' });
+                } else {
+                    req.session.message = {
+                        type: 'success',
+                        message: 'Contrato cadastrado com sucesso!'
+                    };
+                    res.redirect('/contrato-veiculo');
+                }
+            });
+    });
+
+     // Página EDIT
+     router.get('/contrato-veiculo/edit/:idContratoVeiculo', (req, res) => {
+        const idContratoVeiculo = req.params.idContratoVeiculo;
+        const query = 'SELECT * FROM tbContratoVeiculo WHERE idContratoVeiculo = ?';
+        const veiculoQuery = 'SELECT idVeiculo, marca FROM tbVeiculo';
+        const ufQuery = 'SELECT uf FROM tbUf';
+
+        connection.query(query, [idContratoVeiculo], (err, contratoVeiculoResults) => {
+            if (err) {
+                res.redirect('/');
+            } else if (contratoVeiculoResults.length > 0) {
+                connection.query(veiculoQuery, (err, veiculoResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        connection.query(ufQuery, (err, ufResults) => {
+                            if (err) {
+                                res.redirect('/');
+                            } else {
+                                res.render('contratoVeiculo/edit', {
+                                    title: 'Editar Contrato',
+                                    contratoVeiculo: contratoVeiculoResults[0],
+                                    veiculo: veiculoResults,
+                                    uf: ufResults
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+    //EDIT Contrato Veículo
+    router.post('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
+
+        const idContratoPessoal = req.params.idContratoPessoal;
+        const { municipio, nrCandidato, nmContratado, cpfContratado, rgContratado, enderecoContratado, bairroContratado, cidadeContratado,
+            ufContratado, cepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia, nrContaBancaria, usaPixCpf, formaPagamento,
+            dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo } = req.body;
+
+        //Remove caracteres não numéricos
+        const cleanCpfContratado = cpfContratado.replace(/\D/g, '');
+        const cleanCepContratado = cepContratado.replace(/\D/g, '');
+
+        const query = `UPDATE tbContratoPessoal SET 
+        municipio = ?, 
+        nrCandidato = ?, 
+        nmContratado = ?, 
+        cpfContratado = ?, 
+        rgContratado = ?, 
+        enderecoContratado = ?, 
+        bairroContratado = ?, 
+        cidadeContratado = ?, 
+        ufContratado = ?, 
+        cepContratado = ?, 
+        idFuncao = ?, 
+        contratadoDoado = ?, 
+        cgHoraria = ?, 
+        nrBanco = ?, 
+        nrAgencia = ?,  
+        nrContaBancaria = ?, 
+        usaPixCpf = ?, 
+        formaPagamento = ?, 
+        dtVencimento = ?, 
+        dtInicio = ?, 
+        dtFim =?, 
+        hrEntrada = ?, 
+        hrSaida = ?, 
+        hrIntervalo = ?
+        WHERE idContratoPessoal = ?`;
+        connection.query(query, [municipio, nrCandidato, nmContratado, cleanCpfContratado, rgContratado, enderecoContratado,
+            bairroContratado, cidadeContratado, ufContratado, cleanCepContratado, idFuncao, contratadoDoado, cgHoraria, nrBanco, nrAgencia,
+            nrContaBancaria, usaPixCpf, formaPagamento, dtVencimento, dtInicio, dtFim, hrEntrada, hrSaida, hrIntervalo, idContratoPessoal], (err, result) => {
+                if (err) {
+                    console.error(err);
+                    req.session.message = {
+                        type: 'danger',
+                        message: 'Erro ao atualizar o contrato.'
+                    };
+                    res.redirect('/contrato-pessoal');
+                } else {
+                    if (result.affectedRows === 0) {
+                        req.session.message = {
+                            type: 'warning',
+                            message: 'Contrato não encontrado.'
+                        };
+                    } else {
+                        req.session.message = {
+                            type: 'success',
+                            message: 'Contrato atualizado com sucesso!'
+                        };
+                    }
+                    res.redirect('/contrato-pessoal');
+                }
+            });
+    });
+
+    // Delete CONTRATO VEICULO
+    router.get('/contrato-veiculo/delete/:idContratoveiculo', (req, res) => {
+        let idContratoVeiculo = req.params.idContratoVeiculo;
+        const query = 'DELETE FROM tbContratoVeiculo WHERE idContratoVeiculo = ?';
+
+        connection.query(query, [idContratoVeiculo], (err, result) => {
+            if (err) {
+                console.error(err);
+                res.json({ message: err.message });
+            } else {
+                if (result.affectedRows === 0) {
+                    req.session.message = {
+                        type: 'warning',
+                        message: 'Contrato não encontrado.'
+                    };
+                } else {
+                    req.session.message = {
+                        type: 'info',
+                        message: 'Contrato deletado com sucesso!'
+                    };
+                }
+                res.redirect('/contrato-veiculo');
             }
         });
     });
