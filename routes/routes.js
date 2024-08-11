@@ -1168,6 +1168,41 @@ module.exports = (connection) => {
         });
     });
 
+    // View CONTRATO VEICULO
+    router.get('/contrato-veiculo/view/:idContratoVeiculo', (req, res) => {
+        const idContratoVeiculo = req.params.idContratoVeiculo;
+        const query = 'SELECT * FROM tbContratoVeiculo WHERE idContratoVeiculo = ?';
+        const veiculoQuery = 'SELECT idVeiculo, marca FROM tbVeiculo';
+        const ufQuery = 'SELECT uf FROM tbUf';
+
+        connection.query(query, [idContratoVeiculo], (err, contratoVeiculoResults) => {
+            if (err) {
+                res.redirect('/');
+            } else if (contratoVeiculoResults.length > 0) {
+                connection.query(veiculoQuery, (err, veiculoResults) => {
+                    if (err) {
+                        res.redirect('/');
+                    } else {
+                        connection.query(ufQuery, (err, ufResults) => {
+                            if (err) {
+                                res.redirect('/');
+                            } else {
+                                res.render('contratoVeiculo/view', {
+                                    title: 'Editar Contrato',
+                                    contratoVeiculo: contratoVeiculoResults[0],
+                                    veiculo: veiculoResults,
+                                    uf: ufResults
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
     // End point
     return router;
 };
