@@ -1,0 +1,103 @@
+<%- include('../layout/header') %>
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <% if (message) { %>
+                    <div class="alert alert-dismissable fade show alert-<% message.type %>" role="alert">
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                        <strong>
+                            <%= message.message %>
+                        </strong>
+                    </div>
+                    <% } %>
+                        <h2>
+                            <%= title %>
+                        </h2>
+                        <a href="/contrato-veiculo/create" class="btn btn-primary mb-2">Novo Cadastro</a>
+                        <div class="table-responsive">
+                            <% if (contratoVeiculo !='' ) { %>
+                                <table class="table table-striped text-center my-2">
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Marca</th>
+                                            <th class="text-center">Modelo</th>
+                                            <th class="text-center">Ano</th>
+                                            <th class="text-center">Candidato</th>
+                                            <th class="text-center">Data de início</th>
+                                            <th class="text-center">Data de fim</th>
+                                            <th class="text-center">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% contratoVeiculo.forEach((row, index)=> { %>
+                                            <tr class="align-middle">
+                                                <td style="text-align: center;">
+                                                    <%= row.idContratoVeiculo %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.marca %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.modelo %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.ano %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.nrCandidato %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.dtInicioFormat %>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <%= row.dtFimFormat %>
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <a href="/contrato-veiculo/view/<%= row.idContratoVeiculo %>"
+                                                        class="" title="Ver detalhes"><i
+                                                            class="fa-solid fa-eye mx-1"></i></a>
+                                                    <a href="/contrato-veiculo/edit/<%= row.idContratoVeiculo %>"
+                                                        class="text-success" title="Editar"><i
+                                                            class="fas fa-edit fa-lg mx-1"></i></a>
+                                                    <a href="javascript:void(0);" class="text-danger delete-btn"
+                                                        data-url="/contrato-veiculo/delete/<%= row.idContratoVeiculo %>"
+                                                        title="Deletar">
+                                                        <i class="fas fa-trash fa-lg mx-1"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                                <% } else{ %>
+                                    <h1 class="text-center text-secondary mt-5">Nenhum contrato encontrado no banco de
+                                        dados.</h1>
+                                    <% } %>
+
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmação de exclusão -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir este contrato?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Sim</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../layout/footer') %>
