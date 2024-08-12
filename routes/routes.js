@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
-
+const PdfPrinter = require('pdfmake');
+const fs = require('fs');
 module.exports = (connection) => {
+    
     // Rotas
     router.get('/', (req, res) => {
         res.render('index', { title: 'Home Page' });
+    });
+
+    //Relatório Salários
+    router.get('salario/report', (req, res) => {
+        const printer = new PdfPrinter();
     });
 
     // Operações FUNÇÕES
@@ -369,7 +376,7 @@ module.exports = (connection) => {
         Promise.all([candidatoModalQuery, funcaoQuery])
             .then(([candidato, funcao]) => {
                 // Renderiza a página com os dados das duas consultas
-                res.render('ve/create', {
+                res.render('veiculo/create', {
                     title: 'Cadastrar Salário',
                     funcao: funcao,
                     candidato: candidato // Adiciona os dados dos veículos ao contexto
