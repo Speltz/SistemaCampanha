@@ -3,16 +3,80 @@ const router = express.Router();
 const PdfPrinter = require('pdfmake');
 const fs = require('fs');
 module.exports = (connection) => {
-    
-    // Rotas
+
+
+
+    //     //Contrato
+    //     router.get('/contrato/:idContratoPessoal', async (req, res) => {
+    //         const idContratoPessoal = req.params.id;
+        
+    //         try {
+    //             // Query to fetch the data from tbContratoPessoal based on idContratoPessoal
+    //             const [rows] = await db.query('SELECT * FROM tbContratoPessoal WHERE idContratoPessoal = ?', [idContratoPessoal]);
+        
+    //             if (rows.length > 0) {
+    //                 const contrato = rows[0];
+        
+    //                 // Render the EJS template and pass the data from the query
+    //                 res.render('/reports/contrato', {
+    //                     funcaoContratado: contrato.funcaoContratado,
+    //                     dataInicio: contrato.dtInicio,
+    //                     dataFim: contrato.dtFim,
+    //                     valorTotal: "ph",
+    //                     valorPorExtenso: "ph",
+    //                     dataPagamento: contrato.dtVencimento,
+    //                     cidade: contrato.cidadeContratado,
+    //                     uf: "ph",
+    //                     dataContrato: "ph",
+    //                     nomeCandidato: nrCandidato,
+    //                     pleito: "ph",
+    //                     cnpjCandidato: "ph",
+    //                     nomeContratado: contrato.nmContratado,
+    //                     cpfContratado: contrato.cpfContratado,
+    //                     nomeAdministrador: "ph",
+    //                     cpfAdministrador: "ph",
+    //                     enderecoSede: "ph",
+    //                     bairroSede: "ph",
+    //                     cepSede: "ph",
+    //                     enderecoContratado: contrato.enderecoContratado,
+    //                     bairroContratado: contrato.bairroContratado,
+    //                     cidadeContratado: contrato.cidadeContratado,
+    //                     ufContratado: contrato.ufContratado,
+    //                     cepContratado: contrato.cepContratado,
+    //                     descricaoObjeto: "ph",
+    //                     vigenciaRescisao: "ph",
+    //                     descricaoRemuneracao: "ph",
+    //                     descricaoObrigacoesContratante: "ph",
+    //                     descricaoCondicoesGerais: "ph"
+    //                 });
+    //             } else {
+    //                 res.status(404).send('Contrato não encontrado');
+    //             }
+    //         } catch (error) {
+    //             console.error('Erro ao gerar contrato:', error);
+    //             res.status(500).send('Erro ao gerar contrato');
+    //         }
+    //     });
+        
+    // //Rotas PDFs
+    // router.get('reports/folha-de-ponto', (req, res) => {
+    //     res.render('reports/folhaponto', {
+    //       nome: 'John Doe',
+    //       cpf: '123.456.789-00',
+    //       funcao: 'Desenvolvedor'
+    //     });
+    //   });
+
+    // //Relatório Salários
+    // router.get('salario/report', (req, res) => {
+    //     const printer = new PdfPrinter();
+    // });
+
+    // Rotas Operações
     router.get('/', (req, res) => {
         res.render('index', { title: 'Home Page' });
     });
 
-    //Relatório Salários
-    router.get('salario/report', (req, res) => {
-        const printer = new PdfPrinter();
-    });
 
     // Operações FUNÇÕES
     // Index

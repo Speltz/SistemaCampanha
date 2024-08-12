@@ -1,0 +1,114 @@
+<%- include('../scripts/scripts') %>
+<%- include('../layout/footer') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folha de Ponto</title>
+</head>
+<body>
+  <h1>Folha de Ponto</h1>
+
+  <button onclick="generatePDF()">Download PDF</button>
+
+  <script>
+    function generatePDF() {
+      var docDefinition = {
+        pageOrientation: 'landscape',
+        content: [
+          {
+            text: 'FOLHA DE PONTO',
+            style: 'header',
+            alignment: 'center'
+          },
+          {
+            text: '\nELEIÇÃO 2024 “CANDIDATO QUE O CONTRATADO É VINCULADO”',
+            style: 'subheader',
+            alignment: 'center'
+          },
+          {
+            columns: [
+              { text: 'NOME DO CONTRATADO: ', bold: true },
+              { text: '<%= nome %>' }
+            ]
+          },
+          {
+            columns: [
+              { text: 'CPF: ', bold: true },
+              { text: '<%= cpf %>' }
+            ]
+          },
+          {
+            columns: [
+              { text: 'FUNÇÃO: ', bold: true },
+              { text: '<%= funcao %>' }
+            ]
+          },
+          {
+            columns: [
+              { text: 'MÊS: ', bold: true },
+              { text: 'Inicio de admissão-mês fechado/2024' }
+            ]
+          },
+          '\n\n',
+          {
+            table: {
+              headerRows: 1,
+              widths: [20, '*', '*', '*', '*', '*', '*', '*'],
+              body: [
+                [
+                  { text: 'Dia', style: 'tableHeader' },
+                  { text: 'ENTRADA / SAIDA (MANHA)', style: 'tableHeader' },
+                  { text: 'ENTRADA / SAIDA (TARDE)', style: 'tableHeader' },
+                  { text: 'ENTRADA / SAIDA (NOITE)', style: 'tableHeader' },
+                  { text: 'Horário', style: 'tableHeader' },
+                  { text: 'Horário', style: 'tableHeader' },
+                  { text: 'Horário', style: 'tableHeader' },
+                  { text: 'ASSINATURA CONTRATADO', style: 'tableHeader' }
+                ],
+                // Here you can dynamically populate the rows based on your data
+                ...Array.from({ length: 31 }, (_, i) => [
+                  { text: (i + 1).toString(), alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: 'xxxxxxxx', alignment: 'center' },
+                  { text: '', alignment: 'center' }
+                ])
+              ]
+            }
+          },
+          '\n\n\n',
+          {
+            columns: [
+              { text: '___________________________', alignment: 'center', width: '*' },
+              { text: 'ASSINATURA RESPONSAVEL', alignment: 'center', width: '*' }
+            ]
+          }
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true
+          },
+          subheader: {
+            fontSize: 14,
+            bold: true
+          },
+          tableHeader: {
+            bold: true,
+            fontSize: 12,
+            color: 'black'
+          }
+        }
+      };
+
+      pdfMake.createPdf(docDefinition).download('folhaponto.pdf');
+    }
+  </script>
+</body>
+</html>
