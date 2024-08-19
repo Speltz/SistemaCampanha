@@ -2,75 +2,189 @@ const express = require('express');
 const router = express.Router();
 const PdfPrinter = require('pdfmake');
 const fs = require('fs');
+const path = require('path');
+const extenso = require('extenso');
+
+const mysql = require('mysql2/promise');
+const db = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: '1234',
+    database: 'sistemaeleicao'
+});
+
 module.exports = (connection) => {
 
+    router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
+        try {
+            const { idContratoPessoal } = req.params;
+    
+            // Query to get data from tbCandidato, tbFuncao, tbContratoPessoal, and tbSalario
+            const query = `
+            SELECT 
+                cp.idContratoPessoal,
+                cp.municipio,
+                c.nmCandidato,
+                CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
+                SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
+                c.enderecoCandidato,
+                c.bairroCandidato,
+                c.cidadeCandidato,
+                c.ufCandidato,
+                CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
+                c.nmAdmFinanceiro,
+                CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
+                SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
+                c.partido,
+                f.nmFuncao,
+                f.tpContrato,
+                cp.nmContratado,
+                CONCAT(SUBSTRING(cp.cpfContratado, 1, 3), '.', SUBSTRING(cp.cpfContratado, 4, 3), '.', SUBSTRING(cp.cpfContratado, 7, 3), '-', 
+                SUBSTRING(cp.cpfContratado, 10, 2)) AS cpfContratadoFormat,
+                cp.enderecoContratado,
+                cp.bairroContratado,
+                cp.cidadeContratado,
+                cp.ufContratado,
+                CONCAT(SUBSTRING(cp.cepContratado, 1, 5), '-', SUBSTRING(cp.cepContratado, 6, 3)) AS cepContratadoFormat,
+                DATE_FORMAT(cp.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+                DATE_FORMAT(cp.dtFim, '%d/%m/%Y') as dtFimFormat,
+                DATE_FORMAT(cp.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
+                s.valor
+            FROM tbContratoPessoal cp
+            JOIN tbCandidato c ON cp.nrCandidato = c.nrCandidato
+            JOIN tbFuncao f ON cp.idFuncao = f.idFuncao
+            JOIN tbSalario s ON f.idFuncao = s.idFuncao
+            WHERE cp.idContratoPessoal = ?
+            `;
+    
+            const [rows] = await db.query(query, [idContratoPessoal]);
+    
+            if (rows.length > 0) {
+                const contratoPessoal = rows[0];
+    
+                // Ensure the valor is a number
+                const valorNumber = parseFloat(contratoPessoal.valor);
+    
+                if (isNaN(valorNumber)) {
+                    throw new Error('Invalid number format for valor');
+                }
+    
+                // Convert the valor to words using extenso with the currency setting
+                contratoPessoal.valorExtenso = extenso(valorNumber, { mode: 'currency' });
+    
+                if (contratoPessoal.tpContrato === 'Pessoal') {
+                    res.render('reports/contrato', { contratoPessoal });
+                } else if (contratoPessoal.tpContrato === 'Militante') {
+                    res.render('reports/contratoMilitante', { contratoPessoal });
+                } else {
+                    res.status(404).send('Invalid contract type');
+                }
+            } else {
+                res.status(404).send('Contract not found');
+            }
+        } catch (error) {
+            console.error('Error fetching contract data:', error.message);
+            res.status(500).send('Internal Server Error');
+        }
+    });
 
 
-    //     //Contrato
-    //     router.get('/contrato/:idContratoPessoal', async (req, res) => {
-    //         const idContratoPessoal = req.params.id;
-        
-    //         try {
-    //             // Query to fetch the data from tbContratoPessoal based on idContratoPessoal
-    //             const [rows] = await db.query('SELECT * FROM tbContratoPessoal WHERE idContratoPessoal = ?', [idContratoPessoal]);
-        
-    //             if (rows.length > 0) {
-    //                 const contrato = rows[0];
-        
-    //                 // Render the EJS template and pass the data from the query
-    //                 res.render('/reports/contrato', {
-    //                     funcaoContratado: contrato.funcaoContratado,
-    //                     dataInicio: contrato.dtInicio,
-    //                     dataFim: contrato.dtFim,
-    //                     valorTotal: "ph",
-    //                     valorPorExtenso: "ph",
-    //                     dataPagamento: contrato.dtVencimento,
-    //                     cidade: contrato.cidadeContratado,
-    //                     uf: "ph",
-    //                     dataContrato: "ph",
-    //                     nomeCandidato: nrCandidato,
-    //                     pleito: "ph",
-    //                     cnpjCandidato: "ph",
-    //                     nomeContratado: contrato.nmContratado,
-    //                     cpfContratado: contrato.cpfContratado,
-    //                     nomeAdministrador: "ph",
-    //                     cpfAdministrador: "ph",
-    //                     enderecoSede: "ph",
-    //                     bairroSede: "ph",
-    //                     cepSede: "ph",
-    //                     enderecoContratado: contrato.enderecoContratado,
-    //                     bairroContratado: contrato.bairroContratado,
-    //                     cidadeContratado: contrato.cidadeContratado,
-    //                     ufContratado: contrato.ufContratado,
-    //                     cepContratado: contrato.cepContratado,
-    //                     descricaoObjeto: "ph",
-    //                     vigenciaRescisao: "ph",
-    //                     descricaoRemuneracao: "ph",
-    //                     descricaoObrigacoesContratante: "ph",
-    //                     descricaoCondicoesGerais: "ph"
-    //                 });
-    //             } else {
-    //                 res.status(404).send('Contrato não encontrado');
-    //             }
-    //         } catch (error) {
-    //             console.error('Erro ao gerar contrato:', error);
-    //             res.status(500).send('Erro ao gerar contrato');
-    //         }
-    //     });
-        
-    // //Rotas PDFs
-    // router.get('reports/folha-de-ponto', (req, res) => {
-    //     res.render('reports/folhaponto', {
-    //       nome: 'John Doe',
-    //       cpf: '123.456.789-00',
-    //       funcao: 'Desenvolvedor'
-    //     });
-    //   });
+// Contrato Veículo
+router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
+    try {
+        const { idContratoVeiculo } = req.params;
 
-    // //Relatório Salários
-    // router.get('salario/report', (req, res) => {
-    //     const printer = new PdfPrinter();
-    // });
+        // First, find the idVeiculo based on marca, modelo, and ano
+        const veiculoQuery = `
+        SELECT idVeiculo
+        FROM tbVeiculo
+        WHERE marca = (
+            SELECT marca FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+        ) AND modelo = (
+            SELECT modelo FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+        ) AND ano = (
+            SELECT ano FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+        )`;
+
+        const [veiculoRows] = await db.query(veiculoQuery, [idContratoVeiculo, idContratoVeiculo, idContratoVeiculo]);
+
+        if (veiculoRows.length === 0) {
+            return res.status(404).send('Vehicle not found');
+        }
+
+        const idVeiculo = veiculoRows[0].idVeiculo;
+
+        // Now, proceed with the main query including the idVeiculo
+        const query = `
+        SELECT 
+            cv.idContratoVeiculo,
+            cv.municipio,
+            c.nmCandidato,
+            CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
+            SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
+            c.enderecoCandidato,
+            c.bairroCandidato,
+            c.cidadeCandidato,
+            c.ufCandidato,
+            CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
+            c.nmAdmFinanceiro,
+            CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
+            SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
+            c.partido,
+            cv.nmContratado,
+            CONCAT(SUBSTRING(cv.cpfContratado, 1, 3), '.', SUBSTRING(cv.cpfContratado, 4, 3), '.', SUBSTRING(cv.cpfContratado, 7, 3), '-', 
+            SUBSTRING(cv.cpfContratado, 10, 2)) AS cpfContratadoFormat,
+            cv.endereco,
+            cv.bairro,
+            cv.cidade,
+            cv.uf,
+            CONCAT(SUBSTRING(cv.cep, 1, 5), '-', SUBSTRING(cv.cep, 6, 3)) AS cepFormat,
+            v.marca,
+            v.modelo,
+            cv.placaVeiculo,
+            cv.renavam,
+            cv.formaPagamento,
+            v.ano,
+            DATE_FORMAT(cv.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+            DATE_FORMAT(cv.dtFim, '%d/%m/%Y') as dtFimFormat,
+            DATE_FORMAT(cv.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
+            v.valor
+        FROM tbContratoVeiculo cv
+        JOIN tbCandidato c ON cv.nrCandidato = c.nrCandidato
+        JOIN tbVeiculo v ON v.idVeiculo = ?
+        WHERE cv.idContratoVeiculo = ?;
+        `;
+
+        const [rows] = await db.query(query, [idVeiculo, idContratoVeiculo]);
+
+        if (rows.length > 0) {
+            const contratoVeiculo = rows[0];
+
+            // Ensure the valor is a number
+            const valorNumber = parseFloat(contratoVeiculo.valor);
+
+            if (isNaN(valorNumber)) {
+                throw new Error('Invalid number format for valor');
+            }
+
+            // Convert the valor to words using extenso with the currency setting
+            contratoVeiculo.valorExtenso = extenso(valorNumber, { mode: 'currency' });
+
+            res.render('reports/contratoVeiculo', { contratoVeiculo });
+        } else {
+            res.status(404).send('Contract not found');
+        }
+    } catch (error) {
+        console.error('Error fetching contract data:', error.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+    
+
+
+
+
 
     // Rotas Operações
     router.get('/', (req, res) => {
@@ -425,7 +539,7 @@ module.exports = (connection) => {
                 }
             });
         });
-    
+
         const funcaoQuery = new Promise((resolve, reject) => {
             connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
                 if (err) {
@@ -435,7 +549,7 @@ module.exports = (connection) => {
                 }
             });
         });
-    
+
         // Executa ambas as promessas e aguarda suas resoluções
         Promise.all([candidatoModalQuery, funcaoQuery])
             .then(([candidato, funcao]) => {
@@ -495,60 +609,60 @@ module.exports = (connection) => {
         });
     });
 
-   // Página EDIT
-router.get('/veiculo/edit/:idVeiculo', (req, res) => {
-    const idVeiculo = req.params.idVeiculo;
-    
-    // Create promises for each query
-    const veiculoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbVeiculo WHERE idVeiculo = ?', [idVeiculo], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results[0]); // Assuming there is only one result
-            }
-        });
-    });
+    // Página EDIT
+    router.get('/veiculo/edit/:idVeiculo', (req, res) => {
+        const idVeiculo = req.params.idVeiculo;
 
-    const funcaoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+        // Create promises for each query
+        const veiculoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbVeiculo WHERE idVeiculo = ?', [idVeiculo], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]); // Assuming there is only one result
+                }
+            });
         });
-    });
 
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-    });
 
-    // Execute all queries and wait for their results
-    Promise.all([veiculoQuery, funcaoQuery, candidatoModalQuery])
-        .then(([veiculo, funcao, candidato]) => {
-            if (!veiculo) {
-                res.redirect('/');
-            } else {
-                res.render('veiculo/edit', {
-                    title: 'Editar Veículo',
-                    veiculo: veiculo,
-                    funcao: funcao,
-                    candidato: candidato // Include candidato data in the context
-                });
-            }
-        })
-        .catch(err => {
-            // Handle errors
-            res.status(500).json({ message: err.message, type: 'danger' });
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-});
+
+        // Execute all queries and wait for their results
+        Promise.all([veiculoQuery, funcaoQuery, candidatoModalQuery])
+            .then(([veiculo, funcao, candidato]) => {
+                if (!veiculo) {
+                    res.redirect('/');
+                } else {
+                    res.render('veiculo/edit', {
+                        title: 'Editar Veículo',
+                        veiculo: veiculo,
+                        funcao: funcao,
+                        candidato: candidato // Include candidato data in the context
+                    });
+                }
+            })
+            .catch(err => {
+                // Handle errors
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
+    });
 
 
     // Edit VEÍCULO
@@ -629,44 +743,44 @@ router.get('/veiculo/edit/:idVeiculo', (req, res) => {
         });
     });
 
- //Página CREATE
- router.get('/salario/create', (req, res) => {
-    // Cria um array de promessas para as duas consultas
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const funcaoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    // Executa ambas as promessas e aguarda suas resoluções
-    Promise.all([candidatoModalQuery, funcaoQuery])
-        .then(([candidato, funcao]) => {
-            // Renderiza a página com os dados das duas consultas
-            res.render('salario/create', {
-                title: 'Cadastrar Salário',
-                funcao: funcao,
-                candidato: candidato // Adiciona os dados dos veículos ao contexto
+    //Página CREATE
+    router.get('/salario/create', (req, res) => {
+        // Cria um array de promessas para as duas consultas
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
             });
-        })
-        .catch(err => {
-            // Lida com erros
-            res.status(500).json({ message: err.message, type: 'danger' });
         });
-});
+
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Executa ambas as promessas e aguarda suas resoluções
+        Promise.all([candidatoModalQuery, funcaoQuery])
+            .then(([candidato, funcao]) => {
+                // Renderiza a página com os dados das duas consultas
+                res.render('salario/create', {
+                    title: 'Cadastrar Salário',
+                    funcao: funcao,
+                    candidato: candidato // Adiciona os dados dos veículos ao contexto
+                });
+            })
+            .catch(err => {
+                // Lida com erros
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
+    });
 
 
     //Create SALARIO
@@ -717,60 +831,60 @@ router.get('/veiculo/edit/:idVeiculo', (req, res) => {
             }
         });
     });
-// Página EDIT
-router.get('/salario/edit/:idSalario', (req, res) => {
-    const idSalario = req.params.idSalario;
-    
-    // Create promises for each query
-    const salarioQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbSalario WHERE idSalario = ?', [idSalario], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results[0]); // Assuming there is only one result
-            }
-        });
-    });
+    // Página EDIT
+    router.get('/salario/edit/:idSalario', (req, res) => {
+        const idSalario = req.params.idSalario;
 
-    const funcaoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+        // Create promises for each query
+        const salarioQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbSalario WHERE idSalario = ?', [idSalario], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]); // Assuming there is only one result
+                }
+            });
         });
-    });
 
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-    });
 
-    // Execute all queries and wait for their results
-    Promise.all([salarioQuery, funcaoQuery, candidatoModalQuery])
-        .then(([salario, funcao, candidato]) => {
-            if (!salario) {
-                res.redirect('/');
-            } else {
-                res.render('salario/edit', {
-                    title: 'Editar Salário',
-                    salario: salario,
-                    funcao: funcao,
-                    candidato: candidato // Include candidato data in the context
-                });
-            }
-        })
-        .catch(err => {
-            // Handle errors
-            res.status(500).json({ message: err.message, type: 'danger' });
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-});
+
+        // Execute all queries and wait for their results
+        Promise.all([salarioQuery, funcaoQuery, candidatoModalQuery])
+            .then(([salario, funcao, candidato]) => {
+                if (!salario) {
+                    res.redirect('/');
+                } else {
+                    res.render('salario/edit', {
+                        title: 'Editar Salário',
+                        salario: salario,
+                        funcao: funcao,
+                        candidato: candidato // Include candidato data in the context
+                    });
+                }
+            })
+            .catch(err => {
+                // Handle errors
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
+    });
 
     //Edit SALÁRIO
     router.post('/salario/edit/:idSalario', (req, res) => {
@@ -835,8 +949,8 @@ router.get('/salario/edit/:idSalario', (req, res) => {
 
     // Operações CONTRATO PESSOAL
     // Index
-router.get('/contrato-pessoal', (req, res) => {
-    connection.query(`SELECT 
+    router.get('/contrato-pessoal', (req, res) => {
+        connection.query(`SELECT 
         c.idContratoPessoal, 
         c.municipio, 
         c.nrCandidato, 
@@ -865,64 +979,64 @@ router.get('/contrato-pessoal', (req, res) => {
         c.hrIntervalo 
     FROM tbContratoPessoal c
     JOIN tbFuncao f ON c.idFuncao = f.idFuncao`, (err, results) => {
-        if (err) {
-            res.status(500).json({ message: err.message });
-        } else {
-            res.render('contratoPessoal/index', { title: 'Contratos Pessoais', contratoPessoal: results });
-        }
-    });
-});
-
-
-// Página CREATE
-router.get('/contrato-pessoal/create', (req, res) => {
-    // Cria um array de promessas para as duas consultas
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
             if (err) {
-                reject(err);
+                res.status(500).json({ message: err.message });
             } else {
-                resolve(results);
+                res.render('contratoPessoal/index', { title: 'Contratos Pessoais', contratoPessoal: results });
             }
         });
     });
 
-    const funcaoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
 
-    const ufQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT uf FROM tbUf', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    // Executa todas as promessas e aguarda suas resoluções
-    Promise.all([candidatoModalQuery, funcaoQuery, ufQuery])
-        .then(([candidato, funcao, uf]) => {
-            // Renderiza a página com os dados das três consultas
-            res.render('contratoPessoal/create', {
-                title: 'Cadastrar Novo Contrato Pessoal',
-                funcao: funcao,
-                uf: uf,
-                candidato: candidato // Adiciona os dados dos candidatos ao contexto
+    // Página CREATE
+    router.get('/contrato-pessoal/create', (req, res) => {
+        // Cria um array de promessas para as duas consultas
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
             });
-        })
-        .catch(err => {
-            // Lida com erros
-            res.status(500).json({ message: err.message, type: 'danger' });
         });
-});
+
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const ufQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT uf FROM tbUf', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Executa todas as promessas e aguarda suas resoluções
+        Promise.all([candidatoModalQuery, funcaoQuery, ufQuery])
+            .then(([candidato, funcao, uf]) => {
+                // Renderiza a página com os dados das três consultas
+                res.render('contratoPessoal/create', {
+                    title: 'Cadastrar Novo Contrato Pessoal',
+                    funcao: funcao,
+                    uf: uf,
+                    candidato: candidato // Adiciona os dados dos candidatos ao contexto
+                });
+            })
+            .catch(err => {
+                // Lida com erros
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
+    });
 
 
     function checkDateBeforeTrava(nrCandidato, dtInicio, callback) {
@@ -1044,71 +1158,71 @@ router.get('/contrato-pessoal/create', (req, res) => {
     });
 
 
-   // Página EDIT
-router.get('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
-    const idContratoPessoal = req.params.idContratoPessoal;
+    // Página EDIT
+    router.get('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
+        const idContratoPessoal = req.params.idContratoPessoal;
 
-    // Create promises for each query
-    const contratoPessoalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbContratoPessoal WHERE idContratoPessoal = ?', [idContratoPessoal], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results[0]); // Assuming there is only one result
-            }
+        // Create promises for each query
+        const contratoPessoalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbContratoPessoal WHERE idContratoPessoal = ?', [idContratoPessoal], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]); // Assuming there is only one result
+                }
+            });
         });
+
+        const funcaoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const ufQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT uf FROM tbUf', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Execute all queries and wait for their results
+        Promise.all([contratoPessoalQuery, funcaoQuery, ufQuery, candidatoModalQuery])
+            .then(([contratoPessoal, funcao, uf, candidato]) => {
+                if (!contratoPessoal) {
+                    res.redirect('/');
+                } else {
+                    res.render('contratoPessoal/edit', {
+                        title: 'Editar Contrato',
+                        contratoPessoal: contratoPessoal,
+                        funcao: funcao,
+                        uf: uf,
+                        candidato: candidato // Include candidato data in the context
+                    });
+                }
+            })
+            .catch(err => {
+                // Handle errors
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
     });
-
-    const funcaoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const ufQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT uf FROM tbUf', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    // Execute all queries and wait for their results
-    Promise.all([contratoPessoalQuery, funcaoQuery, ufQuery, candidatoModalQuery])
-        .then(([contratoPessoal, funcao, uf, candidato]) => {
-            if (!contratoPessoal) {
-                res.redirect('/');
-            } else {
-                res.render('contratoPessoal/edit', {
-                    title: 'Editar Contrato',
-                    contratoPessoal: contratoPessoal,
-                    funcao: funcao,
-                    uf: uf,
-                    candidato: candidato // Include candidato data in the context
-                });
-            }
-        })
-        .catch(err => {
-            // Handle errors
-            res.status(500).json({ message: err.message, type: 'danger' });
-        });
-});
 
 
     // EDIT Contrato Pessoal
@@ -1283,69 +1397,69 @@ router.get('/contrato-pessoal/edit/:idContratoPessoal', (req, res) => {
         });
     });
 
-   // Página CREATE
-router.get('/contrato-veiculo/create', (req, res) => {
-    // Cria um array de promessas para as consultas
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const veiculoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idVeiculo, marca FROM tbVeiculo', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const ufQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT uf FROM tbUf', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    // Executa todas as promessas e aguarda suas resoluções
-    Promise.all([candidatoModalQuery, veiculoQuery, ufQuery])
-        .then(([candidato, veiculo, uf]) => {
-            // Renderiza a página com os dados das três consultas
-            res.render('contratoVeiculo/create', {
-                title: 'Cadastrar Novo Contrato de Veículo',
-                candidato: candidato, // Adiciona os dados dos candidatos ao contexto
-                veiculo: veiculo,
-                uf: uf
+    // Página CREATE
+    router.get('/contrato-veiculo/create', (req, res) => {
+        // Cria um array de promessas para as consultas
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
             });
-        })
-        .catch(err => {
-            // Lida com erros
-            res.status(500).json({ message: err.message, type: 'danger' });
         });
-});
 
-// Função para verificar a data de início em relação à trava de data do veículo
-function checkDateBeforeTravaVeiculo(idVeiculo, dtInicio, callback) {
-    const checkQuery = `SELECT dtTrava FROM tbVeiculo WHERE idVeiculo = ?`;
-    connection.query(checkQuery, [idVeiculo], (err, results) => {
-        if (err) {
-            return callback(err, null);
-        }
-        if (results.length > 0 && new Date(dtInicio) < new Date(results[0].dtTrava)) {
-            return callback(null, false); // Data inválida
-        }
-        return callback(null, true); // Data válida
+        const veiculoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idVeiculo, marca FROM tbVeiculo', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const ufQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT uf FROM tbUf', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Executa todas as promessas e aguarda suas resoluções
+        Promise.all([candidatoModalQuery, veiculoQuery, ufQuery])
+            .then(([candidato, veiculo, uf]) => {
+                // Renderiza a página com os dados das três consultas
+                res.render('contratoVeiculo/create', {
+                    title: 'Cadastrar Novo Contrato de Veículo',
+                    candidato: candidato, // Adiciona os dados dos candidatos ao contexto
+                    veiculo: veiculo,
+                    uf: uf
+                });
+            })
+            .catch(err => {
+                // Lida com erros
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
     });
-}
+
+    // Função para verificar a data de início em relação à trava de data do veículo
+    function checkDateBeforeTravaVeiculo(idVeiculo, dtInicio, callback) {
+        const checkQuery = `SELECT dtTrava FROM tbVeiculo WHERE idVeiculo = ?`;
+        connection.query(checkQuery, [idVeiculo], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            if (results.length > 0 && new Date(dtInicio) < new Date(results[0].dtTrava)) {
+                return callback(null, false); // Data inválida
+            }
+            return callback(null, true); // Data válida
+        });
+    }
 
 
     // Create CONTRATO VEICULO
@@ -1428,71 +1542,71 @@ function checkDateBeforeTravaVeiculo(idVeiculo, dtInicio, callback) {
 
 
     // Página EDIT
-router.get('/contrato-veiculo/edit/:idContratoVeiculo', (req, res) => {
-    const idContratoVeiculo = req.params.idContratoVeiculo;
+    router.get('/contrato-veiculo/edit/:idContratoVeiculo', (req, res) => {
+        const idContratoVeiculo = req.params.idContratoVeiculo;
 
-    // Cria um array de promessas para as consultas
-    const contratoVeiculoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbContratoVeiculo WHERE idContratoVeiculo = ?', [idContratoVeiculo], (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results[0]); // Supondo que haverá apenas um resultado
-            }
+        // Cria um array de promessas para as consultas
+        const contratoVeiculoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbContratoVeiculo WHERE idContratoVeiculo = ?', [idContratoVeiculo], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results[0]); // Supondo que haverá apenas um resultado
+                }
+            });
         });
+
+        const candidatoModalQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM tbCandidato', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const veiculoQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT idVeiculo, marca FROM tbVeiculo', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        const ufQuery = new Promise((resolve, reject) => {
+            connection.query('SELECT uf FROM tbUf', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Executa todas as promessas e aguarda suas resoluções
+        Promise.all([contratoVeiculoQuery, candidatoModalQuery, veiculoQuery, ufQuery])
+            .then(([contratoVeiculo, candidato, veiculo, uf]) => {
+                if (!contratoVeiculo) {
+                    res.redirect('/');
+                } else {
+                    // Renderiza a página com os dados das quatro consultas
+                    res.render('contratoVeiculo/edit', {
+                        title: 'Editar Contrato de Veículo',
+                        contratoVeiculo: contratoVeiculo,
+                        candidato: candidato, // Adiciona os dados dos candidatos ao contexto
+                        veiculo: veiculo,
+                        uf: uf
+                    });
+                }
+            })
+            .catch(err => {
+                // Lida com erros
+                res.status(500).json({ message: err.message, type: 'danger' });
+            });
     });
-
-    const candidatoModalQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM tbCandidato', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const veiculoQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT idVeiculo, marca FROM tbVeiculo', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    const ufQuery = new Promise((resolve, reject) => {
-        connection.query('SELECT uf FROM tbUf', (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
-    });
-
-    // Executa todas as promessas e aguarda suas resoluções
-    Promise.all([contratoVeiculoQuery, candidatoModalQuery, veiculoQuery, ufQuery])
-        .then(([contratoVeiculo, candidato, veiculo, uf]) => {
-            if (!contratoVeiculo) {
-                res.redirect('/');
-            } else {
-                // Renderiza a página com os dados das quatro consultas
-                res.render('contratoVeiculo/edit', {
-                    title: 'Editar Contrato de Veículo',
-                    contratoVeiculo: contratoVeiculo,
-                    candidato: candidato, // Adiciona os dados dos candidatos ao contexto
-                    veiculo: veiculo,
-                    uf: uf
-                });
-            }
-        })
-        .catch(err => {
-            // Lida com erros
-            res.status(500).json({ message: err.message, type: 'danger' });
-        });
-});
 
 
     // EDIT Contrato Veículo
