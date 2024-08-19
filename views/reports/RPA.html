@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo de Pagamento Autônomo (RPA)</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+
+        .no-border {
+            border: none;
+        }
+
+        .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .right-align {
+            text-align: right;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .highlight-red {
+            color: red;
+        }
+
+        .signature {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .table-info td {
+            height: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">RECIBO DE PAGAMENTO AUTÔNOMO (RPA)</div>
+    <table>
+        <tr>
+            <td colspan="3" class="bold">Nome do Candidato (a):</td>
+            <td colspan="4" class="bold">ELEIÇÃO 2024 <span class="highlight-red"><%= candidato %></span></td>
+        </tr>
+        <tr>
+            <td colspan="3">CNPJ nº <span class="highlight-red"><%= cnpj %></span></td>
+            <td>Recibo nº <%= reciboNumero %></td>
+            <td colspan="3">ano: 2024</td>
+        </tr>
+        <tr>
+            <td colspan="7">Recebi do candidato acima identificado pela prestação dos serviços em Campanha, a importância de R$ <span class="highlight-red"><%= valor %></span> (<span class="highlight-red"><%= valorExtenso %></span>) através de transferência bancária.</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <th colspan="3" class="section-title">Informações para dedução do IRRF (se houver)</th>
+            <th colspan="4" class="section-title">Especificações</th>
+        </tr>
+        <tr>
+            <td>Pensão alimentícia</td>
+            <td colspan="2" class="right-align">R$</td>
+            <td>Valor dos serviços prestados</td>
+            <td colspan="3" class="right-align">R$ <%= valor %></td>
+        </tr>
+        <tr>
+            <td>Dependentes</td>
+            <td>X</td>
+            <td class="right-align">R$</td>
+            <td class="bold">Total</td>
+            <td colspan="3" class="right-align bold">R$ <%= valor %></td>
+        </tr>
+        <tr>
+            <th colspan="3" class="section-title">Cálculo do INSS</th>
+            <th colspan="4" class="section-title">Descontos</th>
+        </tr>
+        <tr>
+            <td>Base de cálculo</td>
+            <td colspan="2" class="right-align">R$</td>
+            <td>INSS retido</td>
+            <td colspan="3" class="right-align">R$</td>
+        </tr>
+        <tr>
+            <td>Alíquota</td>
+            <td colspan="2" class="right-align">%</td>
+            <td>ISS - alíquota de</td>
+            <td colspan="3" class="right-align">R$</td>
+        </tr>
+        <tr>
+            <td class="bold">Valor a recolher</td>
+            <td colspan="2" class="right-align bold">R$</td>
+            <td>IRRF</td>
+            <td colspan="3" class="right-align">R$</td>
+        </tr>
+        <tr>
+            <th colspan="3" class="section-title">Cálculo do IRRF</th>
+            <td class="bold">Valor líquido a receber</td>
+            <td colspan="3" class="right-align bold">R$ <%= valor %></td>
+        </tr>
+        <tr>
+            <td>Base de cálculo</td>
+            <td colspan="2" class="right-align">R$</td>
+            <td colspan="4" class="no-border"></td>
+        </tr>
+        <tr>
+            <td>Alíquota</td>
+            <td colspan="2" class="right-align">%</td>
+            <td colspan="4" class="no-border"></td>
+        </tr>
+        <tr>
+            <td>Parcela a deduzir</td>
+            <td colspan="2" class="right-align">R$</td>
+            <td colspan="4" class="no-border"></td>
+        </tr>
+        <tr>
+            <td class="bold">Valor a recolher</td>
+            <td colspan="2" class="right-align bold">R$</td>
+            <td colspan="4" class="no-border"></td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <th colspan="7" class="section-title">Identificação</th>
+        </tr>
+        <tr>
+            <td colspan="2">Nome do Prestador:</td>
+            <td colspan="5" class="highlight-red"><%= nomePrestador %></td>
+        </tr>
+        <tr>
+            <td colspan="2">CPF:</td>
+            <td colspan="5" class="highlight-red"><%= cpfPrestador %></td>
+        </tr>
+    </table>
+
+    <div class="signature">
+        <p>Local: MUNICIPIO</p>
+        <p>Data: <%= data %></p>
+        <p>Assinatura do prestador de serviços:</p>
+        <p>_____________________________________________</p>
+    </div>
+</body>
+</html>
