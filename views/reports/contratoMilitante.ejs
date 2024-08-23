@@ -4,81 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contrato de Prestação de Serviço Militante</title>
+    <style>
+        .page-container {
+            max-width: 800px; /* Adjust this value as needed */
+            margin: 0 auto; /* Center the container */
+            padding: 20px; /* Add some padding for better readability */
+        }
+
+        .justified-content p {
+            text-align: justify;
+            font-size: 20px;
+            text-indent: 2em;
+        }
+    </style>
 </head>
 <body>
+<div class="page-container">
     <h1 style="text-align: center;">CONTRATO DE PRESTAÇÃO DE MILITÂNCIA A CANDIDATO</h1>
 
+    <div class="justified-content">
     <h2>1. DAS PARTES</h2>
     <p>Contrato de prestação de serviços que entre si fazem nos termos do artigo 100 e 100-A da Lei n.º 9.504 de 30.09.97 (Lei Eleitoral).</p>
     
     <h3>CONTRATANTE</h3>
     <p>
-        ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> CNPJ <%= contratoPessoal.cnpjFormat %><br>
+        ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> CNPJ <%= contratoPessoal.cnpjFormat %>, 
         situado à <%= contratoPessoal.enderecoCandidato %>, <%= contratoPessoal.bairroCandidato %>, <%= contratoPessoal.cidadeCandidato %> - 
-        <%= contratoPessoal.ufCandidato %> CEP <%= contratoPessoal.cepCandidatoFormat %><br>
+        <%= contratoPessoal.ufCandidato %> CEP <%= contratoPessoal.cepCandidatoFormat %>.<br>
         Neste ato representado por seu Administrador financeiro:<br>
         <%= contratoPessoal.nmAdmFinanceiro %>, portador do CPF sob nº <%= contratoPessoal.cpfAdmFinanceiroFormat %>
     </p>
 
     <h3>CONTRATADO</h3>
     <p>
-        <%= contratoPessoal.nmContratado %> CPF sob o nº <%= contratoPessoal.cpfContratadoFormat %><br>
+        <%= contratoPessoal.nmContratado %> CPF sob o nº <%= contratoPessoal.cpfContratadoFormat %>, 
         residente e domiciliado na <%= contratoPessoal.enderecoContratado %>, <%= contratoPessoal.bairroContratado %>, 
         <%= contratoPessoal.cidadeContratado %> - <%= contratoPessoal.ufContratado %>, CEP <%= contratoPessoal.cepContratadoFormat %>
     </p>
 
     <h2>2. DO OBJETO, LOCAL E HORÁRIO DA PRESTAÇÃO DO SERVIÇO</h2>
-    <p>
-        O contratado prestará serviços ao contratante na função de MILITANTE na Eleição 2024, realizando para tanto todas as atividades de militância, sem vínculo empregatício algum.<br>
-        A prestação dos serviços se dará eminentemente fora da sede do contratante, no município de <%= contratoPessoal.cidadeContratado %> - <%= contratoPessoal.ufContratado %> podendo, ainda, desenvolver atividades internas em caso de necessidade do contratante, sendo considerado atividade de militância e mobilização de rua conforme disposto no art.41 da resolução 23.607/19.<br>
-        A prestação de serviços se dará de forma pessoal, não podendo o contratado em nenhuma hipótese utilizar terceiros na prestação dos serviços.<br>
-        O serviço será prestado no horário de Segunda-feira a sexta-feira das 8h00 às 12h00 e das 14h00 às 18h00. Aos sábados de 08h00 às 12h00. Caso haja necessidade do contratante, o serviço poderá ser desenvolvido em horários diversos do assinalado anteriormente, como período noturno e dias de domingo ou feriado, com a devida compensação das horas trabalhadas em outro dia da semana, sem importar em remuneração adicional.
-    </p>
+    <p>O contratado prestará serviços ao contratante na função de MILITANTE na Eleição 2024, realizando para tanto todas as atividades de militância, sem vínculo empregatício algum.</p>
+    <p>A prestação dos serviços se dará eminentemente fora da sede do contratante, no município de <%= contratoPessoal.cidadeContratado %> - <%= contratoPessoal.ufContratado %> podendo, ainda, desenvolver atividades internas em caso de necessidade do contratante, sendo considerado atividade de militância e mobilização de rua conforme disposto no art.41 da resolução 23.607/19.</p>
+    <p>A prestação de serviços se dará de forma pessoal, não podendo o contratado em nenhuma hipótese utilizar terceiros na prestação dos serviços.</p>
+    <p>O serviço será prestado no horário de Segunda-feira a sexta-feira das 8h00 às 12h00 e das 14h00 às 18h00. Aos sábados de 08h00 às 12h00. Caso haja necessidade do contratante, o serviço poderá ser desenvolvido em horários diversos do assinalado anteriormente, como período noturno e dias de domingo ou feriado, com a devida compensação das horas trabalhadas em outro dia da semana, sem importar em remuneração adicional.</p>
 
     <h2>3. VIGÊNCIA E RESCISÃO</h2>
-    <p>
-        O presente contrato de prestação de serviços iniciará no dia <%= contratoPessoal.dtInicioFormat %> e se encerrará no dia <%= contratoPessoal.dtFimFormat %>.<br>
-        Na presente contratação, não há vínculo empregatício nos termos do Art. 100 da Lei n° 9.504/97.<br>
-        Havendo ainda interesse no rompimento deste instrumento, a parte interessada deverá comunicar a outra parte com antecedência mínima de 10 (dez) dias. Nesta hipótese, não haverá ônus para a parte que desejar rompê-lo.
-    </p>
+    <p>O presente contrato de prestação de serviços iniciará no dia <%= contratoPessoal.dtInicioFormat %> e se encerrará no dia <%= contratoPessoal.dtFimFormat %>.</p>
+    <p>Na presente contratação, não há vínculo empregatício nos termos do Art. 100 da Lei n° 9.504/97.</p>
+    <p>Havendo ainda interesse no rompimento deste instrumento, a parte interessada deverá comunicar a outra parte com antecedência mínima de 10 (dez) dias. Nesta hipótese, não haverá ônus para a parte que desejar rompê-lo.</p>
 
     <h2>4. DA REMUNERAÇÃO</h2>
-    <p>
-        Pela prestação dos serviços contratados, o contratante pagará ao contratado o valor total de R$ <%= contratoPessoal.valor %> (<%= contratoPessoal.valorExtenso %>). O pagamento será feito através de RPA – Recibo de Pagamento a Autônomo até o dia <%= contratoPessoal.dtVencimentoFormat %>. O recolhimento à Previdência Social ficará sob a responsabilidade do CONTRATADO.<br>
-        Da remuneração não será descontado o imposto de renda retido na fonte. O contratado recolherá o devido imposto quando da sua declaração de imposto de renda.
-    </p>
+    <p>Pela prestação dos serviços contratados, o contratante pagará ao contratado o valor total de R$ <%= contratoPessoal.valor %> (<%= contratoPessoal.valorExtenso %>). O pagamento será feito até o dia <%= contratoPessoal.dtVencimentoFormat %>. O recolhimento à Previdência Social ficará sob a responsabilidade do CONTRATADO.</p>
+    <p>Da remuneração não será descontado o imposto de renda retido na fonte. O contratado recolherá o devido imposto quando da sua declaração de imposto de renda.</p>
 
     <h2>5. DAS OBRIGAÇÕES DO CONTRATANTE</h2>
-    <p>
-        O valor contratado foi definido pelo valor de mercado para a função, levando em consideração as horas trabalhadas.<br>
-        O Contratante se obriga a pagar até a data prevista o valor pactuado no presente contrato.<br>
-        Ressalva o contratante que não existe vínculo empregatício entre as partes nos termos do art. 100 da Lei 9.504/97 e pelo entendimento pacífico que o art. 4ª da IN RFB 872/2008 deixou o CONTRATANTE na condição de candidato, não se equipara a empresa.<br>
-        O contratante, na condição de candidato, não se equipara a empresa com base no art. 4º da Instrução Normativa 872/2008 da Receita Federal do Brasil por qualquer contribuição previdenciária em favor do contratado.
-    </p>
+    <p>O valor contratado foi definido pelo valor de mercado para a função, levando em consideração as horas trabalhadas.</p>
+    <p>O Contratante se obriga a pagar até a data prevista o valor pactuado no presente contrato.</p>
+    <p>Ressalva o contratante que não existe vínculo empregatício entre as partes nos termos do art. 100 da Lei 9.504/97 e pelo entendimento pacífico que o art. 4ª da IN RFB 872/2008 deixou o CONTRATANTE na condição de candidato, não se equipara a empresa.</p>
+    <p>O contratante, na condição de candidato, não se equipara a empresa com base no art. 4º da Instrução Normativa 872/2008 da Receita Federal do Brasil por qualquer contribuição previdenciária em favor do contratado.</p>
+    
 
     <h2>6. DAS CONDIÇÕES GERAIS DO CONTRATO E DO FORO</h2>
-    <p>
-        Este contrato será cancelado automaticamente se houver dolo ou má-fé por qualquer das partes.<br>
-        Fica eleito o Foro da Comarca de <%= contratoPessoal.cidadeCandidato %> - <%= contratoPessoal.ufCandidato %> para dirimir quaisquer dúvidas resultantes do presente instrumento.<br>
-        E por estarem justos e contratados, assinam o presente instrumento em duas vias de igual valor e teor.
-    </p>
-
-    <p style="text-align: center;">
+    <p>Este contrato será cancelado automaticamente se houver dolo ou má-fé por qualquer das partes.</p>
+    <p>Fica eleito o Foro da Comarca de <%= contratoPessoal.cidadeCandidato %> - <%= contratoPessoal.ufCandidato %> para dirimir quaisquer dúvidas resultantes do presente instrumento.</p>
+    <p>E por estarem justos e contratados, assinam o presente instrumento em duas vias de igual valor e teor.</p>
+    </div>
+    <p style="text-align: center; font-size: 20px">
         <%= contratoPessoal.cidadeCandidato %> - <%= contratoPessoal.ufCandidato %>, <%= contratoPessoal.dtInicioFormat %>.
     </p>
-
+    <div class="justified-content">
     <p>
         CONTRATANTE:<br><br>
         ___________________________________________________________________________________<br>
         ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> - <%= contratoPessoal.partido %><br>
-        CNPJ n° <%= contratoPessoal.cnpj %>
+        CNPJ n° <%= contratoPessoal.cnpjFormat %>
     </p>
 
     <p>
         CONTRATADO:<br><br>
         ___________________________________________________________________________________<br>
         <%= contratoPessoal.nmContratado %><br>
-        CPF n° <%= contratoPessoal.cpfContratado %>
+        CPF n° <%= contratoPessoal.cpfContratadoFormat %>
     </p>
+    </div>
+</div>
 </body>
 </html>

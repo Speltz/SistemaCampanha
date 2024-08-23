@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const pdf = require('html-pdf'); // Import html-pdf
 const PdfPrinter = require('pdfmake');
+const PDFDocument = require('pdfkit');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const extenso = require('extenso');
+const ejs = require('ejs'); // Make sure ejs is imported
 
 const mysql = require('mysql2/promise');
 const db = mysql.createPool({
@@ -18,8 +22,8 @@ module.exports = (connection) => {
     router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
         try {
             const { idContratoPessoal } = req.params;
-    
-            // Query to get data from tbCandidato, tbFuncao, tbContratoPessoal, and tbSalario
+            
+            // SQL query to fetch the contract data, including the contract type (tpContrato)
             const query = `
             SELECT 
                 cp.idContratoPessoal,
@@ -56,29 +60,47 @@ module.exports = (connection) => {
             JOIN tbSalario s ON f.idFuncao = s.idFuncao
             WHERE cp.idContratoPessoal = ?
             `;
-    
+        
             const [rows] = await db.query(query, [idContratoPessoal]);
-    
+        
             if (rows.length > 0) {
                 const contratoPessoal = rows[0];
-    
-                // Ensure the valor is a number
                 const valorNumber = parseFloat(contratoPessoal.valor);
-    
+        
                 if (isNaN(valorNumber)) {
                     throw new Error('Invalid number format for valor');
                 }
-    
-                // Convert the valor to words using extenso with the currency setting
+        
                 contratoPessoal.valorExtenso = extenso(valorNumber, { mode: 'currency' });
     
+                // Determine which template to use based on tpContrato
+                let templatePath;
                 if (contratoPessoal.tpContrato === 'Pessoal') {
-                    res.render('reports/contrato', { contratoPessoal });
+                    templatePath = path.join(__dirname, '../views/reports/contrato.ejs');
                 } else if (contratoPessoal.tpContrato === 'Militante') {
-                    res.render('reports/contratoMilitante', { contratoPessoal });
+                    templatePath = path.join(__dirname, '../views/reports/contratoMilitante.ejs');
                 } else {
-                    res.status(404).send('Invalid contract type');
+                    return res.status(404).send('Invalid contract type');
                 }
+    
+                // Render the EJS template to HTML
+                const html = await ejs.renderFile(templatePath, { contratoPessoal }, { async: true });
+    
+                // Define PDF options
+                const options = { format: 'A4' };
+    
+                // Generate PDF from HTML
+                pdf.create(html, options).toStream((err, stream) => {
+                    if (err) {
+                        return res.status(500).send('Error generating PDF');
+                    }
+    
+                    res.setHeader('Content-disposition', 'attachment; filename=contrato.pdf');
+                    res.setHeader('Content-type', 'application/pdf');
+    
+                    // Pipe the PDF to the response
+                    stream.pipe(res);
+                });
             } else {
                 res.status(404).send('Contract not found');
             }
