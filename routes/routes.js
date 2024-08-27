@@ -18,7 +18,7 @@ const db = mysql.createPool({
 });
 
 module.exports = (connection) => {
-
+    // PDF Contrato Route
     router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
         try {
             const { idContratoPessoal } = req.params;
@@ -61,7 +61,7 @@ module.exports = (connection) => {
             WHERE cp.idContratoPessoal = ?
             `;
         
-            const [rows] = await db.query(query, [idContratoPessoal]);
+            const [rows] = await connection.query(query, [idContratoPessoal]);
         
             if (rows.length > 0) {
                 const contratoPessoal = rows[0];
@@ -112,7 +112,6 @@ module.exports = (connection) => {
             res.status(500).send('Internal Server Error');
         }
     });
-
 
 // // Contrato Veículo
 // router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
