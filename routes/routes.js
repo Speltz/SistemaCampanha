@@ -11,9 +11,9 @@ const ejs = require('ejs'); // Make sure ejs is imported
 
 const mysql = require('mysql2/promise');
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '1234',
+    host: 'speltzdatabase.clu06k80aell.us-east-2.rds.amazonaws.com',
+    user: 'admin',
+    password: 'pvbc!admin',
     database: 'sistemaeleicao'
 });
 
@@ -114,96 +114,96 @@ module.exports = (connection) => {
     });
 
 
-// Contrato Veículo
-router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
-    try {
-        const { idContratoVeiculo } = req.params;
+// // Contrato Veículo
+// router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
+//     try {
+//         const { idContratoVeiculo } = req.params;
 
-        // First, find the idVeiculo based on marca, modelo, and ano
-        const veiculoQuery = `
-        SELECT idVeiculo
-        FROM tbVeiculo
-        WHERE marca = (
-            SELECT marca FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
-        ) AND modelo = (
-            SELECT modelo FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
-        ) AND ano = (
-            SELECT ano FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
-        )`;
+//         // First, find the idVeiculo based on marca, modelo, and ano
+//         const veiculoQuery = `
+//         SELECT idVeiculo
+//         FROM tbVeiculo
+//         WHERE marca = (
+//             SELECT marca FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+//         ) AND modelo = (
+//             SELECT modelo FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+//         ) AND ano = (
+//             SELECT ano FROM tbContratoVeiculo WHERE idContratoVeiculo = ?
+//         )`;
 
-        const [veiculoRows] = await db.query(veiculoQuery, [idContratoVeiculo, idContratoVeiculo, idContratoVeiculo]);
+//         const [veiculoRows] = await db.query(veiculoQuery, [idContratoVeiculo, idContratoVeiculo, idContratoVeiculo]);
 
-        if (veiculoRows.length === 0) {
-            return res.status(404).send('Vehicle not found');
-        }
+//         if (veiculoRows.length === 0) {
+//             return res.status(404).send('Vehicle not found');
+//         }
 
-        const idVeiculo = veiculoRows[0].idVeiculo;
+//         const idVeiculo = veiculoRows[0].idVeiculo;
 
-        // Now, proceed with the main query including the idVeiculo
-        const query = `
-        SELECT 
-            cv.idContratoVeiculo,
-            cv.municipio,
-            c.nmCandidato,
-            CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
-            SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
-            c.enderecoCandidato,
-            c.bairroCandidato,
-            c.cidadeCandidato,
-            c.ufCandidato,
-            CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
-            c.nmAdmFinanceiro,
-            CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
-            SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
-            c.partido,
-            cv.nmContratado,
-            CONCAT(SUBSTRING(cv.cpfContratado, 1, 3), '.', SUBSTRING(cv.cpfContratado, 4, 3), '.', SUBSTRING(cv.cpfContratado, 7, 3), '-', 
-            SUBSTRING(cv.cpfContratado, 10, 2)) AS cpfContratadoFormat,
-            cv.endereco,
-            cv.bairro,
-            cv.cidade,
-            cv.uf,
-            CONCAT(SUBSTRING(cv.cep, 1, 5), '-', SUBSTRING(cv.cep, 6, 3)) AS cepFormat,
-            v.marca,
-            v.modelo,
-            cv.placaVeiculo,
-            cv.renavam,
-            cv.formaPagamento,
-            v.ano,
-            DATE_FORMAT(cv.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
-            DATE_FORMAT(cv.dtFim, '%d/%m/%Y') as dtFimFormat,
-            DATE_FORMAT(cv.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
-            v.valor
-        FROM tbContratoVeiculo cv
-        JOIN tbCandidato c ON cv.nrCandidato = c.nrCandidato
-        JOIN tbVeiculo v ON v.idVeiculo = ?
-        WHERE cv.idContratoVeiculo = ?;
-        `;
+//         // Now, proceed with the main query including the idVeiculo
+//         const query = `
+//         SELECT 
+//             cv.idContratoVeiculo,
+//             cv.municipio,
+//             c.nmCandidato,
+//             CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
+//             SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
+//             c.enderecoCandidato,
+//             c.bairroCandidato,
+//             c.cidadeCandidato,
+//             c.ufCandidato,
+//             CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
+//             c.nmAdmFinanceiro,
+//             CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
+//             SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
+//             c.partido,
+//             cv.nmContratado,
+//             CONCAT(SUBSTRING(cv.cpfContratado, 1, 3), '.', SUBSTRING(cv.cpfContratado, 4, 3), '.', SUBSTRING(cv.cpfContratado, 7, 3), '-', 
+//             SUBSTRING(cv.cpfContratado, 10, 2)) AS cpfContratadoFormat,
+//             cv.endereco,
+//             cv.bairro,
+//             cv.cidade,
+//             cv.uf,
+//             CONCAT(SUBSTRING(cv.cep, 1, 5), '-', SUBSTRING(cv.cep, 6, 3)) AS cepFormat,
+//             v.marca,
+//             v.modelo,
+//             cv.placaVeiculo,
+//             cv.renavam,
+//             cv.formaPagamento,
+//             v.ano,
+//             DATE_FORMAT(cv.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+//             DATE_FORMAT(cv.dtFim, '%d/%m/%Y') as dtFimFormat,
+//             DATE_FORMAT(cv.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
+//             v.valor
+//         FROM tbContratoVeiculo cv
+//         JOIN tbCandidato c ON cv.nrCandidato = c.nrCandidato
+//         JOIN tbVeiculo v ON v.idVeiculo = ?
+//         WHERE cv.idContratoVeiculo = ?;
+//         `;
 
-        const [rows] = await db.query(query, [idVeiculo, idContratoVeiculo]);
+//         const [rows] = await db.query(query, [idVeiculo, idContratoVeiculo]);
 
-        if (rows.length > 0) {
-            const contratoVeiculo = rows[0];
+//         if (rows.length > 0) {
+//             const contratoVeiculo = rows[0];
 
-            // Ensure the valor is a number
-            const valorNumber = parseFloat(contratoVeiculo.valor);
+//             // Ensure the valor is a number
+//             const valorNumber = parseFloat(contratoVeiculo.valor);
 
-            if (isNaN(valorNumber)) {
-                throw new Error('Invalid number format for valor');
-            }
+//             if (isNaN(valorNumber)) {
+//                 throw new Error('Invalid number format for valor');
+//             }
 
-            // Convert the valor to words using extenso with the currency setting
-            contratoVeiculo.valorExtenso = extenso(valorNumber, { mode: 'currency' });
+//             // Convert the valor to words using extenso with the currency setting
+//             contratoVeiculo.valorExtenso = extenso(valorNumber, { mode: 'currency' });
 
-            res.render('reports/contratoVeiculo', { contratoVeiculo });
-        } else {
-            res.status(404).send('Contract not found');
-        }
-    } catch (error) {
-        console.error('Error fetching contract data:', error.message);
-        res.status(500).send('Internal Server Error');
-    }
-});
+//             res.render('reports/contratoVeiculo', { contratoVeiculo });
+//         } else {
+//             res.status(404).send('Contract not found');
+//         }
+//     } catch (error) {
+//         console.error('Error fetching contract data:', error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
     
 

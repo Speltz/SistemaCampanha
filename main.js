@@ -1,4 +1,8 @@
 require('dotenv').config();
+console.log('Database Host:', process.env.HOST);
+console.log('Database User:', process.env.USER);
+console.log('Database Password:', process.env.PASSWORD ? 'Loaded' : 'Not Loaded');
+console.log('Database Name:', process.env.DATABASE);
 const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
@@ -36,6 +40,12 @@ const connection = mysql.createConnection({
     database: process.env.DATABASE
 });
 
+console.log('Connecting to database with:', {
+    host: process.env.HOST,
+    user: process.env.USER,
+    database: process.env.DATABASE
+});
+
 connection.connect((err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados: ' + err.stack);
@@ -43,7 +53,6 @@ connection.connect((err) => {
     }
     console.log('Conectado ao banco de dados como id ' + connection.threadId);
 });
-
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
