@@ -61,7 +61,7 @@ module.exports = (connection) => {
             WHERE cp.idContratoPessoal = ?
             `;
         
-            const [rows] = await connection.query(query, [idContratoPessoal]);
+            const [rows] = await connection.promise().query(query, [idContratoPessoal]);
         
             if (rows.length > 0) {
                 const contratoPessoal = rows[0];
