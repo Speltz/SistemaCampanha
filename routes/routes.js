@@ -95,7 +95,10 @@ module.exports = (connection) => {
                         return res.status(500).send('Error generating PDF');
                     }
     
-                    res.setHeader('Content-disposition', 'attachment; filename=contrato.pdf');
+                    // Set the filename to the value of nmContratado
+                    const filename = `${contratoPessoal.nmContratado.replace(/\s+/g, '_')}.pdf`;
+    
+                    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
                     res.setHeader('Content-type', 'application/pdf');
     
                     // Pipe the PDF to the response
