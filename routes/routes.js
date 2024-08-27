@@ -11,10 +11,10 @@ const ejs = require('ejs'); // Make sure ejs is imported
 
 const mysql = require('mysql2/promise');
 const db = mysql.createPool({
-    host: 'speltzdatabase.clu06k80aell.us-east-2.rds.amazonaws.com',
-    user: 'admin',
-    password: 'pvbc!admin',
-    database: 'sistemaeleicao'
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
 
 module.exports = (connection) => {
