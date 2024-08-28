@@ -2,19 +2,42 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    
     <title>Contrato de Prestação de Serviço Militante</title>
     <style>
         .page-container {
-            max-width: 800px; /* Adjust this value as needed */
-            margin: 0 auto; /* Center the container */
-            padding: 20px; /* Add some padding for better readability */
+            max-width: 800px;
+            /* Adjust this value as needed */
+            margin: 0 auto;
+            /* Center the container */
+            padding: 20px;
+            /* Add some padding for better readability */
         }
-
+    
         .justified-content p {
             text-align: justify;
             font-size: 20px;
             text-indent: 2em;
+        }
+    
+        @media print {
+            @page {
+                margin: 0; /* Remove margins */
+            }
+    
+            body {
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact; /* Ensures colors are printed as displayed */
+            }
+    
+            /* Hides the default header/footer provided by the browser */
+            body::before,
+            body::after {
+                content: none;
+            }
         }
     </style>
 </head>
