@@ -31,7 +31,7 @@
         ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> CNPJ <%= contratoPessoal.cnpjFormat %>, 
         situado à <%= contratoPessoal.enderecoCandidato %>, <%= contratoPessoal.bairroCandidato %>, <%= contratoPessoal.cidadeCandidato %> - 
         <%= contratoPessoal.ufCandidato %> CEP <%= contratoPessoal.cepCandidatoFormat %>.<br>
-        Neste ato representado por seu Administrador financeiro:<br>
+        Neste ato representado por seu Administrador financeiro: 
         <%= contratoPessoal.nmAdmFinanceiro %>, portador do CPF sob nº <%= contratoPessoal.cpfAdmFinanceiroFormat %>
     </p>
 
@@ -73,20 +73,24 @@
         <%= contratoPessoal.cidadeCandidato %> - <%= contratoPessoal.ufCandidato %>, <%= contratoPessoal.dtInicioFormat %>.
     </p>
     <div class="justified-content">
-    <p>
-        CONTRATANTE:<br><br>
-        ___________________________________________________________________________________<br>
-        ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> - <%= contratoPessoal.partido %><br>
-        CNPJ n° <%= contratoPessoal.cnpjFormat %>
-    </p>
+        <p>
+            CONTRATANTE:<br><br>
+            ___________________________________________________________________________________
+        </p>
+        <p style="text-align: center; font-size: 20px">
+            ELEIÇÃO 2024 <%= contratoPessoal.nmCandidato %> - <%= contratoPessoal.partido %><br>
+                    CNPJ n° <%= contratoPessoal.cnpjFormat %>
+        </p>
 
-    <p>
-        CONTRATADO:<br><br>
-        ___________________________________________________________________________________<br>
-        <%= contratoPessoal.nmContratado %><br>
-        CPF n° <%= contratoPessoal.cpfContratadoFormat %>
-    </p>
-    </div>
+
+        <p>
+            CONTRATADO:<br><br>
+            ___________________________________________________________________________________
+        </p>
+        <p style="text-align: center; font-size: 20px">
+            <%= contratoPessoal.nmContratado %><br>
+                CPF n° <%= contratoPessoal.cpfContratadoFormat %>
+        </p>
 </div>
 </body>
 </html>
