@@ -76,34 +76,15 @@ module.exports = (connection) => {
                 // Determine which template to use based on tpContrato
                 let templatePath;
                 if (contratoPessoal.tpContrato === 'Pessoal') {
-                    templatePath = path.join(__dirname, '../views/reports/contrato.ejs');
+                    templatePath = '../views/reports/contrato.ejs';
                 } else if (contratoPessoal.tpContrato === 'Militante') {
-                    templatePath = path.join(__dirname, '../views/reports/contratoMilitante.ejs');
+                    templatePath = '../views/reports/contratoMilitante.ejs';
                 } else {
                     return res.status(404).send('Invalid contract type');
                 }
     
-                // Render the EJS template to HTML
-                const html = await ejs.renderFile(templatePath, { contratoPessoal }, { async: true });
-    
-                // Define PDF options
-                const options = { format: 'A4' };
-    
-                // Generate PDF from HTML
-                pdf.create(html, options).toStream((err, stream) => {
-                    if (err) {
-                        return res.status(500).send('Error generating PDF');
-                    }
-    
-                    // Set the filename to the value of nmContratado
-                    const filename = `${contratoPessoal.nmContratado.replace(/\s+/g, '_')}.pdf`;
-    
-                    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
-                    res.setHeader('Content-type', 'application/pdf');
-    
-                    // Pipe the PDF to the response
-                    stream.pipe(res);
-                });
+                // Render the EJS template to HTML and send it as a response
+                res.render(templatePath, { contratoPessoal });
             } else {
                 res.status(404).send('Contract not found');
             }
