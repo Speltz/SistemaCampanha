@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const extenso = require('extenso');
 const ejs = require('ejs'); // Make sure ejs is imported
+const ExcelJS = require('exceljs');
 
 const mysql = require('mysql2/promise');
 const db = mysql.createPool({
@@ -18,6 +19,106 @@ const db = mysql.createPool({
 });
 
 module.exports = (connection) => {
+    router.get('/export/excel/:nrCandidato', async (req, res) => {
+        try {
+            const { nrCandidato } = req.params;
+    
+            // SQL query to fetch all contracts related to the specific candidate (nrCandidato)
+            const query = `
+                SELECT 
+                    c.nmCandidato,
+                    DATE_FORMAT(cp.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+                    DATE_FORMAT(cp.dtFim, '%d/%m/%Y') as dtFimFormat,
+                    cp.cpfContratado,
+                    cp.nmContratado,
+                    f.nmFuncao,
+                    f.tpContrato,
+                    s.valor
+                FROM tbContratoPessoal cp
+                JOIN tbCandidato c ON cp.nrCandidato = c.nrCandidato
+                JOIN tbFuncao f ON cp.idFuncao = f.idFuncao
+                LEFT JOIN tbSalario s ON cp.idFuncao = s.idFuncao
+                WHERE c.nrCandidato = ?
+                ORDER BY cp.dtInicio
+            `;
+    
+            const [rows] = await connection.promise().query(query, [nrCandidato]);
+    
+            if (rows.length > 0) {
+                const candidateName = rows[0].nmCandidato;
+    
+                // Create a new workbook and add worksheets for Militância and Administrativas
+                const workbook = new ExcelJS.Workbook();
+                const militanciaSheet = workbook.addWorksheet('Militância');
+                const administrativasSheet = workbook.addWorksheet('Administrativas');
+    
+                // Add candidate name as a header to each sheet
+                militanciaSheet.addRow([`${candidateName} - Militância`]).font = { bold: true };
+                militanciaSheet.mergeCells(`A${militanciaSheet.lastRow.number}:F${militanciaSheet.lastRow.number}`);
+    
+                administrativasSheet.addRow([`${candidateName} - Administrativas`]).font = { bold: true };
+                administrativasSheet.mergeCells(`A${administrativasSheet.lastRow.number}:F${administrativasSheet.lastRow.number}`);
+    
+                // Add subheaders for both sheets
+                const headers = [
+                    'Data de Início',
+                    'Data de Fim',
+                    'CPF Contratado',
+                    'Nome Contratado',
+                    'Função',
+                    'Valor'
+                ];
+    
+                militanciaSheet.addRow(headers).font = { bold: true };
+                administrativasSheet.addRow(headers).font = { bold: true };
+    
+                // Set column widths for both sheets
+                const columnWidths = [
+                    { key: 'dtInicioFormat', width: 20 },  // Data de Início
+                    { key: 'dtFimFormat', width: 20 },     // Data de Fim
+                    { key: 'cpfContratado', width: 20 },   // CPF Contratado
+                    { key: 'nmContratado', width: 30 },    // Nome Contratado
+                    { key: 'nmFuncao', width: 30 },        // Função
+                    { key: 'valor', width: 15 },           // Valor
+                ];
+    
+                militanciaSheet.columns = columnWidths;
+                administrativasSheet.columns = columnWidths;
+    
+                // Separate rows based on tpContrato and add them to the respective sheets
+                rows.forEach(row => {
+                    const rowData = [
+                        row.dtInicioFormat,
+                        row.dtFimFormat,
+                        row.cpfContratado,
+                        row.nmContratado,
+                        row.nmFuncao,
+                        row.valor
+                    ];
+    
+                    if (row.tpContrato === 'Militante') {
+                        militanciaSheet.addRow(rowData);
+                    } else if (row.tpContrato === 'Pessoal') {
+                        administrativasSheet.addRow(rowData);
+                    }
+                });
+    
+                // Set the response header to indicate that the content is an Excel file
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                res.setHeader('Content-Disposition', `attachment; filename=${candidateName}_contracts.xlsx`);
+    
+                // Write the workbook to the response
+                await workbook.xlsx.write(res);
+                res.end();
+            } else {
+                res.status(404).send('Não foram encontrados contratos desse candidato');
+            }
+        } catch (error) {
+            console.error('Error generating Excel file:', error.message);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+    
     // PDF Contrato Route
     router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
         try {
