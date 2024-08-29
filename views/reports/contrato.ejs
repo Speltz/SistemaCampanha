@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title><%= contratoPessoal.nmContratado %></title>
+    <title>
+        <%= contratoPessoal.nmContratado %>
+    </title>
     <style>
         .page-container {
             max-width: 800px;
@@ -14,24 +16,26 @@
             padding: 20px;
             /* Add some padding for better readability */
         }
-    
+
         .justified-content p {
             text-align: justify;
             font-size: 18px;
             text-indent: 2em;
         }
-    
+
         @media print {
             @page {
-                margin: 0; /* Remove margins */
+                margin: 0;
+                /* Remove margins */
             }
-    
+
             body {
                 margin: 0;
                 padding: 0;
-                -webkit-print-color-adjust: exact; /* Ensures colors are printed as displayed */
+                -webkit-print-color-adjust: exact;
+                /* Ensures colors are printed as displayed */
             }
-    
+
             /* Hides the default header/footer provided by the browser */
             body::before,
             body::after {
@@ -57,7 +61,7 @@
                                     contratoPessoal.cidadeCandidato %> -
                                     <%= contratoPessoal.ufCandidato %> CEP <%= contratoPessoal.cepCandidatoFormat %>
                                             .<br>
-                                            Neste ato representado por seu Administrador financeiro: 
+                                            Neste ato representado por seu Administrador financeiro:
                                             <%= contratoPessoal.nmAdmFinanceiro %>, portador do CPF sob nº <%=
                                                     contratoPessoal.cpfAdmFinanceiroFormat %>
             </p>
@@ -121,7 +125,7 @@
             </p>
         </div>
 
-        <p style="text-align: center; font-size: 20px">
+        <p style="text-align: center; font-size: 18px">
             <%= contratoPessoal.cidadeCandidato %> - <%= contratoPessoal.ufCandidato %>, <%=
                         contratoPessoal.dtInicioFormat %>.
         </p>

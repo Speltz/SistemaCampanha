@@ -1,139 +1,227 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrato de locação de veículos automotores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <title>Veiculo - <%= contratoVeiculo.nmContratado %>
+    </title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid navy;
+        }
+
+        th,
+        td {
+            border: 1px solid navy;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: white;
+            color: navy;
+            font-weight: bold;
+        }
+
+        .merged {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .page-container {
+            max-width: 800px;
+            /* Adjust this value as needed */
+            margin: 0 auto;
+            /* Center the container */
+            padding: 20px;
+            /* Add some padding for better readability */
+        }
+
+        .justified-content p {
+            text-align: justify;
+            font-size: 18px;
+            text-indent: 2em;
+        }
+
+        @media print {
+            @page {
+                margin: 0;
+                /* Remove margins */
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                /* Ensures colors are printed as displayed */
+            }
+
+            /* Hides the default header/footer provided by the browser */
+            body::before,
+            body::after {
+                content: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1 style="text-align: center;">CONTRATO DE LOCAÇÃO DE VEÌCULOS AUTOMOTORES</h1>
+    <div class="page-container">
+        <h1 style="text-align: center;">CONTRATO DE LOCAÇÃO DE VEÌCULOS AUTOMOTORES</h1>
 
-    <h2>1. DAS PARTES</h2>
-    <p>Contrato de Locação de Veículos Automotores, que entre si celebram, de um lado:</p>
-    
-    <h3>LOCATARIO</h3>
-    <p>
-        ELEIÇÃO 2024 <%= contratoVeiculo.nmCandidato %> CNPJ <%= contratoVeiculo.cnpjFormat %><br>
-        situado à <%= contratoVeiculo.enderecoCandidato %>, <%= contratoVeiculo.bairroCandidato %>, <%= contratoVeiculo.cidadeCandidato %> - 
-        <%= contratoVeiculo.ufCandidato %> CEP <%= contratoVeiculo.cepCandidatoFormat %><br>
-        Neste ato representado por seu Administrador financeiro:<br>
-        <%= contratoVeiculo.nmAdmFinanceiro %>, portador do CPF sob nº <%= contratoVeiculo.cpfAdmFinanceiroFormat %>
-    </p>
+        <div class="justified-content">
+            <h2>1. DAS PARTES</h2>
+            <p>Contrato de Locação de Veículos Automotores, que entre si celebram, de um lado:</p>
 
-    <h3>LOCADOR</h3>
-    <p>
-        <%= contratoVeiculo.nmContratado %> CPF sob o nº <%= contratoVeiculo.cpfContratadoFormat %><br>
-        residente e domiciliado na <%= contratoVeiculo.endereco %>, <%= contratoVeiculo.bairro %>, 
-        <%= contratoVeiculo.cidade %> - <%= contratoVeiculo.uf %>, CEP <%= contratoVeiculo.cepFormat %>
-    </p>
+            <h3>LOCATARIO</h3>
+            <p>
+                ELEIÇÃO 2024 <%= contratoVeiculo.nmCandidato %> CNPJ <%= contratoVeiculo.cnpjFormat %>,
+                        situado à <%= contratoVeiculo.enderecoCandidato %>, <%= contratoVeiculo.bairroCandidato %>, <%=
+                                    contratoVeiculo.cidadeCandidato %> -
+                                    <%= contratoVeiculo.ufCandidato %> CEP <%= contratoVeiculo.cepCandidatoFormat %><br>
+                                            Neste ato representado por seu Administrador financeiro:
+                                            <%= contratoVeiculo.nmAdmFinanceiro %>, portador do CPF sob nº <%=
+                                                    contratoVeiculo.cpfAdmFinanceiroFormat %>
+            </p>
 
-    <h2>2. DO OBJETO</h2>
-    <p>
-        O presente contrato tem como objeto a locação do veículo abaixo relacionado para uso na campanha eleitoral de 2024, do candidato acima mencionado.
-    </p>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                border: 2px solid navy;
-            }
-            th, td {
-                border: 1px solid navy;
-                padding: 8px;
-                text-align: center;
-            }
-            th {
-                background-color: white;
-                color: navy;
-                font-weight: bold;
-            }
-            .merged {
-                text-align: left;
-                padding-left: 10px;
-            }
-        </style>
-        <title>Veículo</title>
-        <table>
-            <thead>
-                <tr>
-                    <th>Carro</th>
-                    <th>Placa</th>
-                    <th>RENAVAM</th>
-                    <th>Ano / Modelo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><%= contratoVeiculo.marca %> / <%= contratoVeiculo.modelo %></td>
-                    <td><%=contratoVeiculo.placaVeiculo %></td>
-                    <td><%=contratoVeiculo.renavam %></td>
-                    <td><%=contratoVeiculo.ano %></td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="merged">
-                        VALOR TOTAL DA LOCAÇÃO:<br>
-                        R$ <%= contratoVeiculo.valor %> (<%= contratoVeiculo.valorExtenso %>)
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <h3>LOCADOR</h3>
+            <p>
+                <%= contratoVeiculo.nmContratado %> CPF sob o nº <%= contratoVeiculo.cpfContratadoFormat %>,
+                        residente e domiciliado na <%= contratoVeiculo.endereco %>, <%= contratoVeiculo.bairro %>,
+                                <%= contratoVeiculo.cidade %> - <%= contratoVeiculo.uf %>, CEP <%=
+                                            contratoVeiculo.cepFormat %>
+            </p>
 
-        <p>O LOCADOR declara que é proprietário do bem móvel em questão para o uso, gozo e disposição dos demais serviços prestados.</p>
+            <h2>2. DO OBJETO</h2>
+            <p>
+                O presente contrato tem como objeto a locação do veículo abaixo relacionado para uso na campanha
+                eleitoral
+                de 2024, do candidato acima mencionado.
+            </p>
 
-    <h2>3. DO VALOR</h2>
-    <p>
-        Pela prestação dos serviços a LOCATÁRIO pagará ao LOCADOR o valor bruto de R$ <%= contratoVeiculo.valor %> (<%= contratoVeiculo.valorExtenso %>), pago em <%= contratoVeiculo.formaPagamento %> parcelas de igual valor mediante a emissão de recibo.
-    </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Carro</th>
+                        <th>Placa</th>
+                        <th>RENAVAM</th>
+                        <th>Ano / Modelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <%= contratoVeiculo.marca %> / <%= contratoVeiculo.modelo %>
+                        </td>
+                        <td>
+                            <%=contratoVeiculo.placaVeiculo %>
+                        </td>
+                        <td>
+                            <%=contratoVeiculo.renavam %>
+                        </td>
+                        <td>
+                            <%=contratoVeiculo.ano %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="merged" style="text-align: center;">
+                            VALOR TOTAL DA LOCAÇÃO:<br>
+                            R$ <%= contratoVeiculo.valor %> (<%= contratoVeiculo.valorExtenso %>)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <h2>4. DA VIGÊNCIA E RESCISÃO</h2>
-    <p>
-        O presente Contrato é celebrado pelo período compreendido entre <%= contratoVeiculo.dtInicioFormat %> a <%= contratoVeiculo.dtFimFormat %>.<br>
-        Poderá este Contrato ser rescindido por quaisquer dos seus celebrantes, com prévio aviso de 15 (quinze) dias, e, particularmente, pelo LOCATÁRIO, em decorrência do descumprimento da cláusula 5.2 acima citada, sendo dispensado o prazo de carência.<br>
-        É motivo de rescisão deixar de manter o veículo dentro das especificações da Cláusula 5.2<br>
-        A rescisão imotivada acarretará ao solicitante uma multa de 10% sobre o saldo do contrato.
-    </p>
+            <p>O LOCADOR declara que é proprietário do bem móvel em questão para o uso, gozo e disposição dos demais
+                serviços prestados.</p>
 
-    <h2>5. DAS OBRIGAÇÕES</h2>
-    <h3>5.1 - DO LOCATÀRIO</h3>
-    <p>
-        - Repassar, na data pré-fixada, ao LOCADOR, os valores previstos na Cláusula Segunda;<br>
-        - Arcar com os custos de combustível na execução do objeto do presente contrato;<br>
-        - Responsabilizar-se civil e penalmente por quaisquer danos que porventura venham a ocorrer, inclusive contra terceiros;<br>
-        - Manter o veículo com condutores devidamente habilitados;<br>
-        - Comunicar imediatamente ao LOCADOR sobre qualquer sinistro ou problema mecânico que venha a ocorrer no veículo.
-    </p>
-    <h3>5.2 - DO LOCADOR</h3>
-    <p>
-        - Responsabilizar-se pela manutenção corretiva do veículo durante toda a vigência deste contrato sob pena de rescisão do presente instrumento por parte do LOCATÁRIO, conforme a cláusula 5, caso o veículo fique indisponível à mesma por prazo superior a dois dias decorrente da falta da referida manutenção.<br>
-        - Manter o veículo com todos os equipamentos e condições necessárias ao funcionamento, de acordo com as regras de trânsito.<br>
-        - Manter o veículo com apólice de seguro em vigência, sendo que na ocorrência de sinistros o LOCATÁRIO se responsabiliza apenas pelo pagamento da franquia de seguro.
-    </p>
+            <h2>3. DO VALOR</h2>
+            <p>
+                Pela prestação dos serviços a LOCATÁRIO pagará ao LOCADOR o valor bruto de R$ <%= contratoVeiculo.valor
+                    %> (
+                    <%= contratoVeiculo.valorExtenso %>), pago em <%= contratoVeiculo.formaPagamento %> parcelas de
+                            igual
+                            valor mediante a emissão de recibo.
+            </p>
 
-    <h2>DAS CONDIÇÕES GERAIS DO CONTRATO E DO FORO</h2>
-    <p>
-        Este contrato será cancelado automaticamente se houver dolo ou má-fé por qualquer das partes.<br>
-        Fica eleito o Foro da Comarca de <%= contratoVeiculo.cidadeCandidato %> - <%= contratoVeiculo.ufCandidato %> para dirimir quaisquer dúvidas resultantes do presente instrumento.<br>
-        E por estarem justos e contratados, assinam o presente instrumento em duas vias de igual valor e teor.
-    </p>
+            <h2>4. DA VIGÊNCIA E RESCISÃO</h2>
+            <p>O presente Contrato é celebrado pelo período compreendido entre <%= contratoVeiculo.dtInicioFormat %> a
+                    <%= contratoVeiculo.dtFimFormat %>.
+                        <p>Poderá este Contrato ser rescindido por quaisquer dos seus celebrantes, com prévio aviso de
+                            15
+                            (quinze) dias, e, particularmente, pelo LOCATÁRIO, em decorrência do descumprimento da
+                            cláusula
+                            5.2 acima citada, sendo dispensado o prazo de carência.</p>
+                        <p>É motivo de rescisão deixar de manter o veículo dentro das especificações da Cláusula 5.2</p>
+                        <p>A rescisão imotivada acarretará ao solicitante uma multa de 10% sobre o saldo do contrato.
+                        </p>
 
-    <p style="text-align: center;">
-        <%= contratoVeiculo.cidadeCandidato %> - <%= contratoVeiculo.ufCandidato %>,<%= contratoVeiculo.dtInicioFormat %>.
-    </p>
+                        <h2>5. DAS OBRIGAÇÕES</h2>
+                        <h3>5.1 - DO LOCATÀRIO</h3>
+                        <p>
+                            - Repassar, na data pré-fixada, ao LOCADOR, os valores previstos na Cláusula Segunda;<br>
+                            - Arcar com os custos de combustível na execução do objeto do presente contrato;<br>
+                            - Responsabilizar-se civil e penalmente por quaisquer danos que porventura venham a ocorrer,
+                            inclusive contra terceiros;<br>
+                            - Manter o veículo com condutores devidamente habilitados;<br>
+                            - Comunicar imediatamente ao LOCADOR sobre qualquer sinistro ou problema mecânico que venha
+                            a
+                            ocorrer no veículo.
+                        </p>
+                        <h3>5.2 - DO LOCADOR</h3>
+                        <p>
+                            - Responsabilizar-se pela manutenção corretiva do veículo durante toda a vigência deste
+                            contrato
+                            sob pena de rescisão do presente instrumento por parte do LOCATÁRIO, conforme a cláusula 5,
+                            caso
+                            o veículo fique indisponível à mesma por prazo superior a dois dias decorrente da falta da
+                            referida manutenção.<br>
+                            - Manter o veículo com todos os equipamentos e condições necessárias ao funcionamento, de
+                            acordo
+                            com as regras de trânsito.<br>
+                            - Manter o veículo com apólice de seguro em vigência, sendo que na ocorrência de sinistros o
+                            LOCATÁRIO se responsabiliza apenas pelo pagamento da franquia de seguro.
+                        </p>
 
-    <p>
-        LOCATÁRIO:<br><br>
-        ___________________________________________________________________________________<br>
-        ELEIÇÃO 2024 <%= contratoVeiculo.nmCandidato %> - <%= contratoVeiculo.partido %><br>
-        CNPJ n° <%= contratoVeiculo.cnpjFormat %>
-    </p>
+                        <h2>6. DAS CONDIÇÕES GERAIS DO CONTRATO E DO FORO</h2>
+                        <p>As partes elegem o foro da Comarca de <%= contratoVeiculo.cidadeCandidato %> - <%=
+                                    contratoVeiculo.ufCandidato %> para dirimir qualquer
+                                    dúvida que possa existir em decorrência da execução do presente, com expressa
+                                    renúncia
+                                    de qualquer outro, por mais privilegiado que seja.</p>
+                        <p>E, por estarem assim justos e certos, assinam e ratificam o presente Contrato em duas vias de
+                            igual teor, na presença das testemunhas abaixo
+                            assinadas, que a tudo sabem e assistiram.</p>
+        </div>
+        <p style="text-align: center; font-size: 18px;">
+            <%= contratoVeiculo.cidadeCandidato %> - <%= contratoVeiculo.ufCandidato %>,<%=
+                        contratoVeiculo.dtInicioFormat %>.
+        </p>
+        <div class="justified-content">
+            <p>
+                LOCATÀRIO::<br><br>
+                ___________________________________________________________________________________
+            </p>
+            <p style="text-align: center; font-size: 18px">
+                ELEIÇÃO 2024 <%= contratoVeiculo.nmCandidato %> - <%= contratoVeiculo.partido %><br>
+                        CNPJ n° <%= contratoVeiculo.cnpjFormat %>
+            </p>
 
-    <p>
-        LOCADOR:<br><br>
-        ___________________________________________________________________________________<br>
-        <%= contratoVeiculo.nmContratado %><br>
-        CPF n° <%= contratoVeiculo.cpfContratadoFormat %>
-    </p>
+
+            <p>
+                LOCADOR:<br><br>
+                ___________________________________________________________________________________
+            </p>
+            <p style="text-align: center; font-size: 18px">
+                <%= contratoVeiculo.nmContratado %><br>
+                    CPF n° <%= contratoVeiculo.cpfContratadoFormat %>
+            </p>
+        </div>
+    </div>
 </body>
+
 </html>
