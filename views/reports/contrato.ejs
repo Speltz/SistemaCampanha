@@ -43,10 +43,11 @@
             }
         }
     </style>
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 </head>
 
 <body>
-    <div class="page-container">
+    <div id="contrato-content" class="page-container">
         <h1 style="text-align: center;">CONTRATO DE PRESTAÇÃO DE SERVIÇOS A CANDIDATO</h1>
 
         <div class="justified-content">
@@ -151,6 +152,19 @@
             </p>
         </div>
     </div>
+    <script>
+        window.onload = function() {
+            const element = document.getElementById('contrato-content');
+            const options = {
+                margin: 1,
+                filename: '<%= contratoPessoal.nmContratado %>_Contrato.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(options).save();
+        };
+    </script>
 </body>
 
 </html>

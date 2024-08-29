@@ -119,83 +119,107 @@ module.exports = (connection) => {
         }
     });
     
-    // PDF Contrato Route
-    router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
-        try {
-            const { idContratoPessoal } = req.params;
-            
-            // SQL query to fetch the contract data, including the contract type (tpContrato)
-            const query = `
-            SELECT 
-                cp.idContratoPessoal,
-                cp.municipio,
-                c.nmCandidato,
-                CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
-                SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
-                c.enderecoCandidato,
-                c.bairroCandidato,
-                c.cidadeCandidato,
-                c.ufCandidato,
-                CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
-                c.nmAdmFinanceiro,
-                CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
-                SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
-                c.partido,
-                f.nmFuncao,
-                f.tpContrato,
-                cp.nmContratado,
-                CONCAT(SUBSTRING(cp.cpfContratado, 1, 3), '.', SUBSTRING(cp.cpfContratado, 4, 3), '.', SUBSTRING(cp.cpfContratado, 7, 3), '-', 
-                SUBSTRING(cp.cpfContratado, 10, 2)) AS cpfContratadoFormat,
-                cp.enderecoContratado,
-                cp.bairroContratado,
-                cp.cidadeContratado,
-                cp.ufContratado,
-                CONCAT(SUBSTRING(cp.cepContratado, 1, 5), '-', SUBSTRING(cp.cepContratado, 6, 3)) AS cepContratadoFormat,
-                DATE_FORMAT(cp.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
-                DATE_FORMAT(cp.dtFim, '%d/%m/%Y') as dtFimFormat,
-                DATE_FORMAT(cp.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
-                s.valor
-            FROM tbContratoPessoal cp
-            JOIN tbCandidato c ON cp.nrCandidato = c.nrCandidato
-            JOIN tbFuncao f ON cp.idFuncao = f.idFuncao
-            JOIN tbSalario s ON f.idFuncao = s.idFuncao
-            WHERE cp.idContratoPessoal = ?
-            `;
-        
-            const [rows] = await connection.promise().query(query, [idContratoPessoal]);
-        
-            if (rows.length > 0) {
-                const contratoPessoal = rows[0];
-                const valorNumber = parseFloat(contratoPessoal.valor);
-        
-                if (isNaN(valorNumber)) {
-                    throw new Error('Invalid number format for valor');
-                }
-        
-                contratoPessoal.valorExtenso = extenso(valorNumber, { mode: 'currency' });
-    
-                // Determine which template to use based on tpContrato
-                let templatePath;
-                if (contratoPessoal.tpContrato === 'Pessoal') {
-                    templatePath = '../views/reports/contrato.ejs';
-                } else if (contratoPessoal.tpContrato === 'Militante') {
-                    templatePath = '../views/reports/contratoMilitante.ejs';
-                } else {
-                    return res.status(404).send('Invalid contract type');
-                }
-    
-                // Render the EJS template to HTML and send it as a response
-                res.render(templatePath, { contratoPessoal });
-            } else {
-                res.status(404).send('Contract not found');
+   // PDF Contrato Route
+router.get('/reports/contrato/:idContratoPessoal', async (req, res) => {
+    try {
+        const { idContratoPessoal } = req.params;
+
+        // SQL query to fetch the contract data, including the contract type (tpContrato)
+        const query = `
+        SELECT 
+            cp.idContratoPessoal,
+            cp.municipio,
+            c.nmCandidato,
+            CONCAT(SUBSTRING(c.cnpj, 1, 2), '.', SUBSTRING(c.cnpj, 3, 3), '.', SUBSTRING(c.cnpj, 6, 3), '/', SUBSTRING(c.cnpj, 9, 4), '-', 
+            SUBSTRING(c.cnpj, 13, 2)) AS cnpjFormat,
+            c.enderecoCandidato,
+            c.bairroCandidato,
+            c.cidadeCandidato,
+            c.ufCandidato,
+            CONCAT(SUBSTRING(c.cepCandidato, 1, 5), '-', SUBSTRING(c.cepCandidato, 6, 3)) AS cepCandidatoFormat,
+            c.nmAdmFinanceiro,
+            CONCAT(SUBSTRING(c.cpfAdmFinanceiro, 1, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 4, 3), '.', SUBSTRING(c.cpfAdmFinanceiro, 7, 3), '-', 
+            SUBSTRING(c.cpfAdmFinanceiro, 10, 2)) AS cpfAdmFinanceiroFormat,
+            c.partido,
+            f.nmFuncao,
+            f.tpContrato,
+            cp.nmContratado,
+            CONCAT(SUBSTRING(cp.cpfContratado, 1, 3), '.', SUBSTRING(cp.cpfContratado, 4, 3), '.', SUBSTRING(cp.cpfContratado, 7, 3), '-', 
+            SUBSTRING(cp.cpfContratado, 10, 2)) AS cpfContratadoFormat,
+            cp.enderecoContratado,
+            cp.bairroContratado,
+            cp.cidadeContratado,
+            cp.ufContratado,
+            CONCAT(SUBSTRING(cp.cepContratado, 1, 5), '-', SUBSTRING(cp.cepContratado, 6, 3)) AS cepContratadoFormat,
+            DATE_FORMAT(cp.dtInicio, '%d/%m/%Y') as dtInicioFormat, 
+            DATE_FORMAT(cp.dtFim, '%d/%m/%Y') as dtFimFormat,
+            DATE_FORMAT(cp.dtVencimento, '%d/%m/%Y') as dtVencimentoFormat,
+            s.valor
+        FROM tbContratoPessoal cp
+        JOIN tbCandidato c ON cp.nrCandidato = c.nrCandidato
+        JOIN tbFuncao f ON cp.idFuncao = f.idFuncao
+        JOIN tbSalario s ON f.idFuncao = s.idFuncao
+        WHERE cp.idContratoPessoal = ?
+        `;
+
+        const [rows] = await connection.promise().query(query, [idContratoPessoal]);
+
+        if (rows.length > 0) {
+            const contratoPessoal = rows[0];
+            const valorNumber = parseFloat(contratoPessoal.valor);
+
+            if (isNaN(valorNumber)) {
+                throw new Error('Invalid number format for valor');
             }
-        } catch (error) {
-            console.error('Error fetching contract data:', error.message);
-            res.status(500).send('Internal Server Error');
+
+            contratoPessoal.valorExtenso = extenso(valorNumber, { mode: 'currency' });
+
+            // Determine which template to use based on tpContrato
+            let templatePath;
+            if (contratoPessoal.tpContrato === 'Pessoal') {
+                templatePath = '../views/reports/contrato.ejs';
+            } else if (contratoPessoal.tpContrato === 'Militante') {
+                templatePath = '../views/reports/contratoMilitante.ejs';
+            } else {
+                return res.status(404).send('Invalid contract type');
+            }
+
+            // Render the EJS template to HTML and include the script to generate the PDF
+            res.render(templatePath, { contratoPessoal }, (err, html) => {
+                if (err) {
+                    console.error('Error rendering EJS template:', err.message);
+                    return res.status(500).send('Internal Server Error');
+                }
+
+                // Add the html2pdf.js script and the auto-download functionality
+                html += `
+                <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+                <script>
+                    window.onload = function() {
+                        const element = document.querySelector('.page-container');
+                        const options = {
+                            margin: 1,
+                            filename: '${contratoPessoal.nmContratado}_Contrato.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+                        html2pdf().from(element).set(options).save();
+                    };
+                </script>
+                `;
+                
+                res.send(html);
+            });
+        } else {
+            res.status(404).send('Contract not found');
         }
-    });
+    } catch (error) {
+        console.error('Error fetching contract data:', error.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
     
-// Contrato Veículo
 router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
     try {
         const { idContratoVeiculo } = req.params;
@@ -276,7 +300,33 @@ router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
             // Convert the valor to words using extenso with the currency setting
             contratoVeiculo.valorExtenso = extenso(valorNumber, { mode: 'currency' });
 
-            res.render('reports/contratoVeiculo', { contratoVeiculo });
+            // Render the EJS template to HTML and include the script to generate the PDF
+            res.render('reports/contratoVeiculo', { contratoVeiculo }, (err, html) => {
+                if (err) {
+                    console.error('Error rendering EJS template:', err.message);
+                    return res.status(500).send('Internal Server Error');
+                }
+
+                // Add the html2pdf.js script and the auto-download functionality
+                html += `
+                <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+                <script>
+                    window.onload = function() {
+                        const element = document.querySelector('.page-container');
+                        const options = {
+                            margin: 1,
+                            filename: '${contratoVeiculo.nmContratado}_Contrato_Veiculo.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+                        html2pdf().from(element).set(options).save();
+                    };
+                </script>
+                `;
+                
+                res.send(html);
+            });
         } else {
             res.status(404).send('Contract not found');
         }
