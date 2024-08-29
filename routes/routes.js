@@ -863,7 +863,7 @@ router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
         });
 
         const funcaoQuery = new Promise((resolve, reject) => {
-            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+            connection.query('SELECT * FROM tbFuncao', (err, results) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -1108,7 +1108,7 @@ router.get('/reports/contratoVeiculo/:idContratoVeiculo', async (req, res) => {
         });
 
         const funcaoQuery = new Promise((resolve, reject) => {
-            connection.query('SELECT idFuncao, nmFuncao FROM tbFuncao', (err, results) => {
+            connection.query('SELECT * FROM tbFuncao', (err, results) => {
                 if (err) {
                     reject(err);
                 } else {

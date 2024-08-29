@@ -27,14 +27,18 @@
                                 <div id="candidato-message" style="margin-top: 10px;"></div>
                                 <div class="mb-3">
                                     <label for="idFuncao">Função</label>
-                                    <select name="idFuncao" class="form-control form-control-lg" required>
-                                        <option value="" disabled selected hidden>Selecione a Função</option>
-                                        <% funcao.forEach(funcao=> { %>
-                                            <option value="<%= funcao.idFuncao %>">
-                                                <%= funcao.nmFuncao %>
-                                            </option>
-                                            <% }); %>
-                                    </select>
+                                    <div class="input-group">
+                                        <select name="idFuncao" class="form-control form-control-lg" required>
+                                            <option value="" disabled selected hidden>Selecione a Função</option>
+                                            <% funcao.forEach(funcao=> { %>
+                                                <option value="<%= funcao.idFuncao %>">
+                                                    <%= funcao.nmFuncao %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                        <button type="button" class="btn btn-primary modal-btn-funcao">Buscar
+                                            Função</button>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="valor">Valor</label>
@@ -66,6 +70,61 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal para exibição de funções -->
+        <div class="modal fade" id="listaFuncoesModal" tabindex="-1" aria-labelledby="listaFuncoesModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="listaFuncoesModalLabel">Lista de Funções</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <% if (funcao.length> 0) { %>
+                            <table class="table table-striped text-center my-2">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Descrição</th>
+                                        <th>Tipo de Contrato</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% funcao.forEach((row, index)=> { %>
+                                        <tr class="align-middle">
+                                            <td>
+                                                <%= row.idFuncao %>
+                                            </td>
+                                            <td>
+                                                <%= row.nmFuncao %>
+                                            </td>
+                                            <td>
+                                                <%= row.dsFuncao %>
+                                            </td>
+                                            <td>
+                                                <%= row.tpContrato %>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="text-success border-none"
+                                                    title="Selecionar função"
+                                                    onclick="preencherCampoFuncao('<%= row.idFuncao %>')">
+                                                    <i class="fa-solid fa-check mx-1"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                            <% } else { %>
+                                <h1 class="text-center text-secondary mt-5">Nenhuma função encontrada no banco de dados.
+                                </h1>
+                                <% } %>
                     </div>
                 </div>
             </div>
@@ -115,7 +174,8 @@
                                                 <%= row.cnpj %>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <button type="button" class="text-success border-none" title="Selecionar candidato"
+                                                <button type="button" class="text-success border-none"
+                                                    title="Selecionar candidato"
                                                     onclick="preencherCampo('<%= row.nrCandidato %>')">
                                                     <i class="fa-solid fa-check mx-1"></i>
                                                 </button>
@@ -178,6 +238,25 @@
                     console.error('Campo com name="nrCandidato" não encontrado.');
                 }
                 $("#listaCandidatosModal").modal('hide');
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                const listaFuncoesModal = new bootstrap.Modal(document.getElementById('listaFuncoesModal'));
+                document.querySelectorAll('.modal-btn-funcao').forEach(button => {
+                    button.addEventListener('click', function () {
+                        listaFuncoesModal.show();
+                    });
+                });
+            });
+
+            function preencherCampoFuncao(idFuncao) {
+                // Preenche o campo com name="idFuncao" com o id da função
+                const campo = document.querySelector('select[name="idFuncao"]');
+                if (campo) {
+                    campo.value = idFuncao;
+                } else {
+                    console.error('Campo com name="idFuncao" não encontrado.');
+                }
+                $("#listaFuncoesModal").modal('hide');
             }
         </script>
         <%- include('../layout/footer') %>
