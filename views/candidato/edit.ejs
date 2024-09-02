@@ -8,7 +8,7 @@
                     <h5 class="text-light">Dados do Candidato</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form action="/candidato/edit/<%= candidato.nrCandidato %>" method="post" id="edit-form" 
+                    <form action="/candidato/edit/<%= candidato.nrCandidato %>/<%= candidato.municipio %>" method="post" id="edit-form" 
                         onsubmit="return validateCandidato()">
                         <input type="hidden" name="originalNrCandidato" value="<%= candidato.nrCandidato %>"/>
                         <div class="mb-3">

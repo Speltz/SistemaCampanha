@@ -50,17 +50,17 @@
                                                     <%= row.cnpj %>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <a href="/candidato/view/<%= row.nrCandidato %>" class=""
+                                                    <a href="/candidato/view/<%= row.nrCandidato %>/<%= row.municipio %>" class=""
                                                         title="Ver detalhes"><i
                                                         class="fa-solid fa-eye mx-1"></i></a>
-                                                    <a href="/candidato/edit/<%= row.nrCandidato %>" class="text-success"
+                                                    <a href="/candidato/edit/<%= row.nrCandidato %>/<%= row.municipio %>" class="text-success"
                                                         title="Editar"><i
                                                             class="fas fa-edit fa-lg mx-1"></i></a>
                                                     <a href="javascript:void(0);" class="text-danger delete-btn"
-                                                        data-url="/candidato/delete/<%= row.nrCandidato %>"
+                                                        data-url="/candidato/delete/<%= row.nrCandidato %>/<%= row.municipio %>"
                                                         title="Deletar">
                                                         <i class="fas fa-trash fa-lg mx-1"></i>
-                                                        <a href="/export/excel/<%= row.nrCandidato %>"class="btn btn-primary">Planilha</a>
+                                                        <a href="/export/excel/<%= row.nrCandidato %>/<%= row.municipio %>"class="btn btn-primary">Planilha</a>
                                                 </td>
                                             </tr>
                                             <% }) %>
