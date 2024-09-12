@@ -19,6 +19,7 @@ const db = mysql.createPool({
 });
 
 module.exports = (connection) => {
+    //Planilhas
     router.get('/export/excel/:nrCandidato/:municipio', async (req, res) => {
         try {
             const { nrCandidato, municipio } = req.params;
